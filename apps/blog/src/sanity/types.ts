@@ -253,7 +253,7 @@ export type AllSanitySchemaTypes = BlockContent | Category | Post | Author | San
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)]
+// Query: *[_type == "post" && defined(slug.current)] {    ...,    "author": author->name,    "categories": categories[]->title  } | order(_createdAt desc)
 export type POSTS_QUERYResult = Array<{
   _id: string;
   _type: "post";
@@ -262,12 +262,7 @@ export type POSTS_QUERYResult = Array<{
   _rev: string;
   title?: string;
   slug?: Slug;
-  author?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "author";
-  };
+  author: string | null;
   mainImage?: {
     asset?: {
       _ref: string;
@@ -280,21 +275,43 @@ export type POSTS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: "image";
   };
-  categories?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "category";
-  }>;
+  categories: Array<string | null> | null;
   publishedAt?: string;
   body?: BlockContent;
 }>;
+// Variable: POST_BY_SLUG_QUERY
+// Query: *[_type == "post" && slug.current == $slug][0] {    ...,    "author": author->name,    "categories": categories[]->title  }
+export type POST_BY_SLUG_QUERYResult = {
+  _id: string;
+  _type: "post";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  author: string | null;
+  mainImage?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  categories: Array<string | null> | null;
+  publishedAt?: string;
+  body?: BlockContent;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  *[_type == \"post\" && defined(slug.current)]\n": POSTS_QUERYResult;
+    "\n  *[_type == \"post\" && defined(slug.current)] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
+    "\n  *[_type == \"post\" && slug.current == $slug][0] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  }\n": POST_BY_SLUG_QUERYResult;
   }
 }

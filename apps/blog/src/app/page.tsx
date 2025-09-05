@@ -1,9 +1,10 @@
 import { POSTS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import { PostCard } from "@/components/post-card";
+import { POSTS_QUERYResult } from "@/sanity/types";
 
 export default async function Home() {
-  const { data: posts } = await sanityFetch({ query: POSTS_QUERY });
+  const { data: posts }: { data: POSTS_QUERYResult } = await sanityFetch({ query: POSTS_QUERY });
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
