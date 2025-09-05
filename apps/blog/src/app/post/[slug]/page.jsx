@@ -6,7 +6,7 @@ import Image from "next/image";
 import { NavigateHome } from "@/components/navigate-home";
 
 export default async function Page({ params }) {
-  const { slug } = params;
+  const { slug } = await params;
   const { data: post } = await sanityFetch({
     query: POST_BY_SLUG_QUERY,
     params: { slug },
@@ -27,19 +27,19 @@ export default async function Page({ params }) {
             />
           )}
           <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">
-            {post.title}
+            {post?.title}
           </h1>
           <div className="text-sm text-gray-500 mb-6">
-            <span>By {post.author}</span>
+            <span>By {post?.author}</span>
             <span className="ml-4">
-              Published on {new Date(post.publishedAt).toLocaleDateString()}
+              Published on {new Date(post?.publishedAt).toLocaleDateString()}
             </span>
             <span className="ml-4">
-              Updated on {new Date(post._updatedAt).toLocaleDateString()}
+              Updated on {new Date(post?._updatedAt).toLocaleDateString()}
             </span>
           </div>
           <div className="prose max-w-none text-gray-700 leading-relaxed space-y-6">
-            <PortableText value={post.body} />
+            <PortableText value={post?.body} />
           </div>
         </article>
       </div>

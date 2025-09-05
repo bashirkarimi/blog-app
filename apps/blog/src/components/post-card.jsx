@@ -13,7 +13,7 @@ const PostCard = ({ post }) => (
     <div className="p-6 flex flex-col flex-grow">
       <h2 className="text-2xl font-bold text-gray-800 mb-2">{post.title}</h2>
       <div className="text-gray-600 mb-4 flex-grow">
-        {<PortableText value={post.body} />}
+        {<PortableText value={post.body[0]} />}
       </div>
       <div className="text-sm text-gray-500">
         <span>By {post.author}</span>
