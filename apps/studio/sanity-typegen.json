@@ -1,5 +1,5 @@
 {
-  "path": "../blog/app**/*.{ts,tsx,js,jsx}",
+  "path": "../blog/src/**/*.{ts,tsx,js,jsx}",
   "schema": "./extract.json",
-  "generates": "../blog/sanity/types.ts"
+  "generates": "../blog/src/sanity/types.ts"
 }
