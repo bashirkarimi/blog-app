@@ -5,6 +5,14 @@ import { sanityFetch } from "@/sanity/live";
 import Image from "next/image";
 import { NavigateHome } from "@/components/navigate-home";
 
+// export async function generateStaticParams() {
+//   const { data: posts } = await sanityFetch({
+//     query: POST_BY_SLUG_QUERY,
+//   });
+//   return (posts || []).map((p) => ({ slug: p.slug || "" }));
+// };
+
+
 export default async function Page({ params }) {
   const { slug } = await params;
   const { data: post } = await sanityFetch({
