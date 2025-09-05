@@ -11,10 +11,14 @@ import { NavigateHome } from "@/components/navigate-home";
 //   });
 //   return (posts || []).map((p) => ({ slug: p.slug || "" }));
 // };
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
 
-
-export default async function Page({ params }) {
-  const { slug } = await params;
+export default async function Page({ params }: PageProps) {
+  const { slug } = params;
   const { data: post } = await sanityFetch({
     query: POST_BY_SLUG_QUERY,
     params: { slug },
@@ -28,7 +32,7 @@ export default async function Page({ params }) {
           {post?.mainImage && (
             <Image
               src={urlFor(post.mainImage).url()}
-              alt={post.title}
+              alt={post?.title ?? ""}
               className="w-full h-auto object-cover object-center"
               width={600}
               height={400}
@@ -40,14 +44,14 @@ export default async function Page({ params }) {
           <div className="text-sm text-gray-500 mb-6">
             <span>By {post?.author}</span>
             <span className="ml-4">
-              Published on {new Date(post?.publishedAt).toLocaleDateString()}
+              Published on {post?.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ""}
             </span>
             <span className="ml-4">
-              Updated on {new Date(post?._updatedAt).toLocaleDateString()}
+              Updated on {post?._updatedAt ? new Date(post._updatedAt).toLocaleDateString() : ""}
             </span>
           </div>
           <div className="prose max-w-none text-gray-700 leading-relaxed space-y-6">
-            <PortableText value={post?.body} />
+            <PortableText value={post?.body ?? []} />
           </div>
         </article>
       </div>
