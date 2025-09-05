@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@sanity/image-url": "^1.2.0",
     "next": "catalog:",
+    "next-sanity": "^10.0.16",
     "react": "catalog:",
     "react-dom": "catalog:"
   },

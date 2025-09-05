@@ -251,3 +251,19 @@ export type SanityAssetSourceData = {
 
 export type AllSanitySchemaTypes = BlockContent | Category | Post | Author | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ../blog/src/sanity/queries.ts
+// Variable: POSTS_QUERY
+// Query: *[_type == "post" && defined(slug.current)]{    _id, title, slug  }
+export type POSTS_QUERYResult = Array<{
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+}>;
+
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    "\n  *[_type == \"post\" && defined(slug.current)]{\n    _id, title, slug\n  }\n": POSTS_QUERYResult;
+  }
+}
