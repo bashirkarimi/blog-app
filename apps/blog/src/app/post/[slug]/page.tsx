@@ -1,20 +1,28 @@
 import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/image";
 import { POST_BY_SLUG_QUERY } from "@/sanity/queries";
+import { POST_SLUGS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import Image from "next/image";
 import { NavigateHome } from "@/components/navigate-home";
 
-// export async function generateStaticParams() {
-//   const { data: posts } = await sanityFetch({
-//     query: POST_BY_SLUG_QUERY,
-//   });
-//   return (posts || []).map((p) => ({ slug: p.slug || "" }));
-// };
 interface PageProps {
   params: {
     slug: string;
   };
+}
+
+export async function generateStaticParams() {
+  try {
+    const { data: slugs } = await sanityFetch({
+      query: POST_SLUGS_QUERY,
+    });
+
+    return (slugs ?? []).map((s) => ({ slug: s.slug }));
+  } catch (err) {
+    console.warn("generateStaticParams: failed to fetch slugs, falling back to empty list", err);
+    return [];
+  }
 }
 
 export default async function Page({ params }: PageProps) {

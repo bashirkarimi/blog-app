@@ -2,7 +2,7 @@ import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/image";
 import Image from "next/image";
 import { POST_BY_SLUG_QUERYResult } from "@/sanity/types";
-import { title } from "process";
+
 const PostCard = ({ post }: { post: POST_BY_SLUG_QUERYResult }) => (
   <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col h-full">
     {post?.mainImage && (

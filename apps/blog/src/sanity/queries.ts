@@ -15,3 +15,9 @@ export const POST_BY_SLUG_QUERY = defineQuery(`
     "categories": categories[]->title
   }
 `);
+
+export const POST_SLUGS_QUERY = defineQuery(`
+  *[_type == "post" && defined(slug.current)]{
+    "slug": slug.current
+  }
+`);
