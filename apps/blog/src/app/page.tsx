@@ -12,7 +12,7 @@ export default async function Home() {
         <ul className="grid gap-8 w-full max-w-3xl">
           {posts.map((post) => (
             <li key={post._id}>
-              <PostCard post={post} />
+              <PostCard post={post as any} />
             </li>
           ))}
         </ul>

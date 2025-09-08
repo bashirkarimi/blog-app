@@ -19,7 +19,7 @@ const PostCard = ({ post }: { post: POST_BY_SLUG_QUERYResult }) => (
         <h2 className="text-2xl font-bold text-gray-800 mb-2">{post.title}</h2>
       )}
       <div className="text-gray-600 mb-4 flex-grow">
-        {post?.body?.length ? <PortableText value={post.body[0]} /> : null}
+        {post?.body && <PortableText value={post.body} />}
       </div>
       <div className="text-sm text-gray-500">
         {post?.author && <span>By {post.author}</span>}
