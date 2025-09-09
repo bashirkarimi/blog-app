@@ -1,12 +1,15 @@
 "use client";
 
-const navigateToHome = () => {
-  window.location.href = "/";
-};
+import { useRouter } from "next/navigation";
+
 const NavigateHome = () => {
+  const router = useRouter();
+  const navigateToHome = () => {
+    router.push("/");
+  };
   return (
     <button
-      onClick={() => navigateToHome()}
+      onClick={navigateToHome}
       className="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150 mb-8 hover:cursor-pointer"
     >
       <svg
