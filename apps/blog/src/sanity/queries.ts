@@ -28,7 +28,6 @@ export const POST_SLUGS_QUERY = defineQuery(`
 
 export const CATEGORIES_IN_POST_QUERY = defineQuery(`
   *[_type == "post" && defined(categories)]{
-
     "categories": categories[]->title
   } | order(title asc)
 `);
