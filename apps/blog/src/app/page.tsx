@@ -4,15 +4,14 @@ import { PostCard } from "@/components/post-card";
 import { Categories } from "@/components/categories";
 
 interface HomeProps {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export default async function Home({
-  searchParams,
-}: HomeProps) {
-  const selectedCategory = Array.isArray(searchParams.category)
-    ? searchParams.category[0] || ""
-    : searchParams.category ?? "";
+export default async function Home(props: HomeProps) {
+  const searchParams = await props.searchParams;
+  const categoryParam = searchParams?.category;
+  const selectedCategory: string =
+    Array.isArray(categoryParam) ? (categoryParam[0] ?? "") : (categoryParam ?? "");
 
   const { data: posts } = await sanityFetch({
     query: POSTS_QUERY,
