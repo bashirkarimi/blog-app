@@ -1,7 +1,10 @@
 import { defineQuery } from "next-sanity";
 
 export const POSTS_QUERY = defineQuery(`
-  *[_type == "post" && defined(slug.current)] {
+  *[_type == "post" && defined(slug.current) 
+  && (!defined($category)
+  || $category == "" 
+  || $category in categories[]->title)]{ 
     ...,
     "body": body[0],
     "author": author->name,
@@ -23,6 +26,9 @@ export const POST_SLUGS_QUERY = defineQuery(`
   }
 `);
 
-export const CATEGORIES_QUERY = defineQuery(`
-  *[_type == "category"] | order(title asc)
+export const CATEGORIES_IN_POST_QUERY = defineQuery(`
+  *[_type == "post" && defined(categories)]{
+
+    "categories": categories[]->title
+  } | order(title asc)
 `);

@@ -253,7 +253,7 @@ export type AllSanitySchemaTypes = BlockContent | Category | Post | Author | San
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: POSTS_QUERY
-// Query: *[_type == "post" && defined(slug.current)] {    ...,    "body": body[0],    "author": author->name,    "categories": categories[]->title  } | order(_createdAt desc)
+// Query: *[_type == "post" && defined(slug.current)   && (!defined($category)  || $category == ""   || $category in categories[]->title)]{     ...,    "body": body[0],    "author": author->name,    "categories": categories[]->title  } | order(_createdAt desc)
 export type POSTS_QUERYResult = Array<{
   _id: string;
   _type: "post";
@@ -340,25 +340,19 @@ export type POST_BY_SLUG_QUERYResult = {
 export type POST_SLUGS_QUERYResult = Array<{
   slug: string | null;
 }>;
-// Variable: CATEGORIES_QUERY
-// Query: *[_type == "category"] | order(title asc)
-export type CATEGORIES_QUERYResult = Array<{
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  description?: string;
+// Variable: CATEGORIES_IN_POST_QUERY
+// Query: *[_type == "post" && defined(categories)]{    "categories": categories[]->title  } | order(title asc)
+export type CATEGORIES_IN_POST_QUERYResult = Array<{
+  categories: Array<string | null> | null;
 }>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  *[_type == \"post\" && defined(slug.current)] {\n    ...,\n    \"body\": body[0],\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
+    "\n  *[_type == \"post\" && defined(slug.current) \n  && (!defined($category)\n  || $category == \"\" \n  || $category in categories[]->title)]{ \n    ...,\n    \"body\": body[0],\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
     "\n  *[_type == \"post\" && slug.current == $slug][0] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  }\n": POST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
-    "\n  *[_type == \"category\"] | order(title asc)\n": CATEGORIES_QUERYResult;
+    "\n  *[_type == \"post\" && defined(categories)]{\n\n    \"categories\": categories[]->title\n  } | order(title asc)\n": CATEGORIES_IN_POST_QUERYResult;
   }
 }
