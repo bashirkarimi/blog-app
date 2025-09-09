@@ -2,6 +2,7 @@ import { POSTS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import { PostCard } from "@/components/post-card";
 import { Categories } from "@/components/categories";
+import { POST_BY_SLUG_QUERYResult } from "@/sanity/types";
 
 interface HomeProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -26,7 +27,7 @@ export default async function Home(props: HomeProps) {
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {posts.map((post) => (
             <li key={post._id}>
-              <PostCard post={post as any} />
+              <PostCard post={post as unknown as POST_BY_SLUG_QUERYResult} />
             </li>
           ))}
         </ul>
