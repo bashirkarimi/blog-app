@@ -2,9 +2,10 @@ import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/image";
 import Image from "next/image";
 import { POST_BY_SLUG_QUERYResult } from "@/sanity/types";
+import Link from "next/link";
 
 const PostCard = ({ post }: { post: POST_BY_SLUG_QUERYResult }) => (
-  <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden cursor-pointer flex flex-col h-full">
+  <div className="bg-white rounded-xl shadow-lg  overflow-hidden  flex flex-col h-full">
     {post?.mainImage && (
       <Image
         src={urlFor(post.mainImage).url()}
@@ -35,12 +36,12 @@ const PostCard = ({ post }: { post: POST_BY_SLUG_QUERYResult }) => (
         )}
         <span className="ml-4"></span>
       </div>
-      <a
-        className="mt-4 inline-flex items-center text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150"
+      <Link
+        className="pt-4 p-1  text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150"
         href={`/post/${post?.slug?.current}`}
       >
         Read more
-      </a>
+      </Link>
     </div>
   </div>
 );

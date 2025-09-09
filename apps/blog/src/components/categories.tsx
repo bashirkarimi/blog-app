@@ -1,5 +1,6 @@
 import { sanityFetch } from "@/sanity/live";
 import { CATEGORIES_IN_POST_QUERY } from "@/sanity/queries";
+import Link from "next/link";
 
 const Categories = async ({
   selectedCategory,
@@ -54,7 +55,7 @@ const Categories = async ({
         </li>
         {uniqueCategories.map((category, index) => (
           <li key={index}>
-            <a
+            <Link
               href={
                 activeCategory === category.title
                   ? "."
@@ -81,7 +82,7 @@ const Categories = async ({
                   {category.count}
                 </span>
               )}
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
