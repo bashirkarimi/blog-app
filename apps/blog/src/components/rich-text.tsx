@@ -10,17 +10,26 @@ const RichText = ({ value }: RichTextProps) => {
   const customBlockComponents = {
     types: {
       image: ({ value }: { value: any }) => {
-        const imgUrl = urlFor(value).height(800).width(600).url();
+        const imgUrl = urlFor(value).url();
+
+        let width = 600;
+        let height = 400;
+
+        const match = imgUrl?.match(/-(\d+)x(\d+)(?=\.)/);
+        if (match) {
+          width = parseInt(match[1], 10) || width;
+          height = parseInt(match[2], 10) || height;
+        }
 
         return (
           <Image
             className="rounded-lg"
-            width={600}
-            height={400}
             alt={value.altText || "Blog post image"}
             src={imgUrl}
+            width={width}
+            height={height}
             sizes="100vw"
-            priority={false}
+            style={{ width: "100%", height: "auto" }}
           />
         );
       },
