@@ -1,10 +1,10 @@
-import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/image";
 import { POST_BY_SLUG_QUERY } from "@/sanity/queries";
 import { POST_SLUGS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import Image from "next/image";
 import { NavigateHome } from "@/components/navigate-home";
+import { RichText } from "@/components/rich-text";
 
 interface PageProps {
   params: {
@@ -20,13 +20,16 @@ export async function generateStaticParams() {
 
     return (slugs ?? []).map((s) => ({ slug: s.slug }));
   } catch (err) {
-    console.warn("generateStaticParams: failed to fetch slugs, falling back to empty list", err);
+    console.warn(
+      "generateStaticParams: failed to fetch slugs, falling back to empty list",
+      err
+    );
     return [];
   }
 }
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const { data: post } = await sanityFetch({
     query: POST_BY_SLUG_QUERY,
     params: { slug },
@@ -52,14 +55,20 @@ export default async function Page({ params }: PageProps) {
           <div className="text-sm text-gray-500 mb-6">
             <span>By {post?.author}</span>
             <span className="ml-4">
-              Published on {post?.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : ""}
+              Published on{" "}
+              {post?.publishedAt
+                ? new Date(post.publishedAt).toLocaleDateString()
+                : ""}
             </span>
             <span className="ml-4">
-              Updated on {post?._updatedAt ? new Date(post._updatedAt).toLocaleDateString() : ""}
+              Updated on{" "}
+              {post?._updatedAt
+                ? new Date(post._updatedAt).toLocaleDateString()
+                : ""}
             </span>
           </div>
           <div className="prose max-w-none text-gray-700 leading-relaxed space-y-6">
-            <PortableText value={post?.body ?? []} />
+            <RichText value={post?.body ?? []} />
           </div>
         </article>
       </div>
