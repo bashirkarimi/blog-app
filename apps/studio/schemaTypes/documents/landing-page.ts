@@ -1,4 +1,6 @@
-import { defineType, defineField } from "sanity";
+import {defineType, defineField, defineArrayMember} from 'sanity'
+import {heroTypes} from '../objects/heros'
+import {sectionTypes} from '../objects/sections'
 
 export const landingPageType = defineType({
   name: 'landingPage',
@@ -22,32 +24,51 @@ export const landingPageType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'contents',
-      title: 'Contents',
-      type: 'pageBuilder',
-      description: 'Add and arrange content blocks to build the page layout',
-      validation: (Rule) => Rule.required().min(1).error('At least one content block is required'),
+      name: 'heros',
+      title: 'Heros',
+      type: 'array',
+      of: heroTypes.map((hero) =>
+        defineArrayMember({
+          type: hero.name,
+        }),
+      ),
+      options: {
+        insertMenu: {
+          views: [
+            {
+              name: 'grid',
+              previewImageUrl: (type) => `/static/heroes/${type}.png`,
+            },
+          ],
+        },
+      },
+      validation: (rule) => rule.required().max(1).error('Please add one hero'),
     }),
-    // defineField({
-    //   name: 'heros',
-    //   title: 'Heros',
-    //   type: 'array',
-    //   of: [{type: 'string'}],
-    //   description: 'List of hero names',
-    // }),
-    // defineField({
-    //   name: 'sections',
-    //   title: 'Sections',
-    //   type: 'array',
-    //   of: [], // You can define different section types here
-    //   description: 'Add sections to build the page layout',
-    // }),
     defineField({
-      name: 'content',
-      title: 'Content',
+      name: 'sections',
+      title: 'Sections',
+      type: 'array',
+      of: sectionTypes.map((section) =>
+        defineArrayMember({
+          type: section.name,
+        }),
+      ),
+      options: {
+        insertMenu: {
+          views: [
+            {
+              name: 'grid',
+              previewImageUrl: (type) => `/static/sections/${type}.png`,
+            },
+          ],
+        },
+      },
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
       type: 'text',
       description: 'Main content of the page',
-      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {

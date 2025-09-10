@@ -1,3 +1,3 @@
+import { blogListType } from "./blog-list";
 
-
-export const sectionTypes = [];
+export const sectionTypes = [blogListType];
