@@ -1,6 +1,7 @@
-import blockContent from './blockContent'
-import category from './category'
-import post from './post'
-import author from './author'
+import {sharedArrayTypes} from './arrays'
+import {sharedObjectTypes} from './objects'
+import {documentTypes} from './documents'
 
-export const schemaTypes = [post, author, category, blockContent]
+export const schemaTypes = [
+  ...documentTypes, ...sharedArrayTypes, ...sharedObjectTypes
+]
