@@ -1,10 +1,10 @@
 import { SectionRenderer } from "./section-renderer";
 import { HeroRenderer } from "./hero-renderer";
+import { SITE_SETTINGS_QUERYResult } from "@/sanity/types";
 export interface PageProps {
-  data: any | null;
+  data: NonNullable<SITE_SETTINGS_QUERYResult>["homePage"];
 }
-export function PageBuilder({ data }: Readonly<PageProps>) {
-
+export function PageBuilder({ data }: PageProps) {
   return (
     <main id="main-content">
       {(() => {
@@ -23,13 +23,13 @@ export function PageBuilder({ data }: Readonly<PageProps>) {
               </>
             );
           }
-          case "detailPage": {
-            return (
-              <>
-                <p>Detail Page</p>
-              </>
-            );
-          }
+          // case "detailPage": {
+          //   return (
+          //     <>
+          //       <p>Detail Page</p>
+          //     </>
+          //   );
+          // }
           default:
             return null;
         }

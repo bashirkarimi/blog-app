@@ -13,6 +13,55 @@
  */
 
 // Source: schema.json
+export type BlogList = {
+  _type: "blogList";
+  title?: string;
+  mode?: "latest" | "manual";
+  limit?: number;
+  posts?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "post";
+  }>;
+};
+
+export type Hero = {
+  _type: "hero";
+  title?: string;
+  text?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+};
+
 export type BlockContent = Array<{
   children?: Array<{
     marks?: Array<string>;
@@ -43,16 +92,6 @@ export type BlockContent = Array<{
   _type: "image";
   _key: string;
 }>;
-
-export type Category = {
-  _id: string;
-  _type: "category";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  description?: string;
-};
 
 export type Post = {
   _id: string;
@@ -89,6 +128,30 @@ export type Post = {
   }>;
   publishedAt?: string;
   body?: BlockContent;
+};
+
+export type SiteSettings = {
+  _id: string;
+  _type: "siteSettings";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  homePage?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "landingPage";
+  };
+};
+
+export type Category = {
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
 };
 
 export type Author = {
@@ -129,6 +192,23 @@ export type Author = {
     _type: "block";
     _key: string;
   }>;
+};
+
+export type LandingPage = {
+  _id: string;
+  _type: "landingPage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  heros?: Array<{
+    _key: string;
+  } & Hero>;
+  sections?: Array<{
+    _key: string;
+  } & BlogList>;
+  description?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -249,9 +329,114 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = BlockContent | Category | Post | Author | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = BlogList | Hero | BlockContent | Post | SiteSettings | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
+// Variable: SITE_SETTINGS_QUERY
+// Query: *[_type == "siteSettings"][0]{    "homePage": homePage->{      title,      slug,      _type,      "heros": heros[]{        ...,      },      "sections": sections[]{        ...,        "posts": posts[]->{          ...,          "body": body[0],          "author": author->name,          "categories": categories[]->title        }      }    }  }
+export type SITE_SETTINGS_QUERYResult = {
+  homePage: {
+    title: string | null;
+    slug: Slug | null;
+    _type: "landingPage";
+    heros: Array<{
+      _key: string;
+      _type: "hero";
+      title?: string;
+      text?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }>;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+    }> | null;
+    sections: Array<{
+      _key: string;
+      _type: "blogList";
+      title?: string;
+      mode?: "latest" | "manual";
+      limit?: number;
+      posts: Array<{
+        _id: string;
+        _type: "post";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        title?: string;
+        slug?: Slug;
+        author: string | null;
+        mainImage?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        categories: Array<string | null> | null;
+        publishedAt?: string;
+        body: {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+          listItem?: "bullet";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+          _key: string;
+        } | null;
+      }> | null;
+    }> | null;
+  } | null;
+} | null;
 // Variable: POSTS_QUERY
 // Query: *[_type == "post" && defined(slug.current)   && (!defined($category)  || $category == ""   || $category in categories[]->title)]{     ...,    "body": body[0],    "author": author->name,    "categories": categories[]->title  } | order(_createdAt desc)
 export type POSTS_QUERYResult = Array<{
@@ -350,9 +535,10 @@ export type CATEGORIES_IN_POST_QUERYResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "\n  *[_type == \"siteSettings\"][0]{\n    \"homePage\": homePage->{\n      title,\n      slug,\n      _type,\n      \"heros\": heros[]{\n        ...,\n      },\n      \"sections\": sections[]{\n        ...,\n        \"posts\": posts[]->{\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        }\n      }\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current) \n  && (!defined($category)\n  || $category == \"\" \n  || $category in categories[]->title)]{ \n    ...,\n    \"body\": body[0],\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
     "\n  *[_type == \"post\" && slug.current == $slug][0] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  }\n": POST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
-    "\n  *[_type == \"post\" && defined(categories)]{\n\n    \"categories\": categories[]->title\n  } | order(title asc)\n": CATEGORIES_IN_POST_QUERYResult;
+    "\n  *[_type == \"post\" && defined(categories)]{\n    \"categories\": categories[]->title\n  } | order(title asc)\n": CATEGORIES_IN_POST_QUERYResult;
   }
 }

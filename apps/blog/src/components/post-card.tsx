@@ -1,10 +1,10 @@
 import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/image";
 import Image from "next/image";
-import { POST_BY_SLUG_QUERYResult } from "@/sanity/types";
+import { POSTS_QUERYResult } from "@/sanity/types";
 import Link from "next/link";
 
-const PostCard = ({ post }: { post: POST_BY_SLUG_QUERYResult }) => (
+const PostCard = ({ post }: { post: POSTS_QUERYResult[number] }) => (
   <div className="bg-white rounded-xl shadow-lg  overflow-hidden  flex flex-col h-full">
     {post?.mainImage && (
       <Image

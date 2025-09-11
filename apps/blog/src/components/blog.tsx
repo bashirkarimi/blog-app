@@ -1,5 +1,11 @@
 import { PostCard } from "./post-card";
-const Blog = ({ data }: { data: any }) => {
+import { POSTS_QUERYResult } from "@/sanity/types";
+
+interface BlogProps {
+  data?: POSTS_QUERYResult;
+}
+
+const Blog = ({ data }: BlogProps) => {
   return (
     <section
       className="w-full  px-4 py-24 mx-auto sm:px-6 lg:px-8"
@@ -13,13 +19,13 @@ const Blog = ({ data }: { data: any }) => {
       </h2>
       {data?.length && (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {data.map((post: any) => (
+          {data.map((post) => (
             <li key={post._id}>
               <PostCard post={post} />
             </li>
           ))}
         </ul>
-      ) }
+      )}
     </section>
   );
 };

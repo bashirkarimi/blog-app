@@ -24,7 +24,7 @@ export default async function Home(props: HomeProps) {
   // });
 
   const siteSettings = await getSiteSettings();
-  const homePage = siteSettings?.homePage;
+  const homePage = siteSettings?.homePage ?? null;
 
   return (
     <div className="container mx-auto">
