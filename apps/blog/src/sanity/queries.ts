@@ -1,5 +1,27 @@
 import { defineQuery } from "next-sanity";
 
+export const SITE_SETTINGS_QUERY = defineQuery(`
+  *[_type == "siteSettings"][0]{
+    "homePage": homePage->{
+      title,
+      slug,
+      _type,
+      "heros": heros[]{
+        ...,
+      },
+      "sections": sections[]{
+        ...,
+        "posts": posts[]->{
+          ...,
+          "body": body[0],
+          "author": author->name,
+          "categories": categories[]->title
+        }
+      }
+    }
+  }
+`);
+
 export const POSTS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current) 
   && (!defined($category)
