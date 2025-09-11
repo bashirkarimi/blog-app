@@ -1,7 +1,7 @@
 import { defineQuery } from "next-sanity";
 
 export const SITE_SETTINGS_QUERY = defineQuery(`
-  *[_type == "siteSettings"][0]{
+  *[_id == "siteSettings"][0]{
     "homePage": homePage->{
       title,
       slug,
@@ -11,12 +11,20 @@ export const SITE_SETTINGS_QUERY = defineQuery(`
       },
       "sections": sections[]{
         ...,
-        "posts": posts[]->{
-          ...,
-          "body": body[0],
-          "author": author->name,
-          "categories": categories[]->title
-        }
+        "posts": select(
+          mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){
+            ...,
+            "body": body[0],
+            "author": author->name,
+            "categories": categories[]->title
+          },
+          mode == "manual" => posts[]->{
+            ...,
+            "body": body[0],
+            "author": author->name,
+            "categories": categories[]->title
+          }
+        )
       }
     }
   }

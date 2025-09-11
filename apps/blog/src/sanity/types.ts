@@ -333,8 +333,10 @@ export type AllSanitySchemaTypes = BlogList | Hero | BlockContent | Post | SiteS
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: SITE_SETTINGS_QUERY
-// Query: *[_type == "siteSettings"][0]{    "homePage": homePage->{      title,      slug,      _type,      "heros": heros[]{        ...,      },      "sections": sections[]{        ...,        "posts": posts[]->{          ...,          "body": body[0],          "author": author->name,          "categories": categories[]->title        }      }    }  }
+// Query: *[_id == "siteSettings"][0]{    "homePage": homePage->{      title,      slug,      _type,      "heros": heros[]{        ...,      },      "sections": sections[]{        ...,        "posts": select(          mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){            ...,            "body": body[0],            "author": author->name,            "categories": categories[]->title          },          mode == "manual" => posts[]->{            ...,            "body": body[0],            "author": author->name,            "categories": categories[]->title          }        )      }    }  }
 export type SITE_SETTINGS_QUERYResult = {
+  homePage: null;
+} | {
   homePage: {
     title: string | null;
     slug: Slug | null;
@@ -535,7 +537,7 @@ export type CATEGORIES_IN_POST_QUERYResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  *[_type == \"siteSettings\"][0]{\n    \"homePage\": homePage->{\n      title,\n      slug,\n      _type,\n      \"heros\": heros[]{\n        ...,\n      },\n      \"sections\": sections[]{\n        ...,\n        \"posts\": posts[]->{\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        }\n      }\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
+    "\n  *[_id == \"siteSettings\"][0]{\n    \"homePage\": homePage->{\n      title,\n      slug,\n      _type,\n      \"heros\": heros[]{\n        ...,\n      },\n      \"sections\": sections[]{\n        ...,\n        \"posts\": select(\n          mode == \"latest\" => *[_type == \"post\" && defined(slug.current)] | order(_createdAt desc){\n            ...,\n            \"body\": body[0],\n            \"author\": author->name,\n            \"categories\": categories[]->title\n          },\n          mode == \"manual\" => posts[]->{\n            ...,\n            \"body\": body[0],\n            \"author\": author->name,\n            \"categories\": categories[]->title\n          }\n        )\n      }\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current) \n  && (!defined($category)\n  || $category == \"\" \n  || $category in categories[]->title)]{ \n    ...,\n    \"body\": body[0],\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
     "\n  *[_type == \"post\" && slug.current == $slug][0] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  }\n": POST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
