@@ -1,10 +1,12 @@
 import { Hero } from "./hero";
+import type { Hero as HeroType } from "@/sanity/types";
 
-const HeroRenderer = ({ hero }: { hero: any }) => {
+const HeroRenderer = ({ hero }: { hero: HeroType | Record<string, any> | null }) => {
+  if (!hero) return null;
+
   switch (hero._type) {
     case "hero":
-      if (!hero) return null;
-      return <Hero hero={hero} />;
+      return <Hero hero={hero as HeroType} />;
     default:
       return null;
   }

@@ -1,10 +1,12 @@
 import { SectionRenderer } from "./section-renderer";
 import { HeroRenderer } from "./hero-renderer";
-import { SITE_SETTINGS_QUERYResult } from "@/sanity/types";
+import type { SITE_SETTINGS_QUERYResult } from "@/sanity/types";
+
 export interface PageProps {
-  data: NonNullable<SITE_SETTINGS_QUERYResult>["homePage"];
+  data: NonNullable<SITE_SETTINGS_QUERYResult>["homePage"] | null;
 }
-export function PageBuilder({ data }: PageProps) {
+
+const PageBuilder = ({ data }: PageProps) => {
   return (
     <main id="main-content">
       {(() => {
@@ -37,3 +39,5 @@ export function PageBuilder({ data }: PageProps) {
     </main>
   );
 }
+
+export { PageBuilder };
