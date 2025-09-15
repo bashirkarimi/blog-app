@@ -1,32 +1,43 @@
 import { defineQuery } from "next-sanity";
 
-export const SITE_SETTINGS_QUERY = defineQuery(`
-  *[_id == "siteSettings"][0]{
-    "homePage": homePage->{
-      title,
-      slug,
-      _type,
-      "heros": heros[]{
-        ...,
-      },
-      "sections": sections[]{
-        ...,
-        "posts": select(
-          mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){
-            ...,
-            "body": body[0],
-            "author": author->name,
-            "categories": categories[]->title
-          },
-          mode == "manual" => posts[]->{
-            ...,
-            "body": body[0],
-            "author": author->name,
-            "categories": categories[]->title
-          }
-        )
+const expandSections = /* groq */ `
+  sections[]{
+    ...,
+    _type == 'blogList' => {
+      ...,
+      "posts": select(
+        mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){
+          ...,
+          "body": body[0],
+          "author": author->name,
+          "categories": categories[]->title
+        },
+        mode == "manual" => posts[]->{
+          ...,
+          "body": body[0],
+          "author": author->name,
+          "categories": categories[]->title
+        }
+      )
+    },
+    _type == 'teaserList' => {
+      ...,
+      postRefs[]->{
+        title, excerpt, mainImage, "slug": slug.current
       }
+    },
+    _type == 'postsModule' => {
+      ...,
+      tags[]->{ title, "slug": slug.current }
     }
+  }
+`;
+
+export const HOME_PAGE_QUERY = defineQuery(`
+  *[_type=='homePage' && _id=='homePage'][0]{
+    seoTitle,
+    heros[],
+    ${expandSections}
   }
 `);
 

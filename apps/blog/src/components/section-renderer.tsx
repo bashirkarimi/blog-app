@@ -1,15 +1,56 @@
-import type { BlogList } from "@/sanity/types";
+
+import { TeaserList } from "./teaser-list";
+import { ImageTeaser } from "./image-teaser";
+import { Accordion } from "./accordion";
+import { RichText } from "./rich-text";
 import { Blog } from "./blog";
 
-const SectionRenderer = ({ section }: { section: BlogList | Record<string, any> }) => {
-  if (!section) return null;
+// import PostsModule from "./PostsModule";
 
-  switch (section._type) {
-    case "blogList":
-      return <Blog data={section as BlogList} />;
-    default:
-      return null;
-  }
+type SearchParams = Record<string, string | string[] | undefined>;
+
+const SectionRenderer = ({
+  sections,
+  searchParams,
+}: {
+  sections: any[];
+  searchParams?: SearchParams;
+}) => {
+  return (
+    <div className="space-y-12">
+      {Array(sections).map((section, idx) => (
+        <div className="space-y-6" key={section._key || idx}>
+          {(() => {
+            switch (section._type) {
+              case "teaserList":
+                return <TeaserList data={section} />;
+              case "imageTeaser":
+                return <ImageTeaser data={section} />;
+              case "accordion":
+                return <Accordion data={section} />;
+              // case "richText":
+              //   return <RichText key={m?._key || i} data={m} />;
+              case "blogList":
+                return <Blog data={section} />;
+              case "teaserList":
+                return <TeaserList data={section} />;
+              // Add other module types here
+              // case "postsModule":
+              //   return (
+              //     <PostsModule
+              //       key={m?._key || i}
+              //       data={m}
+              //       searchParams={searchParams}
+              //     />
+              //   );
+              default:
+                return null;
+            }
+          })()}
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export { SectionRenderer };
