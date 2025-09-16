@@ -243,6 +243,22 @@ export type Hero = {
   };
 };
 
+export type Heros = Array<{
+  _key: string;
+} & Hero>;
+
+export type Sections = Array<{
+  _key: string;
+} & BlogList | {
+  _key: string;
+} & Accordion | {
+  _key: string;
+} & ImageTeaser | {
+  _key: string;
+} & RichText | {
+  _key: string;
+} & TeaserList>;
+
 export type BlockContent = Array<{
   children?: Array<{
     marks?: Array<string>;
@@ -504,7 +520,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | BlockContent | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: HOME_PAGE_QUERY
