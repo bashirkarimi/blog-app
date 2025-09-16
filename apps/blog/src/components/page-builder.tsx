@@ -13,7 +13,7 @@ const PageBuilder = ({ data }: PageProps) => {
     <main id="main-content">
       <>
         {title && (
-          <h1 className={heros.length > 0 ? "sr-only" : ""}>{title}</h1>
+          <h1 className={heros?.length > 0 ? "sr-only" : ""}>{title}</h1>
         )}
         {heros?.map((hero: any) => (
           <HeroRenderer key={hero._key} hero={hero} />
