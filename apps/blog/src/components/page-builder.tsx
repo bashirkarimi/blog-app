@@ -1,9 +1,9 @@
 import { SectionRenderer } from "./section-renderer";
 import { HeroRenderer } from "./hero-renderer";
-import type { SITE_SETTINGS_QUERYResult } from "@/sanity/types";
+import type { HOME_PAGE_QUERYResult } from "@/sanity/types";
 
 export interface PageProps {
-  data: NonNullable<SITE_SETTINGS_QUERYResult>["homePage"] | null;
+  data: any;
 }
 
 const PageBuilder = ({ data }: PageProps) => {

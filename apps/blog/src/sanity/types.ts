@@ -696,6 +696,179 @@ export type HOME_PAGE_QUERYResult = {
     }> | null;
   }> | null;
 } | null;
+// Variable: LANDING_PAGE_QUERY
+// Query: *[_type == 'landingPage' && slug.current == $slug][0]{    seoTitle,    heros[],      sections[]{    ...,    _type == 'blogList' => {      ...,      "posts": select(        mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){          ...,          "body": body[0],          "author": author->name,          "categories": categories[]->title        },        mode == "manual" => posts[]->{          ...,          "body": body[0],          "author": author->name,          "categories": categories[]->title        }      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title, excerpt, mainImage, "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }  }
+export type LANDING_PAGE_QUERYResult = {
+  seoTitle: null;
+  heros: Array<{
+    _key: string;
+  } & Hero> | null;
+  sections: Array<{
+    _key: string;
+    _type: "accordion";
+    items?: Array<{
+      title?: string;
+      content?: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }>;
+      _key: string;
+    }>;
+  } | {
+    _key: string;
+    _type: "blogList";
+    title?: string;
+    mode?: "latest" | "manual";
+    limit?: number;
+    posts: Array<{
+      _id: string;
+      _type: "post";
+      _createdAt: string;
+      _updatedAt: string;
+      _rev: string;
+      title?: string;
+      slug?: Slug;
+      author: string | null;
+      mainImage?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      categories: Array<string | null> | null;
+      publishedAt?: string;
+      body: {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+        listItem?: "bullet";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      } | null;
+    }> | null;
+  } | {
+    _key: string;
+    _type: "imageTeaser";
+    title?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    href?: string;
+    description?: string;
+  } | {
+    _key: string;
+    _type: "richText";
+    content?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }>;
+  } | {
+    _key: string;
+    _type: "teaserList";
+    mode?: "manual" | "posts";
+    items?: Array<{
+      title?: string;
+      summary?: string;
+      image?: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      href?: string;
+      _type: "teaser";
+      _key: string;
+    }>;
+    postRefs: Array<{
+      title: string | null;
+      excerpt: null;
+      mainImage: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+      slug: string | null;
+    }> | null;
+  }> | null;
+} | null;
 // Variable: POSTS_QUERY
 // Query: *[_type == "post" && defined(slug.current)   && (!defined($category)  || $category == ""   || $category in categories[]->title)]{     ...,    "body": body[0],    "author": author->name,    "categories": categories[]->title  } | order(_createdAt desc)
 export type POSTS_QUERYResult = Array<{
@@ -795,6 +968,7 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type=='homePage' && _id=='homePage'][0]{\n    seoTitle,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      ...,\n      \"posts\": select(\n        mode == \"latest\" => *[_type == \"post\" && defined(slug.current)] | order(_createdAt desc){\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        },\n        mode == \"manual\" => posts[]->{\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        }\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title, excerpt, mainImage, \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": HOME_PAGE_QUERYResult;
+    "\n  *[_type == 'landingPage' && slug.current == $slug][0]{\n    seoTitle,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      ...,\n      \"posts\": select(\n        mode == \"latest\" => *[_type == \"post\" && defined(slug.current)] | order(_createdAt desc){\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        },\n        mode == \"manual\" => posts[]->{\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        }\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title, excerpt, mainImage, \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": LANDING_PAGE_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current) \n  && (!defined($category)\n  || $category == \"\" \n  || $category in categories[]->title)]{ \n    ...,\n    \"body\": body[0],\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
     "\n  *[_type == \"post\" && slug.current == $slug][0] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  }\n": POST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
