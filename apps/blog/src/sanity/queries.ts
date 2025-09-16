@@ -1,5 +1,65 @@
 import { defineQuery } from "next-sanity";
 
+const expandSections = /* groq */ `
+  sections[]{
+    ...,
+    _type == 'blogList' => {
+      ...,
+      "posts": select(
+        mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){
+          ...,
+          "body": body[0],
+          "author": author->name,
+          "categories": categories[]->title
+        },
+        mode == "manual" => posts[]->{
+          ...,
+          "body": body[0],
+          "author": author->name,
+          "categories": categories[]->title
+        }
+      )
+    },
+    _type == 'teaserList' => {
+      ...,
+      postRefs[]->{
+        title, excerpt, mainImage, "slug": slug.current
+      }
+    },
+    _type == 'postsModule' => {
+      ...,
+      tags[]->{ title, "slug": slug.current }
+    }
+  }
+`;
+
+export const HOME_PAGE_QUERY = defineQuery(`
+  *[_type=='homePage' && _id=='homePage'][0]{
+    seoTitle,
+    heros[],
+    ${expandSections}
+  }
+`);
+
+
+export const LANDING_PAGE_QUERY = defineQuery(`
+  *[_type == 'landingPage' && slug.current == $slug][0]{
+    seoTitle,
+    title,
+    heros[],
+    ${expandSections}
+  }
+`);
+
+export const SITE_SETTINGS_QUERY = defineQuery(`
+  *[_type=='siteSettings' && _id=='siteSettings'][0]{
+    siteTitle, logo, defaultSeo, headerMenu->{
+      title,
+      items[]{label, target->{"_id": _id, title, "slug": slug.current}}
+    }
+  }
+`);
+
 export const POSTS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current) 
   && (!defined($category)

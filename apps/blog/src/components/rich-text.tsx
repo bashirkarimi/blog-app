@@ -1,21 +1,21 @@
 import { PortableText } from "next-sanity";
 import Image from "next/image";
 import { urlFor } from "@/sanity/image";
-import { BlockContent } from "@/sanity/types";
+import { RichText as RichTextType } from "@/sanity/types";
 
-interface RichTextProps {
-  value: BlockContent;
-}
-const RichText = ({ value }: RichTextProps) => {
+
+const RichText = ({ data }: { data?: { body: RichTextType} | Partial<RichTextType> | any }) => {
   const customBlockComponents = {
     types: {
       image: ({ value }: { value: any }) => {
         const imgUrl = urlFor(value).url();
 
+        if (!imgUrl) return null;
+
         let width = 600;
         let height = 400;
 
-        const match = imgUrl?.match(/-(\d+)x(\d+)(?=\.)/);
+        const match = imgUrl.match(/-(\d+)x(\d+)(?=\.)/);
         if (match) {
           width = parseInt(match[1], 10) || width;
           height = parseInt(match[2], 10) || height;
@@ -53,7 +53,10 @@ const RichText = ({ value }: RichTextProps) => {
     },
   };
   return (
-    <PortableText value={value ?? []} components={customBlockComponents} />
+    <PortableText
+      value={data?.body ?? []}
+      components={customBlockComponents}
+    />
   );
 };
 

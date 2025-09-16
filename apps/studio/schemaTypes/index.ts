@@ -1,6 +1,8 @@
-import blockContent from './blockContent'
-import category from './category'
-import post from './post'
-import author from './author'
+import {sharedArrayTypes} from './arrays'
+import {sharedObjectTypes} from './objects'
+import {documentTypes} from './documents'
+import siteSettings from './singletons/site-settings'
+import homePage from './singletons/home-page'
+import detailsPage from './singletons/details-page'
 
-export const schemaTypes = [post, author, category, blockContent]
+export const schemaTypes = [...documentTypes, ...sharedArrayTypes, ...sharedObjectTypes, siteSettings, homePage, detailsPage];
