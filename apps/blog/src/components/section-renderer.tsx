@@ -1,9 +1,9 @@
-
 import { TeaserList } from "./teaser-list";
 import { ImageTeaser } from "./image-teaser";
 import { Accordion } from "./accordion";
 import { RichText } from "./rich-text";
 import { Blog } from "./blog";
+import { HOME_PAGE_QUERYResult } from "@/sanity/types";
 
 // import PostsModule from "./PostsModule";
 
@@ -13,7 +13,7 @@ const SectionRenderer = ({
   sections,
   searchParams,
 }: {
-  sections: any[];
+  sections: NonNullable<HOME_PAGE_QUERYResult["section"]>;
   searchParams?: SearchParams;
 }) => {
   return (
@@ -28,8 +28,8 @@ const SectionRenderer = ({
                 return <ImageTeaser data={section} />;
               case "accordion":
                 return <Accordion data={section} />;
-              // case "richText":
-              //   return <RichText key={m?._key || i} data={m} />;
+              case "richText":
+                return <RichText data={section} />;
               case "blogList":
                 return <Blog data={section} />;
               case "teaserList":

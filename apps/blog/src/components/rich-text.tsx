@@ -1,12 +1,13 @@
 import { PortableText } from "next-sanity";
 import Image from "next/image";
 import { urlFor } from "@/sanity/image";
-import { BlockContent } from "@/sanity/types";
+import { RichText as RichTextType } from "@/sanity/types";
 
 interface RichTextProps {
-  value: BlockContent;
+  data: RichTextType;
 }
-const RichText = ({ value }: RichTextProps) => {
+const RichText = ({ data }: RichTextProps) => {
+  const value = data.content;
   const customBlockComponents = {
     types: {
       image: ({ value }: { value: any }) => {

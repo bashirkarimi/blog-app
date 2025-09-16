@@ -13,6 +13,7 @@ export const richTextType = defineType({
       validation: (r) => r.min(1),
     }),
   ],
-  preview: {prepare: () => ({title: 'Rich Text'})},
+  preview: {
+    prepare: () => ({title: 'Rich Text'}),
+  },
 })
-
