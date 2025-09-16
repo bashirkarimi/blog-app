@@ -3,7 +3,7 @@ import { PortableText } from "next-sanity";
 import { urlFor } from "@/sanity/image";
 import {Hero as HeroType} from "@/sanity/types";
 
-const Hero = ({ hero  }: { hero: HeroType }) =>{
+const Hero = ({ hero }: { hero: HeroType }) => {
   const {title, text, image} = hero;
   return (
     <section className="isolate w-full aspect-[21/6] py-16 relative overflow-hidden">
