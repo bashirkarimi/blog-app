@@ -15,7 +15,7 @@ export const herosField = defineField({
       views: [
         {
           name: 'grid',
-          previewImageUrl: (type) => `/static/heroes/${type}.png`,
+          previewImageUrl: (type) => `/static/heros/${type}.png`,
         },
       ],
     },
