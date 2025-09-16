@@ -8,7 +8,7 @@ export default async function landingPage({ params }: any) {
     query: LANDING_PAGE_QUERY,
     params: { slug }
   });
-  
+  console.log("Landing page data:", data);
   return (
     <div className="container mx-auto">
       <PageBuilder data={data} />

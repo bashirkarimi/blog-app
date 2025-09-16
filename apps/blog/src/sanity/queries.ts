@@ -45,6 +45,7 @@ export const HOME_PAGE_QUERY = defineQuery(`
 export const LANDING_PAGE_QUERY = defineQuery(`
   *[_type == 'landingPage' && slug.current == $slug][0]{
     seoTitle,
+    title,
     heros[],
     ${expandSections}
   }

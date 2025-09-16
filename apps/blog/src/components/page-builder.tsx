@@ -7,10 +7,14 @@ export interface PageProps {
 }
 
 const PageBuilder = ({ data }: PageProps) => {
-  const { heros, sections } = data;
+  const { heros, sections, title } = data;
+
   return (
     <main id="main-content">
       <>
+        {title && (
+          <h1 className={heros.length > 0 ? "sr-only" : ""}>{title}</h1>
+        )}
         {heros?.map((hero: any) => (
           <HeroRenderer key={hero._key} hero={hero} />
         ))}
