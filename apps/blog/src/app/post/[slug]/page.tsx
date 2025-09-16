@@ -37,7 +37,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <div className="container mx-auto max-w-3xl">
+      <div className="container mx-auto">
         <NavigateHome />
         <article className="bg-white p-8 md:p-12 rounded-xl shadow-lg">
           {post?.mainImage && (
@@ -68,7 +68,7 @@ export default async function Page({ params }: PageProps) {
             </span>
           </div>
           <div className="prose max-w-none text-gray-700 leading-relaxed space-y-6">
-            <RichText value={post?.body ?? []} />
+            <RichText data={post} />
           </div>
         </article>
       </div>

@@ -13,12 +13,12 @@ const SectionRenderer = ({
   sections,
   searchParams,
 }: {
-  sections: NonNullable<HOME_PAGE_QUERYResult["section"]>;
+  sections: NonNullable<NonNullable<HOME_PAGE_QUERYResult>["sections"]>;
   searchParams?: SearchParams;
 }) => {
   return (
     <div className="space-y-12">
-      {Array(sections).map((section, idx) => (
+      {(Array.isArray(sections) ? sections : []).map((section, idx) => (
         <div className="space-y-6" key={section._key || idx}>
           {(() => {
             switch (section._type) {
@@ -31,9 +31,7 @@ const SectionRenderer = ({
               case "richText":
                 return <RichText data={section} />;
               case "blogList":
-                return <Blog data={section} />;
-              case "teaserList":
-                return <TeaserList data={section} />;
+                return <Blog data={section as any} />;
               // Add other module types here
               // case "postsModule":
               //   return (

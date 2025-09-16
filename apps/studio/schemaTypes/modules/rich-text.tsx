@@ -1,18 +1,11 @@
-import {defineType, defineField} from 'sanity'
+import {defineType} from 'sanity'
+import richTextField from '../arrays/rich-text-field'
 
 export const richTextType = defineType({
   name: 'richText',
   title: 'Rich Text',
   type: 'object',
-  fields: [
-    defineField({
-      name: 'content',
-      title: 'Content',
-      type: 'array',
-      of: [{type: 'block'}],
-      validation: (r) => r.min(1),
-    }),
-  ],
+  fields: [richTextField],
   preview: {
     prepare: () => ({title: 'Rich Text'}),
   },

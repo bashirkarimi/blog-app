@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import richTextField from '../arrays/rich-text-field'
 
 export const postType = defineType({
   name: 'post',
@@ -44,11 +45,7 @@ export const postType = defineType({
       title: 'Published at',
       type: 'datetime',
     }),
-    defineField({
-      name: 'body',
-      title: 'Body',
-      type: 'blockContent',
-    }),
+    richTextField
   ],
 
   preview: {

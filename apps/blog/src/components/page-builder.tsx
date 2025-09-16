@@ -19,9 +19,9 @@ const PageBuilder = ({ data }: PageProps) => {
           <HeroRenderer key={hero._key} hero={hero} />
         ))}
 
-        {sections?.map((section: any) => (
-          <SectionRenderer key={section._key} sections={section} />
-        ))}
+        {sections ? (
+          <SectionRenderer sections={sections} />
+        ) : null}
       </>
     </main>
   );

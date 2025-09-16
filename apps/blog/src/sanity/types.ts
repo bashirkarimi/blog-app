@@ -129,15 +129,15 @@ export type TeaserList = {
 
 export type RichText = {
   _type: "richText";
-  content?: Array<{
+  body?: Array<{
     children?: Array<{
       marks?: Array<string>;
       text?: string;
       _type: "span";
       _key: string;
     }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+    listItem?: "bullet";
     markDefs?: Array<{
       href?: string;
       _type: "link";
@@ -145,6 +145,18 @@ export type RichText = {
     }>;
     level?: number;
     _type: "block";
+    _key: string;
+  } | {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
     _key: string;
   }>;
 };
@@ -636,15 +648,15 @@ export type HOME_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "richText";
-    content?: Array<{
+    body?: Array<{
       children?: Array<{
         marks?: Array<string>;
         text?: string;
         _type: "span";
         _key: string;
       }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-      listItem?: "bullet" | "number";
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
       markDefs?: Array<{
         href?: string;
         _type: "link";
@@ -652,6 +664,18 @@ export type HOME_PAGE_QUERYResult = {
       }>;
       level?: number;
       _type: "block";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
       _key: string;
     }>;
   } | {
@@ -810,15 +834,15 @@ export type LANDING_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "richText";
-    content?: Array<{
+    body?: Array<{
       children?: Array<{
         marks?: Array<string>;
         text?: string;
         _type: "span";
         _key: string;
       }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-      listItem?: "bullet" | "number";
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
       markDefs?: Array<{
         href?: string;
         _type: "link";
@@ -826,6 +850,18 @@ export type LANDING_PAGE_QUERYResult = {
       }>;
       level?: number;
       _type: "block";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
       _key: string;
     }>;
   } | {
