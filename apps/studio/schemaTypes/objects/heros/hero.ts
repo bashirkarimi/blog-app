@@ -30,7 +30,7 @@ export const heroType = defineType({
       const {title, media, subtitle} = selection
       return {
         title,
-        subtitle: ` ${subtitle}: `,
+        subtitle: subtitle ? `Type: ${subtitle}` : undefined,
         media: media ?? TextIcon,
       }
     },
