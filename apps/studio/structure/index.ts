@@ -15,10 +15,6 @@ export const structure: StructureResolver = (S) =>
           .child(S.editor().id(def.id).schemaType(def.type).documentId(def.id)),
       ),
       S.divider(),
-      // S.listItem()
-      //   .title('Menus')
-      //   .schemaType('menu')
-      //   .child(S.documentTypeList('menu').title('Menus')),
       S.listItem()
         .title('Landing Pages')
         .schemaType('landingPage')
@@ -35,5 +31,9 @@ export const structure: StructureResolver = (S) =>
         .title('Categories')
         .schemaType('category')
         .child(S.documentTypeList('category').title('Categories')),
-      // S.listItem().title('Tags').schemaType('tag').child(S.documentTypeList('tag').title('Tags')),
+      S.listItem()
+        .title('Menus')
+        .schemaType('menu')
+        .child(S.documentTypeList('menu').title('Menus')),
+      S.listItem().title('Tags').schemaType('tag').child(S.documentTypeList('tag').title('Tags')),
     ])

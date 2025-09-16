@@ -51,6 +51,15 @@ export const LANDING_PAGE_QUERY = defineQuery(`
   }
 `);
 
+export const SITE_SETTINGS_QUERY = defineQuery(`
+  *[_type=='siteSettings' && _id=='siteSettings'][0]{
+    siteTitle, logo, defaultSeo, headerMenu->{
+      title,
+      items[]{label, target->{"_id": _id, title, "slug": slug.current}}
+    }
+  }
+`);
+
 export const POSTS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current) 
   && (!defined($category)

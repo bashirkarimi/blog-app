@@ -13,12 +13,12 @@ export default defineType({
       validation: (r) => r.required(),
     }),
     defineField({name: 'logo', type: 'image', options: {hotspot: true}}),
-    // defineField({
-    //   name: 'headerMenu',
-    //   type: 'reference',
-    //   to: [{type: 'menu'}],
-    //   validation: (r) => r.required(),
-    // }),
+    defineField({
+      name: 'headerMenu',
+      type: 'reference',
+      to: [{type: 'menu'}],
+      validation: (r) => r.required(),
+    }),
     defineField({
       name: 'defaultSeo',
       type: 'object',

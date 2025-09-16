@@ -78,6 +78,12 @@ export type SiteSettings = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  headerMenu?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "menu";
+  };
   defaultSeo?: {
     title?: string;
     description?: string;
@@ -301,6 +307,36 @@ export type BlockContent = Array<{
   _type: "image";
   _key: string;
 }>;
+
+export type Tag = {
+  _id: string;
+  _type: "tag";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+};
+
+export type Menu = {
+  _id: string;
+  _type: "menu";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  items?: Array<{
+    label?: string;
+    target?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "landingPage";
+    };
+    _type: "menuItem";
+    _key: string;
+  }>;
+};
 
 export type Post = {
   _id: string;
@@ -532,7 +568,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Tag | Menu | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: HOME_PAGE_QUERY
@@ -906,6 +942,50 @@ export type LANDING_PAGE_QUERYResult = {
     }> | null;
   }> | null;
 } | null;
+// Variable: SITE_SETTINGS_QUERY
+// Query: *[_type=='siteSettings' && _id=='siteSettings'][0]{    siteTitle, logo, defaultSeo, headerMenu->{      title,      items[]{label, target->{"_id": _id, title, "slug": slug.current}}    }  }
+export type SITE_SETTINGS_QUERYResult = {
+  siteTitle: string | null;
+  logo: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  } | null;
+  defaultSeo: {
+    title?: string;
+    description?: string;
+    ogImage?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+  } | null;
+  headerMenu: {
+    title: string | null;
+    items: Array<{
+      label: string | null;
+      target: {
+        _id: string;
+        title: string | null;
+        slug: string | null;
+      } | null;
+    }> | null;
+  } | null;
+} | null;
 // Variable: POSTS_QUERY
 // Query: *[_type == "post" && defined(slug.current)   && (!defined($category)  || $category == ""   || $category in categories[]->title)]{     ...,    "body": body[0],    "author": author->name,    "categories": categories[]->title  } | order(_createdAt desc)
 export type POSTS_QUERYResult = Array<{
@@ -1006,6 +1086,7 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type=='homePage' && _id=='homePage'][0]{\n    seoTitle,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      ...,\n      \"posts\": select(\n        mode == \"latest\" => *[_type == \"post\" && defined(slug.current)] | order(_createdAt desc){\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        },\n        mode == \"manual\" => posts[]->{\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        }\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title, excerpt, mainImage, \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": HOME_PAGE_QUERYResult;
     "\n  *[_type == 'landingPage' && slug.current == $slug][0]{\n    seoTitle,\n    title,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      ...,\n      \"posts\": select(\n        mode == \"latest\" => *[_type == \"post\" && defined(slug.current)] | order(_createdAt desc){\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        },\n        mode == \"manual\" => posts[]->{\n          ...,\n          \"body\": body[0],\n          \"author\": author->name,\n          \"categories\": categories[]->title\n        }\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title, excerpt, mainImage, \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": LANDING_PAGE_QUERYResult;
+    "\n  *[_type=='siteSettings' && _id=='siteSettings'][0]{\n    siteTitle, logo, defaultSeo, headerMenu->{\n      title,\n      items[]{label, target->{\"_id\": _id, title, \"slug\": slug.current}}\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current) \n  && (!defined($category)\n  || $category == \"\" \n  || $category in categories[]->title)]{ \n    ...,\n    \"body\": body[0],\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  } | order(_createdAt desc)\n": POSTS_QUERYResult;
     "\n  *[_type == \"post\" && slug.current == $slug][0] {\n    ...,\n    \"author\": author->name,\n    \"categories\": categories[]->title\n  }\n": POST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
