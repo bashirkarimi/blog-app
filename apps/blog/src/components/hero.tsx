@@ -6,19 +6,19 @@ import {Hero as HeroType} from "@/sanity/types";
 const Hero = ({ hero  }: { hero: HeroType }) =>{
   const {title, text, image} = hero;
   return (
-    <section className="isolate w-full aspect-[2/1] py-16 relative overflow-hidden">
+    <section className="isolate w-full aspect-[21/6] py-16 relative overflow-hidden">
       <div className="relative flex flex-col justify-center items-center gap-8 h-full z-20">
-        {title ? (
-          <h1 className="text-2xl md:text-4xl lg:text-6xl font-semibold text-white text-pretty max-w-3xl">
+        {title && (
+          <h1 className="text-2xl md:text-4xl lg:text-6xl font-semibold !text-white text-pretty max-w-3xl">
             {title}
           </h1>
-        ) : null}
-        <div className="prose-lg lg:prose-xl prose-invert flex items-center">
-          {text ? <PortableText value={text} /> : null}
+        )}
+        <div className="prose-lg lg:prose-xl prose-invert flex items-center text-white">
+          {text && <PortableText value={text} />}
         </div>
       </div>
-      <div className="absolute inset-0 bg-pink-500 opacity-50 z-10" />
-      {image && image.asset ? (
+      <div className="absolute inset-0 bg-gray-900 opacity-60 z-10" />
+      {image && image.asset && (
         <Image
           className="absolute inset-0 object-cover blur-sm"
           src={urlFor(image).url()}
@@ -26,7 +26,7 @@ const Hero = ({ hero  }: { hero: HeroType }) =>{
           height={800}
           alt=""
         />
-      ) : null}
+      )}
     </section>
   );
 }
