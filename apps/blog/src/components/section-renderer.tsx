@@ -3,18 +3,15 @@ import { ImageTeaser } from "./image-teaser";
 import { Accordion } from "./accordion";
 import { RichText } from "./rich-text";
 import { Blog } from "./blog";
+import { PostsList } from "./posts-list";
 import { HOME_PAGE_QUERYResult } from "@/sanity/types";
-
-// import PostsModule from "./PostsModule";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
 const SectionRenderer = ({
-  sections,
-  searchParams,
+  sections
 }: {
   sections: NonNullable<NonNullable<HOME_PAGE_QUERYResult>["sections"]>;
-  searchParams?: SearchParams;
 }) => {
   return (
     <div className="space-y-12">
@@ -32,15 +29,8 @@ const SectionRenderer = ({
                 return <RichText data={section} />;
               case "blogList":
                 return <Blog data={section as any} />;
-              // Add other module types here
-              // case "postsModule":
-              //   return (
-              //     <PostsModule
-              //       key={m?._key || i}
-              //       data={m}
-              //       searchParams={searchParams}
-              //     />
-              //   );
+              case "posts":
+                return <PostsList data={section} />;
               default:
                 return null;
             }
