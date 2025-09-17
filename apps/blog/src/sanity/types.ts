@@ -33,7 +33,9 @@ export type DetailsPage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList>;
+  } & TeaserList | {
+    _key: string;
+  } & Posts>;
 };
 
 export type HomePage = {
@@ -56,7 +58,9 @@ export type HomePage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList>;
+  } & TeaserList | {
+    _key: string;
+  } & Posts>;
 };
 
 export type SiteSettings = {
@@ -100,6 +104,31 @@ export type SiteSettings = {
       _type: "image";
     };
   };
+};
+
+export type Posts = {
+  _type: "posts";
+  title?: string;
+  limit?: number;
+  sort?: "newest" | "oldest";
+  showTags?: boolean;
+  tagSource?: "all" | "selected";
+  tags?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "tag";
+  }>;
+  moreLinkMode?: "client" | "link";
+  moreLinkLabel?: string;
+  moreLandingPage?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "landingPage";
+  };
+  moreHref?: string;
 };
 
 export type TeaserList = {
@@ -275,7 +304,9 @@ export type Sections = Array<{
   _key: string;
 } & RichText | {
   _key: string;
-} & TeaserList>;
+} & TeaserList | {
+  _key: string;
+} & Posts>;
 
 export type BlockContent = Array<{
   children?: Array<{
@@ -446,7 +477,9 @@ export type LandingPage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList>;
+  } & TeaserList | {
+    _key: string;
+  } & Posts>;
   description?: string;
 };
 
@@ -568,7 +601,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Tag | Menu | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | Posts | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Tag | Menu | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: HOME_PAGE_QUERY
@@ -681,6 +714,30 @@ export type HOME_PAGE_QUERYResult = {
     };
     href?: string;
     description?: string;
+  } | {
+    _key: string;
+    _type: "posts";
+    title?: string;
+    limit?: number;
+    sort?: "newest" | "oldest";
+    showTags?: boolean;
+    tagSource?: "all" | "selected";
+    tags?: Array<{
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      _key: string;
+      [internalGroqTypeReferenceTo]?: "tag";
+    }>;
+    moreLinkMode?: "client" | "link";
+    moreLinkLabel?: string;
+    moreLandingPage?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "landingPage";
+    };
+    moreHref?: string;
   } | {
     _key: string;
     _type: "richText";
@@ -867,6 +924,30 @@ export type LANDING_PAGE_QUERYResult = {
     };
     href?: string;
     description?: string;
+  } | {
+    _key: string;
+    _type: "posts";
+    title?: string;
+    limit?: number;
+    sort?: "newest" | "oldest";
+    showTags?: boolean;
+    tagSource?: "all" | "selected";
+    tags?: Array<{
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      _key: string;
+      [internalGroqTypeReferenceTo]?: "tag";
+    }>;
+    moreLinkMode?: "client" | "link";
+    moreLinkLabel?: string;
+    moreLandingPage?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "landingPage";
+    };
+    moreHref?: string;
   } | {
     _key: string;
     _type: "richText";
