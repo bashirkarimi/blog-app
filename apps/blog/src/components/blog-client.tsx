@@ -1,16 +1,17 @@
 "use client";
 
-import { useState, useCallback, Suspense } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { Button } from "./button";
 import { PostCard } from "./post-card";
 import { Post } from "@/sanity/types";
 import { Categories } from "./categories";
 
 interface BlogPostsClientProps {
-  initialPosts: Extract<Post, "_weak" | "_type" | "_createdAt" | "_updatedAt" | "_rev" | "_ref">[];
+  initialPosts: Post[];
   total: number;
   pageSize: number;
   mode?: string;
+  category?: string; // reserved if you later do server-side category fetching
 }
 
 export function BlogPostsClient({
@@ -19,30 +20,38 @@ export function BlogPostsClient({
   pageSize,
   mode = "latest",
 }: BlogPostsClientProps) {
-  const [posts, setPosts] = useState<Post[]>(initialPosts || []);
+  // Keep ALL loaded posts here (never mutate this for filtering)
+  const [allPosts, setAllPosts] = useState<Post[]>(initialPosts || []);
   const [loading, setLoading] = useState(false);
-
-  const hasMore = posts.length < total;
   const [selectedCategory, setSelectedCategory] = useState("");
-  console.log("Selected category in BlogPostsClient:", selectedCategory);
 
-  const categoryCounts = posts
-    .flatMap((post) => post?.categories?.map((c) => c.title as string) ?? [])
-    .reduce<Record<string, number>>((acc, title) => {
-      acc[title] = (acc[title] || 0) + 1;
-      return acc;
-    }, {});
+  const hasMore = allPosts.length < total;
 
-  const categories = Object.entries(categoryCounts).map(
-    ([title, count]) => { return { title, count } }
-  );
+  // Derive visible posts (do not overwrite allPosts)
+  const visiblePosts = useMemo(() => {
+    if (!selectedCategory) return allPosts;
+    return allPosts.filter((post) =>
+      post.categories?.some((c) => c.title === selectedCategory)
+    );
+  }, [allPosts, selectedCategory]);
+
+  // Category counts based on all loaded posts (not filtered) so counts stay stable
+  const categories = useMemo(() => {
+    const counts = allPosts
+      .flatMap((p) => p?.categories?.map((c) => c.title as string) || [])
+      .reduce<Record<string, number>>((acc, title) => {
+        acc[title] = (acc[title] || 0) + 1;
+        return acc;
+      }, {});
+    return Object.entries(counts).map(([title, count]) => ({ title, count }));
+  }, [allPosts]);
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
     try {
       const params = new URLSearchParams({
-        offset: String(posts.length),
+        offset: String(allPosts.length),
         limit: String(pageSize),
         mode,
       });
@@ -50,45 +59,54 @@ export function BlogPostsClient({
         method: "GET",
         cache: "no-store",
       });
-      if (!res.ok) {
-        throw new Error(`Request failed: ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       const json = await res.json();
-      const incoming: Post[] = json?.posts || [];
-      if (!Array.isArray(incoming)) {
-        throw new Error("Malformed response (posts not array)");
-      }
-      setPosts((prev) => [...prev, ...incoming]);
-    } catch (e: any) {
-      console.warn(e.message || "Failed to load more posts");
+      const incoming: Post[] = Array.isArray(json?.posts) ? json.posts : [];
+
+      // Deduplicate by _id (defensive)
+      const existing = new Set(allPosts.map((p) => p._id));
+      const merged = [
+        ...allPosts,
+        ...incoming.filter((p) => !existing.has(p._id)),
+      ];
+      setAllPosts(merged);
+    } catch (e) {
+      console.warn((e as Error).message);
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, posts.length, pageSize, mode, ]);
+  }, [loading, hasMore, allPosts, pageSize, mode]);
 
   return (
     <div className="mt-8">
-      <Suspense fallback={<div className="py-4">Loading categories...</div>}>
-        <Categories
-          selectedCategory={selectedCategory}
-          categories={categories}
-          setSelectedCategory={setSelectedCategory}
-        />
-      </Suspense>
+      <Categories
+        selectedCategory={selectedCategory}
+        categories={categories}
+        setSelectedCategory={setSelectedCategory}
+      />
+
       <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {posts.map((post) => (
+        {visiblePosts.map((post) => (
           <li key={post._id}>
             <PostCard post={post} />
           </li>
         ))}
       </ul>
 
+      {visiblePosts.length === 0 && (
+        <p className="mt-6 text-sm text-center text-gray-500">
+          No posts for this category.
+        </p>
+      )}
+
       <div className="flex justify-center">
         <Button
           onClick={loadMore}
-          disabled={loading}
+          disabled={loading || !hasMore}
           hasMore={hasMore}
-          label={loading ? "Loading..." : "Load more"}
+          label={
+            loading ? "Loading..." : hasMore ? "Load more" : "No more posts"
+          }
         />
       </div>
     </div>

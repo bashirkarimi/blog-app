@@ -1,6 +1,4 @@
-"use client";
-
-const Categories = async ({
+const Categories = ({
   selectedCategory,
   setSelectedCategory,
   categories,
@@ -16,13 +14,11 @@ const Categories = async ({
       <h2 className="sr-only">Categories</h2>
       <ul className="flex flex-wrap gap-2 ">
         <li>
-          <a
-            href={
-              activeCategory === ""
-                ? "."
-                : `?category=${encodeURIComponent("")}`
-            }
-            aria-current={activeCategory === "" ? "true" : undefined}
+          <button
+            onClick={() => setSelectedCategory("")}
+            value="All"
+            disabled={activeCategory === ""}
+            aria-current={activeCategory === "All" ? "true" : undefined}
             className={`text-sm font-medium mr-2 px-3 py-1 rounded-full transition-colors ${
               activeCategory === ""
                 ? "bg-blue-800 text-white"
@@ -30,7 +26,7 @@ const Categories = async ({
             }`}
           >
             All
-          </a>
+          </button>
         </li>
 
         {categories &&
