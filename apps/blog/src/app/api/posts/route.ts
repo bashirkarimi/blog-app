@@ -1,53 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
 import { client } from "@/sanity/client";
-import { groq } from "next-sanity";
+import { PAGINATED_POSTS_QUERY } from "@/sanity/queries";
+
+// Force dynamic so pagination isn't cached accidentally
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const limit = Math.min(parseInt(searchParams.get("limit") || "6", 10), 50);
-    const offset = Math.max(parseInt(searchParams.get("offset") || "0", 10), 0);
-    const sort = (searchParams.get("sort") || "newest") as "newest" | "oldest";
-    const tagSlugs = (searchParams.get("tags") || "")
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
 
-    const order = sort === "oldest" ? "asc" : "desc";
+    const rawLimit = Number(searchParams.get("limit") ?? 6);
+    const rawOffset = Number(searchParams.get("offset") ?? 0);
+    const limit = Math.min(Math.max(isNaN(rawLimit) ? 6 : rawLimit, 1), 50);
+    const offset = Math.max(isNaN(rawOffset) ? 0 : rawOffset, 0);
 
-    const tagFilter = tagSlugs.length
-      ? `&& count((tags[]->slug.current)[@ in ${JSON.stringify(tagSlugs)}]) > 0`
-      : "";
+    const mode = searchParams.get("mode") ?? "latest";
+    const category = searchParams.get("category") ?? "";
 
-    const baseFilter = `*[_type=='post' ${tagFilter}]`;
+    const data = await client.fetch(PAGINATED_POSTS_QUERY, {
+      offset,
+      limit,
+      mode,
+      category,
+    });
 
-    const itemsQuery = groq`${baseFilter} | order(_createdAt ${order}) [${offset}...${
-      offset + limit
-    }] {
-      title, body, mainImage, "slug": slug.current,
-      tags[]->{ title, "slug": slug.current }
-    }`;
-
-    const countQuery = groq`count(${baseFilter})`;
-
-    const [items, total] = await Promise.all([
-      client.fetch(itemsQuery),
-      client.fetch(countQuery),
-    ]);
-
-    // Available tags for this filter context (only tags that appear in published posts)
-    const tagsQuery = groq`*[_type=='tag' && defined(slug.current) && count(*[_type=='post' && references(^._id)]) > 0]{ title, "slug": slug.current } | order(title asc)`;
-    const allTags = await client.fetch(tagsQuery);
+    const posts = Array.isArray(data?.posts) ? data.posts : [];
+    const total = typeof data?.total === "number" ? data.total : posts.length;
+    const hasMore = offset + posts.length < total;
 
     return NextResponse.json({
-      items,
+      posts,
       total,
       offset,
       limit,
-      hasMore: offset + items.length < total,
-      tags: allTags,
+      hasMore,
+      mode,
+      category,
     });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (err: any) {
+    console.error("[GET /api/posts] error:", err);
+    return NextResponse.json(
+      { error: err.message ?? "Unknown error" },
+      { status: 500 }
+    );
   }
 }
