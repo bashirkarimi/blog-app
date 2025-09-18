@@ -102,13 +102,11 @@ export const PAGINATED_POSTS_QUERY = defineQuery(`
 {
   "posts": *[_type == "post"
     && defined(slug.current)
-    && (!defined($category) || $category == "" || $category in categories[]->title)
   ] | order(coalesce(publishedAt, _createdAt) desc)[$offset...$offset + $limit]{
     ${POST_LIST_PROJECTION}
   },
   "total": count(*[_type == "post"
     && defined(slug.current)
-    && (!defined($category) || $category == "" || $category in categories[]->title)
   ])
 }
 `);
