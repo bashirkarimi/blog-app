@@ -6,7 +6,6 @@ import Link from "next/link";
 
 const PostCard = ({ post }: { post: any }) => (
   <div className="bg-white rounded-xl shadow-lg  overflow-hidden  flex flex-col h-full">
-    {/* {JSON.stringify(post)} */}
     {post?.mainImage && (
       <Image
         src={urlFor(post.mainImage).url()}
@@ -25,7 +24,7 @@ const PostCard = ({ post }: { post: any }) => (
       </div>
       <Link
         className="pt-4 p-1  text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150"
-        href={`/post/${post?.slug?.current}`}
+        href={`/post/${post?.slug}`}
       >
         Read more
       </Link>

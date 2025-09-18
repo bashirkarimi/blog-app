@@ -53,7 +53,7 @@ export default async function Page({ params }: PageProps) {
             {post?.title}
           </h1>
           <div className="text-sm text-gray-500 mb-6">
-            <span>By {post?.author}</span>
+            <span>By {post?.author?.name}</span>
             <span className="ml-4">
               Published on{" "}
               {post?.publishedAt
