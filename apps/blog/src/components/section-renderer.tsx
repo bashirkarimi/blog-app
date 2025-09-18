@@ -3,7 +3,6 @@ import { ImageTeaser } from "./image-teaser";
 import { Accordion } from "./accordion";
 import { RichText } from "./rich-text";
 import { Blog } from "./blog";
-import { PostsList } from "./posts-list";
 import { HOME_PAGE_QUERYResult } from "@/sanity/types";
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -29,8 +28,6 @@ const SectionRenderer = ({
                 return <RichText data={section} />;
               case "blogList":
                 return <Blog data={section as any} />;
-              case "posts":
-                return <PostsList data={section} />;
               default:
                 return null;
             }
