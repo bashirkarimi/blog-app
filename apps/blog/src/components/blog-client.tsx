@@ -1,16 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, Suspense } from "react";
 import { Button } from "./button";
 import { PostCard } from "./post-card";
 import { Post } from "@/sanity/types";
+import { Categories } from "./categories";
 
 interface BlogPostsClientProps {
   initialPosts: Extract<Post, "_weak" | "_type" | "_createdAt" | "_updatedAt" | "_rev" | "_ref">[];
   total: number;
   pageSize: number;
   mode?: string;
-  category?: string;
 }
 
 export function BlogPostsClient({
@@ -18,24 +18,33 @@ export function BlogPostsClient({
   total,
   pageSize,
   mode = "latest",
-  category = "",
 }: BlogPostsClientProps) {
   const [posts, setPosts] = useState<Post[]>(initialPosts || []);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const hasMore = posts.length < total;
+  const [selectedCategory, setSelectedCategory] = useState("");
+  console.log("Selected category in BlogPostsClient:", selectedCategory);
+
+  const categoryCounts = posts
+    .flatMap((post) => post?.categories?.map((c) => c.title as string) ?? [])
+    .reduce<Record<string, number>>((acc, title) => {
+      acc[title] = (acc[title] || 0) + 1;
+      return acc;
+    }, {});
+
+  const categories = Object.entries(categoryCounts).map(
+    ([title, count]) => { return { title, count } }
+  );
 
   const loadMore = useCallback(async () => {
     if (loading || !hasMore) return;
     setLoading(true);
-    setError(null);
     try {
       const params = new URLSearchParams({
         offset: String(posts.length),
         limit: String(pageSize),
         mode,
-        category,
       });
       const res = await fetch(`/api/posts?${params.toString()}`, {
         method: "GET",
@@ -51,14 +60,21 @@ export function BlogPostsClient({
       }
       setPosts((prev) => [...prev, ...incoming]);
     } catch (e: any) {
-      setError(e.message || "Failed to load more posts");
+      console.warn(e.message || "Failed to load more posts");
     } finally {
       setLoading(false);
     }
-  }, [loading, hasMore, posts.length, pageSize, mode, category]);
+  }, [loading, hasMore, posts.length, pageSize, mode, ]);
 
   return (
     <div className="mt-8">
+      <Suspense fallback={<div className="py-4">Loading categories...</div>}>
+        <Categories
+          selectedCategory={selectedCategory}
+          categories={categories}
+          setSelectedCategory={setSelectedCategory}
+        />
+      </Suspense>
       <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {posts.map((post) => (
           <li key={post._id}>
@@ -66,12 +82,6 @@ export function BlogPostsClient({
           </li>
         ))}
       </ul>
-
-      {error && (
-        <p className="mt-4 text-sm text-red-600 text-center" role="alert">
-          {error}
-        </p>
-      )}
 
       <div className="flex justify-center">
         <Button
