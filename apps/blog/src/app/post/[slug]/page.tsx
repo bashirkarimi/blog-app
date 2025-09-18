@@ -44,12 +44,12 @@ export default async function Page({ params }: PageProps) {
             <Image
               src={urlFor(post.mainImage).url()}
               alt={post?.title ?? ""}
-              className="w-full h-auto object-cover object-center"
+              className="w-full max-h-96 object-cover object-center aspect-video"
               width={600}
               height={400}
             />
           )}
-          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 my-2 pt-2leading-tight">
             {post?.title}
           </h1>
           <div className="text-sm text-gray-500 mb-6">

@@ -27,7 +27,7 @@ const Blog = async ({ data }: BlogProps) => {
 
   return (
     <section
-      className="w-full py-24 mx-auto "
+      className="w-full mx-auto "
       aria-labelledby="blog-title"
     >
       <h2
