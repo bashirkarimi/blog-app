@@ -2,19 +2,19 @@
 
 import { useTransition } from "react";
 
-interface LoadMoreButtonProps {
+interface ButtonProps {
   onClick: () => Promise<void> | void;
   disabled?: boolean;
   hasMore: boolean;
   label?: string;
 }
 
-export function LoadMoreButton({
+export function Button({
   onClick,
   disabled,
   hasMore,
   label = "Load more",
-}: LoadMoreButtonProps) {
+}: ButtonProps) {
   const [isPending, startTransition] = useTransition();
 
   if (!hasMore) return null;

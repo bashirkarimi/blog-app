@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { LoadMoreButton } from "./button";
+import { Button } from "./button";
 import { PostCard } from "./post-card";
 import { Post } from "@/sanity/types";
 
@@ -59,7 +59,7 @@ export function BlogPostsClient({
 
   return (
     <div className="mt-8">
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {posts.map((post) => (
           <li key={post._id}>
             <PostCard post={post} />
@@ -74,7 +74,7 @@ export function BlogPostsClient({
       )}
 
       <div className="flex justify-center">
-        <LoadMoreButton
+        <Button
           onClick={loadMore}
           disabled={loading}
           hasMore={hasMore}
