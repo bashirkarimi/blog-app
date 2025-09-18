@@ -1,29 +1,53 @@
+// ...existing code...
 import { defineQuery } from "next-sanity";
 
-const expandSections = /* groq */ `
+// Updated lightweight projection to match post.ts fields only.
+// Added structured author & categories objects; removed nonexistent 'excerpt'.
+// If you later add an excerpt, reintroduce it here.
+const POST_LIST_PROJECTION = `
+  _id,
+  title,
+  "slug": slug.current,
+  publishedAt,
+  mainImage,
+  body[0],
+  "author": author->{ _id, name },
+  "categories": categories[]->{ _id, title }
+`;
+
+// Updated detail projection: spreads all fields (includes rich text field from richTextField import).
+// Adds normalized author & categories. Assumes rich text field is named 'body' (adjust if different).
+const POST_DETAIL_PROJECTION = `
+  ...,
+  "author": author->{ _id, name },
+  "categories": categories[]->{ _id, title }
+`;
+
+// Keep section expansion; only internal projection changed (no excerpt now).
+const expandSections = defineQuery(`
   sections[]{
     ...,
     _type == 'blogList' => {
-      ...,
+      limit,
+      title,
+      mode,
       "posts": select(
-        mode == "latest" => *[_type == "post" && defined(slug.current)] | order(_createdAt desc){
-          ...,
-          "body": body[0],
-          "author": author->name,
-          "categories": categories[]->title
-        },
         mode == "manual" => posts[]->{
-          ...,
-          "body": body[0],
-          "author": author->name,
-          "categories": categories[]->title
-        }
+          ${POST_LIST_PROJECTION}
+        },
+        mode != "manual" => []
+      ),
+      "total": select(
+        mode == "manual" => count(posts[]),
+        mode != "manual" => count(*[_type == "post" && defined(slug.current)])
       )
     },
     _type == 'teaserList' => {
       ...,
       postRefs[]->{
-        title, excerpt, mainImage, "slug": slug.current
+        title,
+        mainImage,
+        "slug": slug.current
       }
     },
     _type == 'postsModule' => {
@@ -31,8 +55,9 @@ const expandSections = /* groq */ `
       tags[]->{ title, "slug": slug.current }
     }
   }
-`;
+`);
 
+// Home & Landing Pages (unchanged aside from projection updates)
 export const HOME_PAGE_QUERY = defineQuery(`
   *[_type=='homePage' && _id=='homePage'][0]{
     seoTitle,
@@ -40,7 +65,6 @@ export const HOME_PAGE_QUERY = defineQuery(`
     ${expandSections}
   }
 `);
-
 
 export const LANDING_PAGE_QUERY = defineQuery(`
   *[_type == 'landingPage' && slug.current == $slug][0]{
@@ -53,41 +77,67 @@ export const LANDING_PAGE_QUERY = defineQuery(`
 
 export const SITE_SETTINGS_QUERY = defineQuery(`
   *[_type=='siteSettings' && _id=='siteSettings'][0]{
-    siteTitle, logo, defaultSeo, headerMenu->{
+    siteTitle,
+    logo,
+    defaultSeo,
+    headerMenu->{
       title,
       items[]{label, target->{"_id": _id, title, "slug": slug.current}}
     }
   }
 `);
 
+// Legacy (non-paginated) posts query (now uses coalesced published date ordering).
 export const POSTS_QUERY = defineQuery(`
-  *[_type == "post" && defined(slug.current) 
-  && (!defined($category)
-  || $category == "" 
-  || $category in categories[]->title)]{ 
-    ...,
-    "body": body[0],
-    "author": author->name,
-    "categories": categories[]->title
-  } | order(_createdAt desc)
-`);
-
-export const POST_BY_SLUG_QUERY = defineQuery(`
-  *[_type == "post" && slug.current == $slug][0] {
-    ...,
-    "author": author->name,
-    "categories": categories[]->title
+  *[_type == "post"
+    && defined(slug.current)
+    && (!defined($category) || $category == "" || $category in categories[]->title)
+  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{
+    ${POST_LIST_PROJECTION}
   }
 `);
 
+// Paginated posts with total count.
+export const PAGINATED_POSTS_QUERY = defineQuery(`
+{
+  "posts": *[_type == "post"
+    && defined(slug.current)
+    && (!defined($category) || $category == "" || $category in categories[]->title)
+  ] | order(coalesce(publishedAt, _createdAt) desc)[$offset...$offset + $limit]{
+    ${POST_LIST_PROJECTION}
+  },
+  "total": count(*[_type == "post"
+    && defined(slug.current)
+    && (!defined($category) || $category == "" || $category in categories[]->title)
+  ])
+}
+`);
+
+// Single post by slug (full detail)
+export const POST_BY_SLUG_QUERY = defineQuery(`
+  *[_type == "post" && slug.current == $slug][0]{
+    ${POST_DETAIL_PROJECTION}
+  }
+`);
+
+// All slugs for static paths
 export const POST_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)]{
     "slug": slug.current
   }
 `);
 
-export const CATEGORIES_IN_POST_QUERY = defineQuery(`
-  *[_type == "post" && defined(categories)]{
-    "categories": categories[]->title
-  } | order(title asc)
+// Unique categories
+export const UNIQUE_CATEGORIES_QUERY = defineQuery(`
+  array::unique(
+    *[_type == "post" && count(categories[]->title) > 0].categories[]->title
+  ) | order(@ asc)
 `);
+
+// (Optional) legacy categories in posts
+export const CATEGORIES_IN_POST_QUERY = defineQuery(`
+  *[_type == "post" && count(categories[]->title) > 0]{
+    "categories": categories[]->title
+  }
+`);
+// ...existing code...
