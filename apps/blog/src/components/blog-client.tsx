@@ -1,17 +1,39 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import { Button } from "./button";
+import { useState, useCallback } from "react";
+import { CategoryBar } from "./category-bar";
 import { PostCard } from "./post-card";
-import { Post } from "@/sanity/types";
-import { Categories } from "./categories";
+
+interface ListPost {
+  _id: string;
+  title?: string | null;
+  slug?: string | null;
+  publishedAt?: string | null;
+  mainImage?: any;
+  author?: { _id: string; name?: string | null } | null;
+  categories?: { _id: string; title?: string | null }[] | null;
+}
+
+interface CategoryCount {
+  title: string;
+  count: number;
+}
+
+interface StoreEntry {
+  posts: ListPost[];
+  total: number;
+  loading?: boolean;
+  error?: string | null;
+}
+
+type StoreMap = Record<string, StoreEntry>;
 
 interface BlogPostsClientProps {
-  initialPosts: Post[];
+  initialPosts: ListPost[];
   total: number;
   pageSize: number;
   mode?: string;
-  category?: string; // reserved if you later do server-side category fetching
+  categoriesCounts?: CategoryCount[];
 }
 
 export function BlogPostsClient({
@@ -19,94 +41,137 @@ export function BlogPostsClient({
   total,
   pageSize,
   mode = "latest",
+  categoriesCounts = [],
 }: BlogPostsClientProps) {
-  const [allPosts, setAllPosts] = useState<Post[]>(initialPosts || []);
-  const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [stores, setStores] = useState<StoreMap>({
+    "": { posts: initialPosts, total, loading: false, error: null },
+  });
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
-  const hasMore = allPosts.length < total;
+  const key = selectedCategory || "";
+  const current = stores[key] || { posts: [], total: 0, loading: false };
 
-  // Derive visible posts (do not overwrite allPosts)
-  const visiblePosts = useMemo(() => {
-    if (!selectedCategory) return allPosts;
-    return allPosts.filter((post) =>
-      post.categories?.some((c: any) => c.title as string === selectedCategory)
-    );
-  }, [allPosts, selectedCategory]);
+  const hasMore = current.posts.length < current.total;
+  const isLoading = !!current.loading;
 
-  // Category counts based on all loaded posts (not filtered) so counts stay stable
-  const categories = useMemo(() => {
-    const counts = allPosts
-      .flatMap((p) => p?.categories?.map((c: any) => c.title as string) || [])
-      .reduce<Record<string, number>>((acc, title) => {
-        acc[title] = (acc[title] || 0) + 1;
-        return acc;
-      }, {});
-    return Object.entries(counts).map(([title, count]) => ({ title, count }));
-  }, [allPosts]);
+  const patchStore = useCallback((k: string, patch: Partial<StoreEntry>) => {
+    setStores((prev) => ({
+      ...prev,
+      [k]: { ...(prev[k] || { posts: [], total: 0 }), ...patch },
+    }));
+  }, []);
 
-  const loadMore = useCallback(async () => {
-    if (loading || !hasMore) return;
-    setLoading(true);
-    try {
-      const params = new URLSearchParams({
-        offset: String(allPosts.length),
-        limit: String(pageSize),
-        mode,
-      });
-      const res = await fetch(`/api/posts?${params.toString()}`, {
-        method: "GET",
-        cache: "no-store",
-      });
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-      const json = await res.json();
-      const incoming: Post[] = Array.isArray(json?.posts) ? json.posts : [];
+  const fetchPage = useCallback(
+    async (category: string, offset: number) => {
+      const k = category || "";
+      patchStore(k, { loading: true, error: null });
 
-      // Deduplicate by _id (defensive)
-      const existing = new Set(allPosts.map((p) => p._id));
-      const merged = [
-        ...allPosts,
-        ...incoming.filter((p) => !existing.has(p._id)),
-      ];
-      setAllPosts(merged);
-    } catch (e) {
-      console.warn((e as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }, [loading, hasMore, allPosts, pageSize, mode]);
+      try {
+        const params = new URLSearchParams({
+          offset: String(offset),
+          limit: String(pageSize),
+          mode,
+        });
+        if (category) params.set("category", category);
+
+        const res = await fetch(`/api/posts?${params.toString()}`, {
+          cache: "no-store",
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const incoming: ListPost[] = Array.isArray(json.posts)
+          ? json.posts
+          : [];
+        const totalForCat =
+          typeof json.total === "number"
+            ? json.total
+            : offset + incoming.length;
+
+        setStores((prev) => {
+          const existing = prev[k]?.posts ?? [];
+          const existingIds = new Set(existing.map((p) => p._id));
+          const merged = [
+            ...existing,
+            ...incoming.filter((p) => !existingIds.has(p._id)),
+          ];
+          return {
+            ...prev,
+            [k]: {
+              posts: merged,
+              total: totalForCat,
+              loading: false,
+              error: null,
+            },
+          };
+        });
+      } catch (e: any) {
+        patchStore(k, {
+          loading: false,
+          error: e.message || "Failed to load posts",
+        });
+      }
+    },
+    [mode, pageSize, patchStore]
+  );
+
+  const onSelectCategory = useCallback(
+    (cat: string) => {
+      setSelectedCategory(cat);
+      const k = cat || "";
+      if (!stores[k]) {
+        setStores((prev) => ({
+          ...prev,
+          [k]: { posts: [], total: 0, loading: true, error: null },
+        }));
+        fetchPage(cat, 0);
+      }
+    },
+    [stores, fetchPage]
+  );
+
+  const loadMore = useCallback(() => {
+    if (isLoading || !hasMore) return;
+    fetchPage(selectedCategory, current.posts.length);
+  }, [isLoading, hasMore, fetchPage, selectedCategory, current.posts.length]);
 
   return (
     <div className="mt-8">
-      <Categories
+      <CategoryBar
+        categories={categoriesCounts}
         selectedCategory={selectedCategory}
-        categories={categories}
-        setSelectedCategory={setSelectedCategory}
+        onSelect={onSelectCategory}
       />
 
       <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {visiblePosts.map((post) => (
+        {current.posts.map((post) => (
           <li key={post._id}>
             <PostCard post={post} />
           </li>
         ))}
       </ul>
 
-      {visiblePosts.length === 0 && (
-        <p className="mt-6 text-sm text-center text-gray-500">
-          No posts for this category.
+      {current.error && (
+        <p className="mt-4 text-center text-sm text-red-600" role="alert">
+          {current.error}
         </p>
       )}
 
-      <div className="flex justify-center">
-        <Button
+      {!isLoading && current.posts.length === 0 && !current.error && (
+        <p className="mt-6 text-center text-sm text-gray-500">
+          No posts{selectedCategory && ` in “${selectedCategory}”`}.
+        </p>
+      )}
+
+      <div className="flex justify-center mt-8">
+        <button
+          type="button"
           onClick={loadMore}
-          disabled={loading || !hasMore}
-          hasMore={hasMore}
-          label={
-            loading ? "Loading..." : hasMore ? "Load more" : "No more posts"
-          }
-        />
+          disabled={!hasMore || isLoading}
+          className="px-4 py-2 text-sm font-medium rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50"
+          aria-busy={isLoading}
+        >
+          {isLoading ? "Loading..." : hasMore ? "Load more" : "No more posts"}
+        </button>
       </div>
     </div>
   );

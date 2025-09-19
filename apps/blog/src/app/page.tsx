@@ -1,5 +1,5 @@
 import { sanityFetch } from "@/sanity/live";
-import { Categories } from "@/components/categories";
+import { Categories } from "@/components/category-filter";
 import { HOME_PAGE_QUERY } from "@/sanity/queries";
 import { PageBuilder } from "@/components/page-builder";
 

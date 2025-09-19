@@ -1,16 +1,13 @@
 // ...existing code...
 import { defineQuery } from "next-sanity";
 
-// Updated lightweight projection to match post.ts fields only.
-// Added structured author & categories objects; removed nonexistent 'excerpt'.
-// If you later add an excerpt, reintroduce it here.
+// Slim projection for list views (removed body[0] to reduce payload)
 const POST_LIST_PROJECTION = `
   _id,
   title,
   "slug": slug.current,
   publishedAt,
   mainImage,
-  body[0],
   "author": author->{ _id, name },
   "categories": categories[]->{ _id, title }
 `;
@@ -97,16 +94,18 @@ export const POSTS_QUERY = defineQuery(`
   }
 `);
 
-// Paginated posts with total count.
+// (UPDATE) Paginated posts now supports optional $category filtering
 export const PAGINATED_POSTS_QUERY = defineQuery(`
 {
   "posts": *[_type == "post"
     && defined(slug.current)
+    && (!defined($category) || $category == "" || $category in categories[]->title)
   ] | order(coalesce(publishedAt, _createdAt) desc)[$offset...$offset + $limit]{
     ${POST_LIST_PROJECTION}
   },
   "total": count(*[_type == "post"
     && defined(slug.current)
+    && (!defined($category) || $category == "" || $category in categories[]->title)
   ])
 }
 `);
@@ -138,4 +137,12 @@ export const CATEGORIES_IN_POST_QUERY = defineQuery(`
     "categories": categories[]->title
   }
 `);
-// ...existing code...
+
+// (NEW) Categories with authoritative counts
+export const CATEGORIES_WITH_COUNTS_QUERY = defineQuery(`
+  *[_type == "category"]{
+    _id,
+    title,
+    "count": count(*[_type == "post" && references(^._id) && defined(slug.current)])
+  } | order(title asc)
+`);
