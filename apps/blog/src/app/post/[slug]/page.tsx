@@ -67,7 +67,7 @@ export default async function Page({ params }: PageProps) {
                 : ""}
             </span>
           </div>
-          <div className="prose max-w-4/5 mx-auto mt-10 text-gray-700 leading-relaxed space-y-6">
+          <div className="prose max-w-[80%] mx-auto mt-10 text-gray-700 leading-relaxed space-y-6">
             <RichText data={post} />
           </div>
         </article>
