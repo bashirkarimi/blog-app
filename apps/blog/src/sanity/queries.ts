@@ -8,6 +8,7 @@ const POST_LIST_PROJECTION = `
   "slug": slug.current,
   publishedAt,
   mainImage,
+  excerpt,
   "author": author->{ _id, name },
   "categories": categories[]->{ _id, title }
 `;

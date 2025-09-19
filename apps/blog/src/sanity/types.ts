@@ -364,6 +364,8 @@ export type Post = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  excerpt?: string;
+  body?: BlockContent;
   categories?: Array<{
     _ref: string;
     _type: "reference";
@@ -372,7 +374,6 @@ export type Post = {
     [internalGroqTypeReferenceTo]?: "category";
   }>;
   publishedAt?: string;
-  body?: BlockContent;
 };
 
 export type Category = {
@@ -572,10 +573,10 @@ export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | Tease
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: expandSections
-// Query: sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": select(        mode == "manual" => posts[]->{            _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }        },        mode != "manual" => []      ),      "total": select(        mode == "manual" => count(posts[]),        mode != "manual" => count(*[_type == "post" && defined(slug.current)])      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title,        mainImage,        "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }
+// Query: sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": select(        mode == "manual" => posts[]->{            _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  excerpt,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }        },        mode != "manual" => []      ),      "total": select(        mode == "manual" => count(posts[]),        mode != "manual" => count(*[_type == "post" && defined(slug.current)])      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title,        mainImage,        "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }
 export type ExpandSectionsResult = never;
 // Variable: HOME_PAGE_QUERY
-// Query: *[_type=='homePage' && _id=='homePage'][0]{    seoTitle,    heros[],      sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": select(        mode == "manual" => posts[]->{            _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }        },        mode != "manual" => []      ),      "total": select(        mode == "manual" => count(posts[]),        mode != "manual" => count(*[_type == "post" && defined(slug.current)])      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title,        mainImage,        "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }  }
+// Query: *[_type=='homePage' && _id=='homePage'][0]{    seoTitle,    heros[],      sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": select(        mode == "manual" => posts[]->{            _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  excerpt,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }        },        mode != "manual" => []      ),      "total": select(        mode == "manual" => count(posts[]),        mode != "manual" => count(*[_type == "post" && defined(slug.current)])      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title,        mainImage,        "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }  }
 export type HOME_PAGE_QUERYResult = {
   seoTitle: string | null;
   heros: Array<{
@@ -629,6 +630,7 @@ export type HOME_PAGE_QUERYResult = {
         crop?: SanityImageCrop;
         _type: "image";
       } | null;
+      excerpt: string | null;
       author: {
         _id: string;
         name: string | null;
@@ -732,7 +734,7 @@ export type HOME_PAGE_QUERYResult = {
   }> | null;
 } | null;
 // Variable: LANDING_PAGE_QUERY
-// Query: *[_type == 'landingPage' && slug.current == $slug][0]{    seoTitle,    title,    heros[],      sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": select(        mode == "manual" => posts[]->{            _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }        },        mode != "manual" => []      ),      "total": select(        mode == "manual" => count(posts[]),        mode != "manual" => count(*[_type == "post" && defined(slug.current)])      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title,        mainImage,        "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }  }
+// Query: *[_type == 'landingPage' && slug.current == $slug][0]{    seoTitle,    title,    heros[],      sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": select(        mode == "manual" => posts[]->{            _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  excerpt,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }        },        mode != "manual" => []      ),      "total": select(        mode == "manual" => count(posts[]),        mode != "manual" => count(*[_type == "post" && defined(slug.current)])      )    },    _type == 'teaserList' => {      ...,      postRefs[]->{        title,        mainImage,        "slug": slug.current      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    }  }  }
 export type LANDING_PAGE_QUERYResult = {
   seoTitle: null;
   title: string | null;
@@ -787,6 +789,7 @@ export type LANDING_PAGE_QUERYResult = {
         crop?: SanityImageCrop;
         _type: "image";
       } | null;
+      excerpt: string | null;
       author: {
         _id: string;
         name: string | null;
@@ -934,7 +937,7 @@ export type SITE_SETTINGS_QUERYResult = {
   } | null;
 } | null;
 // Variable: POSTS_QUERY
-// Query: *[_type == "post"    && defined(slug.current)    && (!defined($category) || $category == "" || $category in categories[]->title)  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{      _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }  }
+// Query: *[_type == "post"    && defined(slug.current)    && (!defined($category) || $category == "" || $category in categories[]->title)  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{      _id,  title,  "slug": slug.current,  publishedAt,  mainImage,  excerpt,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }  }
 export type POSTS_QUERYResult = Array<{
   _id: string;
   title: string | null;
@@ -952,6 +955,7 @@ export type POSTS_QUERYResult = Array<{
     crop?: SanityImageCrop;
     _type: "image";
   } | null;
+  excerpt: string | null;
   author: {
     _id: string;
     name: string | null;
@@ -987,12 +991,13 @@ export type POST_BY_SLUG_QUERYResult = {
     crop?: SanityImageCrop;
     _type: "image";
   };
+  excerpt?: string;
+  body?: BlockContent;
   categories: Array<{
     _id: string;
     title: string | null;
   }> | null;
   publishedAt?: string;
-  body?: BlockContent;
 } | null;
 // Variable: POST_SLUGS_QUERY
 // Query: *[_type == "post" && defined(slug.current)]{    "slug": slug.current  }
@@ -1019,11 +1024,11 @@ export type CATEGORIES_WITH_COUNTS_QUERYResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": select(\n        mode == \"manual\" => posts[]->{\n          \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n        },\n        mode != \"manual\" => []\n      ),\n      \"total\": select(\n        mode == \"manual\" => count(posts[]),\n        mode != \"manual\" => count(*[_type == \"post\" && defined(slug.current)])\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title,\n        mainImage,\n        \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n": ExpandSectionsResult;
-    "\n  *[_type=='homePage' && _id=='homePage'][0]{\n    seoTitle,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": select(\n        mode == \"manual\" => posts[]->{\n          \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n        },\n        mode != \"manual\" => []\n      ),\n      \"total\": select(\n        mode == \"manual\" => count(posts[]),\n        mode != \"manual\" => count(*[_type == \"post\" && defined(slug.current)])\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title,\n        mainImage,\n        \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": HOME_PAGE_QUERYResult;
-    "\n  *[_type == 'landingPage' && slug.current == $slug][0]{\n    seoTitle,\n    title,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": select(\n        mode == \"manual\" => posts[]->{\n          \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n        },\n        mode != \"manual\" => []\n      ),\n      \"total\": select(\n        mode == \"manual\" => count(posts[]),\n        mode != \"manual\" => count(*[_type == \"post\" && defined(slug.current)])\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title,\n        mainImage,\n        \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": LANDING_PAGE_QUERYResult;
+    "\n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": select(\n        mode == \"manual\" => posts[]->{\n          \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n        },\n        mode != \"manual\" => []\n      ),\n      \"total\": select(\n        mode == \"manual\" => count(posts[]),\n        mode != \"manual\" => count(*[_type == \"post\" && defined(slug.current)])\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title,\n        mainImage,\n        \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n": ExpandSectionsResult;
+    "\n  *[_type=='homePage' && _id=='homePage'][0]{\n    seoTitle,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": select(\n        mode == \"manual\" => posts[]->{\n          \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n        },\n        mode != \"manual\" => []\n      ),\n      \"total\": select(\n        mode == \"manual\" => count(posts[]),\n        mode != \"manual\" => count(*[_type == \"post\" && defined(slug.current)])\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title,\n        mainImage,\n        \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": HOME_PAGE_QUERYResult;
+    "\n  *[_type == 'landingPage' && slug.current == $slug][0]{\n    seoTitle,\n    title,\n    heros[],\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": select(\n        mode == \"manual\" => posts[]->{\n          \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n        },\n        mode != \"manual\" => []\n      ),\n      \"total\": select(\n        mode == \"manual\" => count(posts[]),\n        mode != \"manual\" => count(*[_type == \"post\" && defined(slug.current)])\n      )\n    },\n    _type == 'teaserList' => {\n      ...,\n      postRefs[]->{\n        title,\n        mainImage,\n        \"slug\": slug.current\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    }\n  }\n\n  }\n": LANDING_PAGE_QUERYResult;
     "\n  *[_type=='siteSettings' && _id=='siteSettings'][0]{\n    siteTitle,\n    logo,\n    defaultSeo,\n    headerMenu->{\n      title,\n      items[]{label, target->{\"_id\": _id, title, \"slug\": slug.current}}\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
-    "\n  *[_type == \"post\"\n    && defined(slug.current)\n    && (!defined($category) || $category == \"\" || $category in categories[]->title)\n  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n  }\n": POSTS_QUERYResult;
+    "\n  *[_type == \"post\"\n    && defined(slug.current)\n    && (!defined($category) || $category == \"\" || $category in categories[]->title)\n  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  mainImage,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n  }\n": POSTS_QUERYResult;
     "\n  *[_type == \"post\" && slug.current == $slug][0]{\n    \n  ...,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n  }\n": POST_BY_SLUG_QUERYResult;
     "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
     "\n  array::unique(\n    *[_type == \"post\" && count(categories[]->title) > 0].categories[]->title\n  ) | order(@ asc)\n": UNIQUE_CATEGORIES_QUERYResult;
