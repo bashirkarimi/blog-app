@@ -43,7 +43,6 @@ const BlogList = async ({ data }: BlogListProps) => {
       >
         {data?.title ?? "From the blog"}
       </h2>
-
       <CategoryFilter>
         {(categoriesCounts) => (
           <BlogItem

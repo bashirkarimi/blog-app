@@ -5,6 +5,7 @@ import { sanityFetch } from "@/sanity/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/queries";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "@repo/ui/styles.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

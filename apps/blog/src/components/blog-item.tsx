@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { CategoryBar } from "./category-bar";
 import { PostCard } from "./post-card";
 import { POSTS_QUERYResult } from "@/sanity/types";
+import { Button } from "@repo/ui/button";
 
 interface CategoryCount {
   title: string;
@@ -154,18 +155,17 @@ const BlogItem = ({
       )}
 
       <div className="flex justify-center mt-8">
-        <button
-          type="button"
+        <Button
           onClick={loadMore}
           disabled={!hasMore || isLoading}
-          className="px-4 py-2 text-sm font-medium rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50"
           aria-busy={isLoading}
+          variant="default"
         >
           {isLoading ? "Loading..." : hasMore ? "Load more" : "No more posts"}
-        </button>
+        </Button>
       </div>
     </div>
   );
-}
+};
 
 export { BlogItem };
