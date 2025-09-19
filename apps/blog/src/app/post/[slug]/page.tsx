@@ -49,7 +49,7 @@ export default async function Page({ params }: PageProps) {
               height={400}
             />
           )}
-          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 my-2 pt-2leading-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 my-2 pt-2 leading-tight">
             {post?.title}
           </h1>
           <div className="text-sm text-gray-500 mb-6">
