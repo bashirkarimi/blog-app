@@ -8,39 +8,32 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-
-    const rawLimit = Number(searchParams.get("limit") ?? 6);
-    const rawOffset = Number(searchParams.get("offset") ?? 0);
-    const limit = Math.min(Math.max(isNaN(rawLimit) ? 6 : rawLimit, 1), 50);
-    const offset = Math.max(isNaN(rawOffset) ? 0 : rawOffset, 0);
-
-    const mode = searchParams.get("mode") ?? "latest";
-    const category = searchParams.get("category") ?? "";
+    const limit = Math.min(
+      Math.max(Number(searchParams.get("limit")) || 6, 1),
+      50
+    );
+    const offset = Math.max(Number(searchParams.get("offset")) || 0, 0);
+    const category = searchParams.get("category") || "";
+    const mode = searchParams.get("mode") || "latest";
 
     const data = await client.fetch(PAGINATED_POSTS_QUERY, {
       offset,
       limit,
-      mode,
       category,
+      mode,
     });
 
-    const posts = Array.isArray(data?.posts) ? data.posts : [];
-    const total = typeof data?.total === "number" ? data.total : posts.length;
+    const posts = data?.posts ?? [];
+    const total = data?.total ?? posts.length;
     const hasMore = offset + posts.length < total;
 
-    return NextResponse.json({
-      posts,
-      total,
-      offset,
-      limit,
-      hasMore,
-      mode,
-      category,
-    });
-  } catch (err: any) {
-    console.error("[GET /api/posts] error:", err);
-    return NextResponse.json(
-      { error: err.message ?? "Unknown error" },
+    return new Response(
+      JSON.stringify({ posts, total, offset, limit, hasMore, category }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
+  } catch (e: any) {
+    return new Response(
+      JSON.stringify({ error: e.message || "Unknown error" }),
       { status: 500 }
     );
   }
