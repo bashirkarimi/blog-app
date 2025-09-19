@@ -1,14 +1,14 @@
 import { PAGINATED_POSTS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import type { BlogList } from "@/sanity/types";
-import { BlogPostsClient } from "./blog-client";
+import { BlogItem } from "./blog-item";
 import { CategoryFilter } from "./category-filter";
 
-interface BlogProps {
+interface BlogListProps {
   data?: BlogList;
 }
 
-const Blog = async ({ data }: BlogProps) => {
+const BlogList = async ({ data }: BlogListProps) => {
   const limit = Math.max(Number(data?.limit ?? 6), 1);
   const mode = data?.mode ?? "latest";
 
@@ -46,7 +46,7 @@ const Blog = async ({ data }: BlogProps) => {
 
       <CategoryFilter>
         {(categoriesCounts) => (
-          <BlogPostsClient
+          <BlogItem
             initialPosts={initialPosts}
             total={total}
             pageSize={limit}
@@ -59,4 +59,4 @@ const Blog = async ({ data }: BlogProps) => {
   );
 };
 
-export { Blog };
+export { BlogList };
