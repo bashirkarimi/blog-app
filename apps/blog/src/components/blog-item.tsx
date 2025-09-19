@@ -28,7 +28,7 @@ interface StoreEntry {
 
 type StoreMap = Record<string, StoreEntry>;
 
-interface BlogPostsClientProps {
+interface BlogItemProps {
   initialPosts: ListPost[];
   total: number;
   pageSize: number;
@@ -36,13 +36,13 @@ interface BlogPostsClientProps {
   categoriesCounts?: CategoryCount[];
 }
 
-export function BlogPostsClient({
+const BlogItem = ({
   initialPosts,
   total,
   pageSize,
   mode = "latest",
   categoriesCounts = [],
-}: BlogPostsClientProps) {
+}: BlogItemProps) => {
   const [stores, setStores] = useState<StoreMap>({
     "": { posts: initialPosts, total, loading: false, error: null },
   });
@@ -176,3 +176,5 @@ export function BlogPostsClient({
     </div>
   );
 }
+
+export { BlogItem };

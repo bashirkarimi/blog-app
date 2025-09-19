@@ -2,7 +2,7 @@ import { TeaserList } from "./teaser-list";
 import { ImageTeaser } from "./image-teaser";
 import { Accordion } from "./accordion";
 import { RichText } from "./rich-text";
-import { Blog } from "./blog";
+import { BlogList } from "./blog-list";
 import { HOME_PAGE_QUERYResult } from "@/sanity/types";
 
 const SectionRenderer = ({
@@ -23,7 +23,7 @@ const SectionRenderer = ({
           case "richText":
             return <RichText data={section} />;
           case "blogList":
-            return <Blog data={section as any} />;
+            return <BlogList data={section as any} />;
           default:
             return null;
         }
