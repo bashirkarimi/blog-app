@@ -35,6 +35,13 @@ export const postType = defineType({
       },
     }),
     defineField({
+      name: 'excerpt',
+      title: 'Excerpt',
+      type: 'text',
+      description: 'A short summary of the post, used in lists and previews.',
+    }),
+    richTextField,
+    defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
@@ -45,7 +52,6 @@ export const postType = defineType({
       title: 'Published at',
       type: 'datetime',
     }),
-    richTextField
   ],
 
   preview: {

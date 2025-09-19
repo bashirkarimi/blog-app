@@ -13,7 +13,7 @@ export const TeaserList = ({ data }: { data: any }) => {
       : data.items || [];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {items.map((it: any, i: number) => (
         <div key={i} className="rounded-md border overflow-hidden flex flex-col h-full">
           <Image

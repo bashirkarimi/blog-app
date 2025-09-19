@@ -44,16 +44,16 @@ export default async function Page({ params }: PageProps) {
             <Image
               src={urlFor(post.mainImage).url()}
               alt={post?.title ?? ""}
-              className="w-full h-auto object-cover object-center"
+              className="w-full max-h-96 object-cover object-center aspect-video"
               width={600}
               height={400}
             />
           )}
-          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-2 leading-tight">
+          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 my-2 pt-2 leading-tight">
             {post?.title}
           </h1>
           <div className="text-sm text-gray-500 mb-6">
-            <span>By {post?.author}</span>
+            <span>By {post?.author?.name}</span>
             <span className="ml-4">
               Published on{" "}
               {post?.publishedAt
@@ -67,7 +67,7 @@ export default async function Page({ params }: PageProps) {
                 : ""}
             </span>
           </div>
-          <div className="prose max-w-none text-gray-700 leading-relaxed space-y-6">
+          <div className="prose max-w-[80%] mx-auto mt-10 text-gray-700 leading-relaxed space-y-6">
             <RichText data={post} />
           </div>
         </article>
