@@ -19,7 +19,7 @@ const Categories = ({
             value="All"
             disabled={activeCategory === ""}
             aria-current={activeCategory === "All" ? "true" : undefined}
-            className={`text-sm font-medium mr-2 px-3 py-1 rounded-full transition-colors ${
+            className={`text-sm font-medium mr-2 px-3 py-1 rounded-full transition-colors hover:cursor-pointer ${
               activeCategory === ""
                 ? "bg-blue-800 text-white"
                 : "bg-blue-100 text-blue-800 hover:bg-blue-200"
@@ -39,7 +39,7 @@ const Categories = ({
                 aria-current={
                   activeCategory === category.title ? "true" : undefined
                 }
-                className={`text-sm font-medium mr-2 px-3 py-1 rounded-full transition-colors ${
+                className={`text-sm font-medium mr-2 px-3 py-1 rounded-full transition-colors hover:cursor-pointer ${
                   activeCategory === category.title
                     ? "bg-blue-800 text-white"
                     : "bg-blue-100 text-blue-800 hover:bg-blue-200"

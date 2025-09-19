@@ -20,7 +20,6 @@ export function BlogPostsClient({
   pageSize,
   mode = "latest",
 }: BlogPostsClientProps) {
-  // Keep ALL loaded posts here (never mutate this for filtering)
   const [allPosts, setAllPosts] = useState<Post[]>(initialPosts || []);
   const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -31,14 +30,14 @@ export function BlogPostsClient({
   const visiblePosts = useMemo(() => {
     if (!selectedCategory) return allPosts;
     return allPosts.filter((post) =>
-      post.categories?.some((c) => c.title === selectedCategory)
+      post.categories?.some((c: any) => c.title as string === selectedCategory)
     );
   }, [allPosts, selectedCategory]);
 
   // Category counts based on all loaded posts (not filtered) so counts stay stable
   const categories = useMemo(() => {
     const counts = allPosts
-      .flatMap((p) => p?.categories?.map((c) => c.title as string) || [])
+      .flatMap((p) => p?.categories?.map((c: any) => c.title as string) || [])
       .reduce<Record<string, number>>((acc, title) => {
         acc[title] = (acc[title] || 0) + 1;
         return acc;
