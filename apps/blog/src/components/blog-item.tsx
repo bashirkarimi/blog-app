@@ -3,16 +3,7 @@
 import { useState, useCallback } from "react";
 import { CategoryBar } from "./category-bar";
 import { PostCard } from "./post-card";
-
-interface ListPost {
-  _id: string;
-  title?: string | null;
-  slug?: string | null;
-  publishedAt?: string | null;
-  mainImage?: any;
-  author?: { _id: string; name?: string | null } | null;
-  categories?: { _id: string; title?: string | null }[] | null;
-}
+import { POSTS_QUERYResult } from "@/sanity/types";
 
 interface CategoryCount {
   title: string;
@@ -20,7 +11,7 @@ interface CategoryCount {
 }
 
 interface StoreEntry {
-  posts: ListPost[];
+  posts: POSTS_QUERYResult[number][];
   total: number;
   loading?: boolean;
   error?: string | null;
@@ -29,7 +20,7 @@ interface StoreEntry {
 type StoreMap = Record<string, StoreEntry>;
 
 interface BlogItemProps {
-  initialPosts: ListPost[];
+  initialPosts: POSTS_QUERYResult[number][];
   total: number;
   pageSize: number;
   mode?: string;
@@ -75,11 +66,11 @@ const BlogItem = ({
         if (category) params.set("category", category);
 
         const res = await fetch(`/api/posts?${params.toString()}`, {
-          cache: "no-store",
+          cache: "no-cache",
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        const incoming: ListPost[] = Array.isArray(json.posts)
+        const incoming: POSTS_QUERYResult[number][] = Array.isArray(json.posts)
           ? json.posts
           : [];
         const totalForCat =
@@ -104,10 +95,10 @@ const BlogItem = ({
             },
           };
         });
-      } catch (e: any) {
+      } catch (e: unknown) {
         patchStore(k, {
           loading: false,
-          error: e.message || "Failed to load posts",
+          error: (e as Error).message || "Failed to load posts",
         });
       }
     },

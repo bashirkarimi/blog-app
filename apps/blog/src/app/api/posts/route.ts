@@ -31,9 +31,9 @@ export async function GET(req: NextRequest) {
       JSON.stringify({ posts, total, offset, limit, hasMore, category }),
       { status: 200, headers: { "Content-Type": "application/json" } }
     );
-  } catch (e: any) {
+  } catch (e: unknown) {
     return new Response(
-      JSON.stringify({ error: e.message || "Unknown error" }),
+      JSON.stringify({ error: (e as Error).message || "Unknown error" }),
       { status: 500 }
     );
   }
