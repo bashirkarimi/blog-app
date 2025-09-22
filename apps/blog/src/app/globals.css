@@ -58,6 +58,11 @@ h3 {
   font-size: var(--h3-size);
 }
 
+a:hover,
+button:hover {
+  cursor: pointer;
+}
+
 /* Small tweak for prose content to keep consistent spacing inside .typography */
 .typography h1,
 .typography h2,
