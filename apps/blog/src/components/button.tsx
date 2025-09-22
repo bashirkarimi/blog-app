@@ -1,4 +1,6 @@
 "use client";
+import { Button as ButtonUI } from "@repo/ui/button";
+
 
 import { useTransition } from "react";
 
@@ -20,14 +22,14 @@ export function Button({
   if (!hasMore) return null;
 
   return (
-    <button
+    <ButtonUI
       onClick={() => startTransition(() => onClick())}
       disabled={disabled || isPending}
-      className="mt-8 px-4 py-2 text-sm font-medium rounded border border-gray-300 hover:bg-gray-50 hover:cursor-pointer disabled:opacity-50"
+      // className="mt-8 px-4 py-2 text-sm font-medium rounded border border-gray-300 hover:bg-gray-50 hover:cursor-pointer disabled:opacity-50"
       type="button"
       aria-busy={isPending}
     >
       {isPending ? "Loading..." : label}
-    </button>
+    </ButtonUI>
   );
 }
