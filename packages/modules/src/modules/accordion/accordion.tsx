@@ -1,6 +1,6 @@
 import { ComponentType, useState } from "react";
 import { AccordionModule } from "../../types";
-import { Button } from "@repo/ui";
+import { Button } from "@repo/ui/button";
 
 interface AccordionProps {
   data: AccordionModule;

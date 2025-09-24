@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { CategoryBar } from "./category-bar";
 import { PostCard } from "./post-card";
 import { POSTS_QUERYResult } from "@/sanity/types";
-import { Button } from "@repo/ui";
+import { Button } from "@repo/ui/button";
 
 interface CategoryCount {
   title: string;

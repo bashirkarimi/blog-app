@@ -8,10 +8,8 @@
     "dist"
   ],
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
+    "./button": "./src/components/button.tsx",
+    "./section": "./src/components/section.tsx",
     "./styles.css": "./dist/index.css"
   },
   "license": "MIT",

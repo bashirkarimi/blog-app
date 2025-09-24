@@ -4,7 +4,7 @@ import { ImageTeaser } from "./image-teaser";
 import { Accordion } from "./accordion";
 import { RichText } from "./rich-text";
 import { BlogList } from "./blog-list";
-import { Section } from "@repo/ui/";
+import { Section } from "@repo/ui/section";
 import type { ComponentType } from "react";
 
 type SectionTypeName = Sections[number]["_type"];
