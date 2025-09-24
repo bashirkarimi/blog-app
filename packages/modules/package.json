@@ -1,0 +1,40 @@
+{
+  "name": "@repo/modules",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "prebuild": "pnpm -F @repo/ui build",
+    "build": "pnpm run clean && tsc -p tsconfig.json",
+    "dev": "pnpm run clean && tsc -w -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "dependencies": {
+    "@portabletext/react": "^4.0.3",
+    "@repo/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@portabletext/types": "^2.0.15",
+    "eslint": "^9.33.0",
+    "typescript": "catalog:"
+  }
+}

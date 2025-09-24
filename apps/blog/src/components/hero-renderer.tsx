@@ -1,4 +1,4 @@
-import { Hero } from "./hero";
+import { Hero } from "@repo/modules";
 import type { Hero as HeroType } from "@/sanity/types";
 
 const HeroRenderer = ({ hero }: { hero: HeroType | Record<string, any> | null }) => {
@@ -6,7 +6,7 @@ const HeroRenderer = ({ hero }: { hero: HeroType | Record<string, any> | null })
 
   switch (hero._type) {
     case "hero":
-      return <Hero hero={hero as HeroType} />;
+      return <Hero data={hero as HeroType} />;
     default:
       return null;
   }

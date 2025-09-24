@@ -8,10 +8,11 @@
     "dist"
   ],
   "exports": {
-    "./styles.css": "./dist/index.css",
-    "./*": "./dist/*.js",
     "./button": "./src/components/button.tsx",
-    "./card": "./src/components/card.tsx"
+    "./section": "./src/components/section.tsx",
+    "./card": "./src/components/card.tsx",
+    "./gradient": "./src/components/gradient.tsx",
+    "./styles.css": "./dist/index.css"
   },
   "license": "MIT",
   "scripts": {

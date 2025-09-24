@@ -4,8 +4,8 @@ import { twMerge } from "tailwind-merge";
 
 
 const Section = forwardRef<
-  HTMLSelectElement,
-  HTMLAttributes<HTMLSelectElement>
+  HTMLElement,
+  HTMLAttributes<HTMLElement>
 >(({ className, ...props }, ref) => {
   return (
     <section ref={ref} className={twMerge("my-8 md:my-12", className)} {...props} />

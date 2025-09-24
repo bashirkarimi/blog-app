@@ -8,7 +8,8 @@ const nextConfig = {
       },
     ],
   },
-  transpilePackages: ["@repo/ui"],
+  /** Enables hot reloading for local packages without a build step */
+  transpilePackages: ["@repo/ui", "@repo/modules"],
 };
 
 export default nextConfig;
