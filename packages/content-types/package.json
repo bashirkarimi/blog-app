@@ -1,0 +1,24 @@
+{
+  "name": "@repo/content-types",
+  "version": "0.0.0",
+  "private": true,
+  "files": [
+    "dist",
+    "src"
+  ],
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
