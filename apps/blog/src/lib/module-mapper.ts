@@ -1,12 +1,13 @@
 import type { AnyModule, AccordionModule, HeroModule } from "@repo/modules/types";
 import type { Accordion, Hero } from "@repo/content-types"; // from generated Sanity types
+import { urlFor } from "../sanity/image";
 
 export function mapAccordion(doc: Accordion): AccordionModule {
   return {
     _type: "accordion",
     items: (doc.items || []).map((i) => ({
       title: i?.title || "",
-      content: i?.content || [],
+      content: (i?.content as unknown as any[]) || [],
     })),
   };
 }
@@ -14,12 +15,12 @@ export function mapAccordion(doc: Accordion): AccordionModule {
 
 
 export function mapHero(doc: Hero): HeroModule {
-  const asset = doc.image?.asset;
+  const imageUrl = doc.image ? urlFor(doc.image).width(1600).url() : undefined;
   return {
     _type: "hero",
     title: doc.title || "",
-    text: doc.text || [],
-    image: doc.image,
+    text: (doc.text as unknown as any[]) || [],
+    image: imageUrl,
   };
 }
 

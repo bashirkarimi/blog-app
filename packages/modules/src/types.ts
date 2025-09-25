@@ -1,5 +1,4 @@
 import type { PortableTextBlock } from "@portabletext/types";
-import type { StaticImageData } from "next/image";
 export interface BaseModule {
   _type: string;
   _key?: string;
@@ -15,6 +14,6 @@ export interface HeroModule extends BaseModule {
   _type: "hero";
   title: string;
   text?: PortableTextBlock[];
-  image?: StaticImageData;
+  image?: string;
 }
 export type AnyModule = AccordionModule | HeroModule;
