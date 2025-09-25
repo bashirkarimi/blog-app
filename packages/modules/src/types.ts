@@ -12,7 +12,7 @@ export interface AccordionModule extends BaseModule {
 }
 export interface HeroModule extends BaseModule {
   _type: "hero";
-  title: string;
+  title?: string;
   text?: PortableTextBlock[];
   image?: string;
 }
