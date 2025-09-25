@@ -2,6 +2,9 @@
   "name": "@repo/modules",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
@@ -13,12 +16,15 @@
     "./types": {
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js"
-    }
+    },
+    "./styles.css": "./dist/index.css"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "pnpm -F @repo/ui build",
-    "build": "pnpm run clean && tsc -p tsconfig.json",
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "dev": "pnpm run clean && tsc -w -p tsconfig.json"
   },
   "peerDependencies": {
@@ -28,7 +34,8 @@
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
-    "@repo/ui": "workspace:*"
+    "@repo/ui": "workspace:*",
+    "@repo/tailwind-config": "workspace:*"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
@@ -37,6 +44,8 @@
     "@types/react-dom": "^19.1.9",
     "@portabletext/types": "^2.0.15",
     "eslint": "^9.33.0",
+    "@tailwindcss/cli": "^4.1.5",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }
 }
