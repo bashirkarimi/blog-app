@@ -8,10 +8,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
+    "./accordion": "./src/modules/accordion/accordion.tsx",
+    "./hero": "./src/modules/hero/hero.tsx",
+    "./types": "./src/types/index.ts"
   },
   "scripts": {
     "clean": "rm -rf dist",

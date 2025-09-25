@@ -1,7 +1,7 @@
 import { Sections } from "@/sanity/types";
 import { TeaserList } from "./teaser-list";
 import { ImageTeaser } from "./image-teaser";
-import { Accordion } from "./accordion";
+import { Accordion } from "@repo/modules/accordion";
 import { RichText } from "./rich-text";
 import { BlogList } from "./blog-list";
 import { Section } from "@repo/ui/section";
