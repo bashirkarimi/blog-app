@@ -18,8 +18,9 @@
       "import": "./dist/types.js"
     },
     "./styles.css": {
-      "default": "./dist/index.css",
-      "development": "./src/styles.css"
+      "development": "./src/styles.css",
+      "production": "./dist/index.css",
+      "default": "./src/styles.css"
     }
   },
   "scripts": {
