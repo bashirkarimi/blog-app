@@ -2,6 +2,7 @@
 import { ComponentType, useState } from "react";
 import { AccordionModule } from "../../types";
 import { Button } from "@repo/ui/button";
+import { PortableText } from "@portabletext/react";
 
 interface AccordionProps {
   data: AccordionModule;
@@ -28,8 +29,8 @@ function Item({ item }: { item: any }) {
       </Button>
       {open && (
         <div className="px-4 pb-4 text-sm text-gray-700">
-          {(item.content || []).map((block: any, i: number) => (
-            <p key={i}>{block?.children?.[0]?.text}</p>
+          {(item.content && (
+            <PortableText value={item.content} />
           ))}
         </div>
       )}

@@ -10,7 +10,10 @@
   "exports": {
     "./accordion": "./src/modules/accordion/accordion.tsx",
     "./hero": "./src/modules/hero/hero.tsx",
-    "./types": "./src/types/index.ts"
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    }
   },
   "scripts": {
     "clean": "rm -rf dist",

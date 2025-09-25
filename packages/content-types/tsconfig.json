@@ -1,11 +1,14 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist",
     "rootDir": "src",
+    "outDir": "dist",
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "composite": true
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    // Not using project references here; remove composite to avoid TS6379
+    // (Composite requires incremental true or cannot disable incremental.)
+    "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
