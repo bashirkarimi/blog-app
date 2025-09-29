@@ -4,7 +4,6 @@
   "type": "module",
   "private": true,
   "exports": {
-    ".": "./shared-styles.css",
     "./shared-styles.css": "./shared-styles.css",
     "./postcss": "./postcss.config.js"
   },
