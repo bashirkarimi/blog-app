@@ -1,4 +1,12 @@
-@import "@repo/tailwind-config";
+/* Tailwind v4: ensure we include module package sources so custom spacing
+  utilities like w-half, w-two-thirds, etc. are generated even when only
+  referenced inside the app (and not inside @repo/modules source). */
+@config "./tailwind.config.js";
+/* Import shared theme BEFORE tailwind so tokens exist when utilities are generated */
+@import "@repo/tailwind-config/shared-styles.css";
+@import "tailwindcss";
+/* Import module component styles (which themselves import shared theme in their own build) */
+@import "@repo/modules/styles.css";
 
 :root {
   --background: #ffffff;

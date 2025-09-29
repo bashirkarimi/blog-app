@@ -1,2 +1,3 @@
 /* Component-level styles for the UI package */
-@import "@repo/tailwind-config";
+@import "@repo/tailwind-config/shared-styles.css"; /* tokens */
+@import "tailwindcss"; /* utilities generated using tokens */
