@@ -4,4 +4,23 @@
   --color-blue-1000: #2a8af6;
   --color-purple-1000: #a853ba;
   --color-red-1000: #e92a67;
+
+  /* Custom sizing scale (percentages & semantic widths)
+     Use with width/height utilities, e.g. w-half, w-two-thirds, h-hero.
+     These are added because arbitrary values like w-[50%] weren't being
+     generated due to missing content configuration in the Tailwind build. */
+  --spacing-half: 50%;
+  --spacing-third: 33.333333%;
+  --spacing-two-thirds: 66.666667%;
+  --spacing-quarter: 25%;
+  --spacing-three-quarters: 75%;
+  --spacing-fifth: 20%;
+  --spacing-two-fifths: 40%;
+  --spacing-three-fifths: 60%;
+  --spacing-four-fifths: 80%;
+  --spacing-hero: 50%; /* For layouts needing a 50% hero text column */
+  /* Extended fixed widths (example tokens) */
+  --spacing-72: 18rem;
+  --spacing-80: 20rem;
+  --spacing-96: 24rem;
 }
