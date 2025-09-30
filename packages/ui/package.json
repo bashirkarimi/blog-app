@@ -16,10 +16,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
-    "build:components": "tsc",
+  "build:styles": "tailwindcss -c ./tailwind.config.js -i ./src/styles.css -o ./dist/index.css",
+  "build:components": "tsc",
     "check-types": "tsc --noEmit",
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --content './src/**/*.{js,jsx,ts,tsx}' --watch",
     "dev:components": "tsc --watch",
     "lint": "eslint src --max-warnings 0"
   },

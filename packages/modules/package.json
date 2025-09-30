@@ -2,22 +2,34 @@
   "name": "@repo/modules",
   "version": "0.0.0",
   "private": true,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+    "./accordion": "./src/modules/accordion/accordion.tsx",
+    "./hero": "./src/modules/hero/hero.tsx",
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js"
+    },
+    "./styles.css": {
+      "development": "./src/styles.css",
+      "production": "./dist/index.css",
+      "default": "./src/styles.css"
     }
   },
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist node_modules",
     "prebuild": "pnpm -F @repo/ui build",
-    "build": "pnpm run clean && tsc -p tsconfig.json",
-    "dev": "pnpm run clean && tsc -w -p tsconfig.json"
+  "build:styles": "tailwindcss -c ./tailwind.config.ts -i ./src/styles.css -o ./dist/index.css",
+    "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --content './src/**/*.{js,jsx,ts,tsx}' --watch",
+    "dev:components": "tsc --watch"
   },
   "peerDependencies": {
     "next": "catalog:",
@@ -26,15 +38,18 @@
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
+    "@repo/tailwind-config": "workspace:*",
     "@repo/ui": "workspace:*"
   },
   "devDependencies": {
+    "@portabletext/types": "^2.0.15",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/cli": "^4.1.5",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
-    "@portabletext/types": "^2.0.15",
     "eslint": "^9.33.0",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }
 }

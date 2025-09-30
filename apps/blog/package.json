@@ -9,8 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
     "@repo/modules": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@sanity/image-url": "^1.2.0",
     "next": "catalog:",
     "next-sanity": "^10.0.16",
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^15.4.6",
+    "@repo/content-types": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",

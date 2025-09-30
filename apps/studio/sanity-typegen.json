@@ -1,5 +1,7 @@
 {
   "path": "../blog/src/**/*.{ts,tsx,js,jsx}",
   "schema": "./extract.json",
-  "generates": "../blog/src/sanity/types.ts"
+  "generates": "../../packages/content-types/src/sanity.generated.ts",
+  "addExportNames": true,
+  "useUnionTypes": true
 }
