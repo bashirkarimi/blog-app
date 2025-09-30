@@ -7,8 +7,8 @@ const ImageTeaser = ({ data }: { data: any }) => {
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center">
       {imgUrl && (
-        <div className="w-full order-1 md:order-2 md:ml-4 md:w-1/2">
-          <div className="relative w-full overflow-hidden bg-gray-100 rounded-md mb-4 md:mb-0 pb-[56.25%] md:pb-[100%]">
+        <div className="w-full h-full order-1 md:order-2 md:ml-4 md:w-1/2">
+          <div className="relative w-full h-full overflow-hidden rounded-md mb-4 md:mb-0 aspect-video">
             <Image
               src={imgUrl}
               alt={data?.title ?? "Image"}
