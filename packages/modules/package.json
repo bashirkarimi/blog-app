@@ -21,7 +21,7 @@
       "development": "./src/styles.css",
       "production": "./dist/index.css",
       "default": "./src/styles.css"
-    },
+    }
   },
   "scripts": {
     "clean": "rm -rf dist node_modules",
