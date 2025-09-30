@@ -2,7 +2,8 @@
   utilities are generated even when only
   referenced inside the app (and not inside @repo/modules source). */
 
-  @import "@repo/tailwind-config/shared-styles.css";
+  /* Import tokens via relative path for deterministic resolution in dev/build */
+  @import "../../../packages/tailwind-config/shared-styles.css";
   @import "tailwindcss";
 
 :root {
