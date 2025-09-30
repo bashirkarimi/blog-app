@@ -1,4 +1,4 @@
 /* Component-level styles for the UI package */
 /* Use relative path to avoid export resolution issues during isolated builds */
-@import "../../tailwind-config/shared-styles.css"; /* tokens */
+@import "@repo/tailwind-config/shared-styles.css"; /* tokens */
 @import "tailwindcss"; /* utilities generated using tokens */
