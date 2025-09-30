@@ -27,7 +27,7 @@
   "scripts": {
     "clean": "rm -rf dist node_modules",
     "prebuild": "pnpm -F @repo/ui build",
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --content './src/**/*.{js,jsx,ts,tsx}'",
+  "build:styles": "tailwindcss -c ./tailwind.config.ts -i ./src/styles.css -o ./dist/index.css",
     "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
     "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --content './src/**/*.{js,jsx,ts,tsx}' --watch",
     "dev:components": "tsc --watch"
