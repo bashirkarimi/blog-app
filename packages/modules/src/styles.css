@@ -1,2 +1,2 @@
-@import "../../tailwind-config/shared-styles.css";
+@import "@repo/tailwind-config/shared-styles.css";
 @import "tailwindcss";
