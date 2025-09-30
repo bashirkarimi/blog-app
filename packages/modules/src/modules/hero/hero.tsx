@@ -22,7 +22,7 @@ const Hero: ComponentType<HeroProps> = ({ data }) => (
       <Image
         className="object-center object-cover"
         src={data.image}
-        alt={data.title ?? "Image"}
+        alt={data.title ?? ""}
         fill
       />
     )}
