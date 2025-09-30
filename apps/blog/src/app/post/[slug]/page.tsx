@@ -18,7 +18,7 @@ export async function generateStaticParams() {
       query: POST_SLUGS_QUERY,
     });
 
-    return (slugs ?? []).map((s) => ({ slug: s.slug }));
+    return (slugs ?? []).map((s: { slug: string }) => ({ slug: s.slug }));
   } catch (err) {
     console.warn(
       "generateStaticParams: failed to fetch slugs, falling back to empty list",

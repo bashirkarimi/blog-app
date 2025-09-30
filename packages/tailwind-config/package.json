@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "main": "./shared-styles.css",
   "exports": {
+    ".": "./shared-styles.css",
     "./shared-styles.css": "./shared-styles.css",
     "./postcss": "./postcss.config.js"
   },
