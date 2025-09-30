@@ -2,6 +2,7 @@ import { urlFor } from "@/sanity/image";
 import { POST_BY_SLUG_QUERY } from "@/sanity/queries";
 import { POST_SLUGS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
+import { client } from "@/sanity/client"; // use raw client for build-time SSG
 import Image from "next/image";
 import { NavigateHome } from "@/components/navigate-home";
 import { RichText } from "@/components/rich-text";
@@ -14,11 +15,10 @@ interface PageProps {
 
 export async function generateStaticParams() {
   try {
-    const { data: slugs } = await sanityFetch({
-      query: POST_SLUGS_QUERY,
-    });
+    const slugs: { slug: string | null }[] = await client.fetch(POST_SLUGS_QUERY);
 
-    return (slugs ?? []).map((s: { slug: string }) => ({ slug: s.slug }));
+    return (slugs || [])
+      .map((s) => ({ slug: s.slug as string }));
   } catch (err) {
     console.warn(
       "generateStaticParams: failed to fetch slugs, falling back to empty list",
