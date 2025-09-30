@@ -10,7 +10,7 @@ interface HeroProps {
 const Hero: ComponentType<HeroProps> = ({ data }) => (
   <div className="relative w-full aspect-[21/6] z-0 flex">
     <div className="max-h-content w-full md:w-1/2 lg:w-1/3 relative p-8 mt-auto z-20 text-white">
-      <h2 className="text-4xl !text-white font-bold relative z-10">{data.title}</h2>
+      <h2 className="text-4xl text-white font-bold relative z-10">{data.title}</h2>
       {data.text && (
         <div className="mt-4 relative z-10">
           <PortableText value={data.text} />
