@@ -40,8 +40,7 @@
   "dependencies": {
     "@portabletext/react": "^4.0.3",
     "@repo/tailwind-config": "workspace:*",
-    "@repo/ui": "workspace:*",
-    "install": "^0.13.0"
+    "@repo/ui": "workspace:*"
   },
   "devDependencies": {
     "@portabletext/types": "^2.0.15",
