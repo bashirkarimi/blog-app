@@ -1,7 +1,7 @@
 import { PageBuilder } from "@/components/page-builder";
 import { LANDING_PAGE_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
-import notFound from "./not-found";
+import { notFound } from "next/navigation";
 
 export default async function landingPage({ params }: any) {
   const { slug } = await params;
