@@ -16,10 +16,10 @@ interface PageProps {
 
 export async function generateStaticParams() {
   try {
-    const slugs: { slug: string | null }[] = await client.fetch(POST_SLUGS_QUERY);
+    const slugs: { slug: string | null }[] =
+      await client.fetch(POST_SLUGS_QUERY);
 
-    return (slugs || [])
-      .map((s) => ({ slug: s.slug as string }));
+    return (slugs || []).map((s) => ({ slug: s.slug as string }));
   } catch (err) {
     console.warn(
       "generateStaticParams: failed to fetch slugs, falling back to empty list",
@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
     query: POST_BY_SLUG_QUERY,
     params: { slug },
   });
-
+  
   if (!post) {
     notFound();
   }
