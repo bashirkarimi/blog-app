@@ -7,6 +7,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "@repo/ui/styles.css";
 import "@repo/modules/styles.css";
+import { notFound } from "next/navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,7 @@ export default async function RootLayout({ children }) {
   const { data: settings } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
 
   if (!settings) {
-    return <div>404 - Page Not Found</div>;
+    return notFound();
   }
 
   return (
