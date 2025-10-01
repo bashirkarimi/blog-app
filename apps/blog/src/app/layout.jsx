@@ -26,6 +26,10 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const { data: settings } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
 
+  if (!settings) {
+    return <div>404 - Page Not Found</div>;
+  }
+
   return (
     <html lang="en">
       <body

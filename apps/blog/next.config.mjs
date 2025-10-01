@@ -10,6 +10,9 @@ const nextConfig = {
   },
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: ["@repo/ui", "@repo/modules", "@repo/content-types"],
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;

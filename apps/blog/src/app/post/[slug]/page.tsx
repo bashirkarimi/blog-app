@@ -6,6 +6,7 @@ import { client } from "@/sanity/client"; // use raw client for build-time SSG
 import Image from "next/image";
 import { NavigateHome } from "@/components/navigate-home";
 import { RichText } from "@/components/rich-text";
+import { notFound } from "next/navigation";
 
 interface PageProps {
   params: {
@@ -35,6 +36,9 @@ export default async function Page({ params }: PageProps) {
     params: { slug },
   });
 
+  if (!post) {
+    notFound();
+  }
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="container mx-auto">
