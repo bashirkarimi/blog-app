@@ -6,7 +6,8 @@ import { RichText } from "./rich-text";
 import { BlogList } from "./blog-list";
 import { Section } from "@repo/ui/section";
 import type { ComponentType } from "react";
-import { mapAccordion } from "@/lib/module-mapper";
+import { mapModule } from "@/lib/module-registry";
+import type { AccordionModule } from "@repo/modules/types";
 
 type SectionTypeName = Sections[number]["_type"];
 type SectionByType<T extends SectionTypeName> = Extract<
@@ -21,7 +22,10 @@ type SectionComponents = {
 // Adapter to satisfy expected prop type shape for accordion
 const AccordionSection: ComponentType<{ data: SectionByType<"accordion"> }> = ({
   data,
-}) => <Accordion data={mapAccordion(data)} />;
+}) => {
+  const mappedData = mapModule(data) as AccordionModule | null;
+  return mappedData ? <Accordion data={mappedData} /> : null;
+};
 
 export const sections: SectionComponents = {
   teaserList: TeaserList,
