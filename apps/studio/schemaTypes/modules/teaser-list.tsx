@@ -6,12 +6,6 @@ export const teaserListType = defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'mode',
-      type: 'string',
-      options: {list: ['manual', 'posts']},
-      initialValue: 'manual',
-    }),
-    defineField({
       name: 'items',
       type: 'array',
       of: [
@@ -22,18 +16,20 @@ export const teaserListType = defineType({
             {name: 'title', type: 'string', validation: (r) => r.required()},
             {name: 'summary', type: 'text'},
             {name: 'image', type: 'image', options: {hotspot: true}},
-            {name: 'href', type: 'string'},
+            {name: 'Link', type: 'url'},
+            {name: 'linkLabel', type: 'string'}
           ],
         },
       ],
-      hidden: ({parent}) => parent?.mode !== 'manual',
-    }),
-    defineField({
-      name: 'postRefs',
-      title: 'Posts',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'post'}]}],
-      hidden: ({parent}) => parent?.mode !== 'posts',
     }),
   ],
+  preview: {
+    select: {title: 'items.0.title'},
+    prepare(selection) {
+      const {title} = selection
+      return {
+        title: title ? `Teaser List: ${title}` : 'Teaser List',
+      }
+    }
+  },
 })
