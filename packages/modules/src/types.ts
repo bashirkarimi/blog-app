@@ -16,4 +16,11 @@ export interface HeroModule extends BaseModule {
   text?: PortableTextBlock[];
   image?: string;
 }
-export type AnyModule = AccordionModule | HeroModule;
+export interface ImageTeaserModule extends BaseModule {
+  _type: "imageTeaser";
+  title?: string;
+  description?: string;
+  image?: string;
+  href?: string;
+}
+export type AnyModule = AccordionModule | HeroModule | ImageTeaserModule;

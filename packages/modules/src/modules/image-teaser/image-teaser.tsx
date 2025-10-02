@@ -1,16 +1,16 @@
 import Image from "next/image";
-import { urlFor } from "@/sanity/image";
+import type { ImageTeaserModule } from "../../types";
 
-const ImageTeaser = ({ data }: { data: any }) => {
-  const imgUrl = data?.image ? urlFor(data.image).url() : null;
+const ImageTeaser = ({ data }: { data: ImageTeaserModule }) => {
+
 
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center">
-      {imgUrl && (
+      {data?.image && (
         <div className="w-full h-full order-1 md:order-2 md:ml-4 md:w-1/2">
           <div className="relative w-full h-full overflow-hidden rounded-md mb-4 md:mb-0 aspect-video">
             <Image
-              src={imgUrl}
+              src={data.image}
               alt={data?.title ?? "Image"}
               fill
               className="object-cover object-center"
