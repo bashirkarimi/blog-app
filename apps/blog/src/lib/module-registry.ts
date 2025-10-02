@@ -25,6 +25,14 @@ const mappers: { [K in ModuleType]: Mapper<K> } = {
     text: (doc.text as any[]) || [],
     image: doc.image ? urlFor(doc.image).width(1600).url() : undefined,
   }),
+  imageTeaser: (doc) => ({
+    _type: "imageTeaser",
+    title: doc.title || "",
+    description: doc.description || "",
+    image: doc.image ? urlFor(doc.image).width(800).url() : undefined,
+    href: doc.href || undefined,
+  }),
+  // Add new mappers here.
 };
 
 export function mapModule(doc: SanityModuleDoc): InternalModule | null {
