@@ -8,24 +8,26 @@ interface HeroProps {
 }
 
 const Hero: ComponentType<HeroProps> = ({ data }) => (
-  <div className="relative w-full aspect-[21/6] z-0 flex">
-    <div className="max-h-content w-full md:w-1/2 lg:w-1/3 relative p-8 mt-auto z-20 text-white">
-      <h2 className="text-4xl text-white font-bold relative z-10">{data.title}</h2>
-      {data.text && (
-        <div className="mt-4 relative z-10">
-          <PortableText value={data.text} />
-        </div>
-      )}
-      <div className="absolute inset-0 bg-gray-900 opacity-60 z-10" />
-    </div>
+  <div className="relative w-full aspect-[21/6] flex overflow-hidden">
     {data.image && (
       <Image
-        className="object-center object-cover"
+        className="object-cover object-center select-none"
         src={data.image}
         alt={data.title ?? ""}
         fill
+        priority
       />
     )}
+    {/* dark overlay */}
+    <div className="absolute inset-0 bg-gray-900/60" aria-hidden="true" />
+    <div className="relative w-full md:w-1/2 lg:w-1/3 p-8 mt-auto text-white z-10">
+      <h2 className="text-4xl font-bold">{data.title}</h2>
+      {data.text && (
+        <div className="mt-4 prose prose-invert max-w-none">
+          <PortableText value={data.text} />
+        </div>
+      )}
+    </div>
   </div>
 );
 

@@ -1,2 +1,7 @@
+/* This file is kept for local storybook / package level development.
+	Do NOT import this file inside consuming Next.js apps because the
+	app already imports its global Tailwind pipeline (globals.css).
+	Importing this would duplicate the Tailwind layers and break
+	specificity ordering. */
 @import "@repo/tailwind-config/shared-styles.css";
 @import "tailwindcss";

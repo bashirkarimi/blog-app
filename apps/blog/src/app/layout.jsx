@@ -6,8 +6,10 @@ import { SITE_SETTINGS_QUERY } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "@repo/ui/styles.css";
-import "@repo/modules/styles.css";
+// IMPORTANT: Tailwind should only be imported once globally to avoid duplicated
+// layers and broken utility precedence. The design system packages also had
+// entry style files that re-imported Tailwind which caused duplicates when
+// brought into the app. We intentionally do NOT import those here.
 import { notFound } from "next/navigation";
 
 const geistSans = Geist({
