@@ -1,4 +1,3 @@
-// lib/module-registry.ts
 import { urlFor } from "../sanity/image";
 import type {
   ModuleTypeMap,
@@ -10,6 +9,13 @@ import type {
 type Mapper<K extends ModuleType> = (
   doc: ModuleTypeMap[K]["doc"]
 ) => ModuleTypeMap[K]["mapped"];
+
+// Safely build an image URL; return undefined if invalid or empty.
+function safeImage(image: any, width: number): string | undefined {
+  if (!image || !image.asset) return undefined;
+  const url = urlFor(image).width(width).url();
+  return url || undefined;
+}
 
 const mappers: { [K in ModuleType]: Mapper<K> } = {
   accordion: (doc) => ({
@@ -23,14 +29,23 @@ const mappers: { [K in ModuleType]: Mapper<K> } = {
     _type: "hero",
     title: doc.title || "",
     text: (doc.text as any[]) || [],
-    image: doc.image ? urlFor(doc.image).width(1600).url() : undefined,
+    image: safeImage(doc.image, 1600),
   }),
   imageTeaser: (doc) => ({
     _type: "imageTeaser",
     title: doc.title || "",
     description: doc.description || "",
-    image: doc.image ? urlFor(doc.image).width(800).url() : undefined,
+    image: safeImage(doc.image, 800),
     href: doc.href || undefined,
+  }),
+  teaserList: (doc) => ({
+    _type: "teaserList",
+    items: (doc.items  || []).map((item) => ({
+      title: item?.title || "",
+      summary: item?.summary || "",
+      image: safeImage(item?.image, 400),
+      href: item?.href || undefined,
+    })),
   }),
   // Add new mappers here.
 };

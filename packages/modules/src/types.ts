@@ -23,4 +23,15 @@ export interface ImageTeaserModule extends BaseModule {
   image?: string;
   href?: string;
 }
-export type AnyModule = AccordionModule | HeroModule | ImageTeaserModule;
+
+export interface TeaserListModule extends BaseModule {
+  _type: "teaserList";
+  items?: {
+    title?: string;
+    summary?: string;
+    image?: string;
+    href?: string;
+  }[];
+}
+
+export type AnyModule = AccordionModule | HeroModule | ImageTeaserModule | TeaserListModule;

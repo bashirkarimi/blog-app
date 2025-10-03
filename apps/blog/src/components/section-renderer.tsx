@@ -1,5 +1,5 @@
 import { Sections } from "@/sanity/types";
-import { TeaserList } from "./teaser-list";
+import { TeaserList } from "@repo/modules/teaser-list";
 import { ImageTeaser } from "@repo/modules/image-teaser";
 import { Accordion } from "@repo/modules/accordion";
 import { RichText } from "./rich-text";

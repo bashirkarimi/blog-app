@@ -11,9 +11,6 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "./accordion": "./src/modules/accordion/accordion.tsx",
-    "./hero": "./src/modules/hero/hero.tsx",
-    "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
     "./types": {
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js"
@@ -22,7 +19,11 @@
       "development": "./src/styles.css",
       "production": "./dist/index.css",
       "default": "./src/styles.css"
-    }
+    },
+      "./accordion": "./src/modules/accordion/accordion.tsx",
+      "./hero": "./src/modules/hero/hero.tsx",
+      "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
+      "./teaser-list": "./src/modules/teaser-list/teaser-list.tsx"
   },
   "scripts": {
   "clean": "rm -rf dist",
