@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { urlFor } from "@/sanity/image";
+import { HeaderModule } from "../../types";
 
-const Header = ({ settings }: { settings: any }) => {
+const Header = ({ data }: { data: HeaderModule }) => {
   return (
     <header className="container mx-auto">
-      <div className="mx-auto l flex items-center  p-4">
+      <div className="mx-auto flex items-center p-4">
         <div className="flex items-center gap-3">
-          {settings?.logo && (
+          {data?.logo && (
             <Image
-              src={urlFor(settings.logo).width(64).height(64).url()}
+              src={data.logo}
               alt="logo"
               width={64}
               height={64}
@@ -17,13 +17,13 @@ const Header = ({ settings }: { settings: any }) => {
             />
           )}
           <Link href="/">
-            <strong>{settings?.siteTitle ?? "Site"}</strong>
+            <strong>{data?.siteTitle ?? "Site"}</strong>
           </Link>
         </div>
         <nav className="flex gap-6 ml-8">
-          {settings?.headerMenu?.items?.map((it: any) => (
-            <Link key={it?.target?._id} href={`/${it?.target?.slug}`}>
-              {it?.label ?? it?.target?.title}
+          {data?.headerMenu?.map((menu) => (
+            <Link key={menu?.href} href={`/${menu?.href}`}>
+              {menu?.label}
             </Link>
           ))}
         </nav>

@@ -34,4 +34,14 @@ export interface TeaserListModule extends BaseModule {
   }[];
 }
 
+export interface HeaderModule extends BaseModule {
+  _type: "header";
+  siteTitle?: string;
+  logo?: string;
+  headerMenu?: {
+    label: string;
+    href: string;
+  }[];
+}
+
 export type AnyModule = AccordionModule | HeroModule | ImageTeaserModule | TeaserListModule;

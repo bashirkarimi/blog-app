@@ -23,7 +23,9 @@
       "./accordion": "./src/modules/accordion/accordion.tsx",
       "./hero": "./src/modules/hero/hero.tsx",
       "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
-      "./teaser-list": "./src/modules/teaser-list/teaser-list.tsx"
+      "./teaser-list": "./src/modules/teaser-list/teaser-list.tsx",
+      "./header": "./src/modules/header/header.tsx",
+      "./footer": "./src/modules/footer/footer.tsx"
   },
   "scripts": {
   "clean": "rm -rf dist",
