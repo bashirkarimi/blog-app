@@ -1,3 +1,5 @@
+/* Point Tailwind at the monorepo root config so external package sources are scanned. */
+@config "../../../../tailwind.config.ts";
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
