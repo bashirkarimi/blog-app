@@ -6,7 +6,8 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src/styles.css"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,7 +21,8 @@
     "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
     "./teaser-list": "./src/modules/teaser-list/teaser-list.tsx",
     "./header": "./src/modules/header/header.tsx",
-    "./footer": "./src/modules/footer/footer.tsx"
+    "./footer": "./src/modules/footer/footer.tsx",
+    "./styles.css": "./src/styles.css"
   },
   "scripts": {
     "clean": "rm -rf dist",

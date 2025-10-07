@@ -5,14 +5,16 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src/styles.css"
   ],
   "license": "MIT",
   "exports": {
     "./button": "./src/components/button.tsx",
     "./section": "./src/components/section.tsx",
     "./card": "./src/components/card.tsx",
-    "./gradient": "./src/components/gradient.tsx"
+    "./gradient": "./src/components/gradient.tsx",
+    "./styles.css": "./src/styles.css"
   },
   "scripts": {
     "build:components": "tsc",
