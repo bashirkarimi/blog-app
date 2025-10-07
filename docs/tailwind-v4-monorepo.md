@@ -1,27 +1,36 @@
-# Tailwind CSS v4 Monorepo Setup Guide
+# Tailwind CSS v4 Monorepo Implementation Guide
 
-A concise, repeatable pattern for sharing design tokens and utilities across apps and packages in this (or any similar) Turborepo/PNPM monorepo.
+Practical, scalable pattern for sharing design tokens and utilities across multiple apps & packages in a PNPM + Turborepo workspace.
 
-## Goals
-- Single source of truth for design tokens (colors, spacing, etc.)
-- Zero duplication of Tailwind utility generation across packages
-- Component libraries ship lean CSS (or none) and rely on the app build
-- Easy to add new tokens / packages without breaking styling
+---
+## Core Goals
+1. Single source of truth for design tokens (color, spacing, radii, fractions)
+2. Generate utilities **once per app**, not per package
+3. Library packages ship only components (zero/lean CSS)
+4. Adding a new package or token never breaks existing styling
+5. Runtime theming (dark mode, future brands) stays easy via CSS variables
 
-## Layering Model
-1. Tokens: design primitives via `@theme` (no Tailwind import here)
-2. Utilities: Tailwind generates utility classes from tokens
-3. Components: class compositions & minimal custom CSS from libraries
-4. App Overrides: per-app variables or layout tweaks
+---
+## Layering Model (Conceptual Stack)
+| Layer | Source | Purpose |
+|-------|--------|---------|
+| 1. Tokens | `@theme` in `design-tokens.css` | Raw design primitives (variables) |
+| 2. Utilities | Tailwind build in app | Class generation from tokens (`bg-blue-1000`, `w-half`) |
+| 3. Components | `@repo/ui`, `@repo/modules` | Class composition / minimal custom selectors |
+| 4. App Surface | App `globals.css` + layouts | Layout, overrides, theming scopes |
 
+Import order inside an app’s global stylesheet:
+```css
+@config "../../../../tailwind.config.ts";               /* root config (monorepo) */
+@import "@repo/tailwind-config/design-tokens.css";       /* 1. tokens */
+@import "tailwindcss";                                   /* 2. utilities from tokens */
+@import "@repo/ui/styles.css";                           /* 3. optional lib layer */
+@import "@repo/modules/styles.css";                      /* 3. optional lib layer */
+/* 4. app overrides follow here */
 ```
-@import "@repo/tailwind-config/shared-styles.css"; /* tokens */
-@import "tailwindcss";                             /* utilities */
-@import "@repo/ui/styles.css";                     /* component styles (optional) */
-```
 
-## 1. Design Token Package (`packages/tailwind-config`)
-File: `shared-styles.css`
+---
+## 1. Design Tokens (`packages/tailwind-config/design-tokens.css`)
 ```css
 @theme {
   --color-blue-1000: #2a8af6;
@@ -40,129 +49,183 @@ File: `shared-styles.css`
   --spacing-72: 18rem;
   --spacing-80: 20rem;
   --spacing-96: 24rem;
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 1rem;
 }
 ```
-Important: This file does **not** import `tailwindcss`. It only declares tokens.
+▶ This file contains **only** tokens; it does **not** import Tailwind.
 
-## 2. App-Level Global CSS (Example: `apps/blog/src/app/globals.css`)
-```css
-@import "@repo/tailwind-config/shared-styles.css"; /* tokens first */
-@import "tailwindcss";                             /* generate utilities */
-/* Optional: library component CSS */
-@import "@repo/ui/styles.css";
-@import "@repo/modules/styles.css";
-```
-Add any root CSS or variable overrides after these imports.
+**Why CSS file (not JS)?** It stays tool-agnostic, lets designers inspect/override, and enables runtime theming by altering root custom properties.
 
-## 3. Tailwind Config (App)
-Example: `apps/blog/tailwind.config.ts`
+---
+## 2. Root Tailwind Config (Monorepo) – `tailwind.config.ts`
 ```ts
-export default {
+// Root config centralizes scanning & shared preset wiring.
+import type { Config } from 'tailwindcss';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const designSystem = require('./packages/tailwind-config');
+
+const config: Config = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "../../packages/ui/src/**/*.{js,jsx,ts,tsx}",
-    "../../packages/modules/src/**/*.{js,jsx,ts,tsx}",
+    './apps/**/*.{js,jsx,ts,tsx,mdx}',
+    './packages/ui/src/**/*.{js,jsx,ts,tsx,mdx}',
+    './packages/modules/src/**/*.{js,jsx,ts,tsx,mdx}',
+  ],
+  presets: [designSystem],
+};
+export default config;
+```
+This ensures utilities used **only** inside package source still generate.
+
+---
+## 3. App-Level Tailwind Config – `apps/<app>/tailwind.config.ts`
+```ts
+import type { Config } from 'tailwindcss';
+import root from '../../tailwind.config';
+
+const config: Config = {
+  ...root,
+  content: [
+    './src/**/*.{js,jsx,ts,tsx,mdx}',
+    '../../packages/ui/src/**/*.{js,jsx,ts,tsx,mdx}',
+    '../../packages/modules/src/**/*.{js,jsx,ts,tsx,mdx}',
   ],
 };
+export default config;
 ```
-Why include package paths? So utilities used **only** inside library components (e.g. `bg-blue-1000`) are generated even if not referenced in app source directly.
+Override here only if you need app-specific safelist/plugins.
 
-## 4. Library Styles (Optional)
-`packages/ui/src/styles.css`
+---
+## 4. Global CSS Structure – Example `apps/blog/src/app/globals.css`
 ```css
-@import "@repo/tailwind-config/shared-styles.css";
-@import "tailwindcss"; /* Only if you want utilities available for local story/dev */
-```
-For a leaner approach you can omit the Tailwind import here and let the app handle utilities. Then restrict this file to component-specific custom CSS.
+@config "../../../../tailwind.config.ts";
+@import "@repo/tailwind-config/design-tokens.css"; /* tokens */
+@import "tailwindcss";                             /* utilities */
+@import "@repo/ui/styles.css";                     /* (optional) library layer */
+@import "@repo/modules/styles.css";                /* (optional) library layer */
 
-## 5. Building vs. Relying on App Build
-Recommended: Do **not** prebundle all utilities inside library `dist` CSS. Let apps compile Tailwind once with full content awareness. Use per-package Tailwind builds only for local isolated development or Storybook.
-
-Example package build script (optional):
-```json
-"build:styles": "tailwindcss -c ./tailwind.config.ts -i ./src/styles.css -o ./dist/index.css"
+/* App-specific variables / overrides */
+:root { /* ... */ }
+.dark { /* theme overrides */ }
 ```
 
-## 6. Adding New Tokens
-1. Edit `shared-styles.css`
-2. Restart dev (or touch a content file)
-3. Use classes (e.g. `bg-blue-1000`, `w-half`) directly.
-
-Tailwind maps:
-- `--color-blue-1000` -> `bg-blue-1000`, `text-blue-1000`, `border-blue-1000`
-- `--spacing-half` -> `w-half`, `h-half`, `basis-half`, etc.
-
-## 7. Dark Mode / Theming
-Override token values using attribute or media queries:
+---
+## 5. Library Packages (`@repo/ui`, `@repo/modules`)
+Each exposes components & (optionally) a lightweight `styles.css` that **only imports tokens**:
 ```css
-[data-theme="dark"] {
-  --color-blue-1000: #1d6dc1;
+@import "@repo/tailwind-config/design-tokens.css";
+/* Add component-scoped custom rules here if needed (avoid full utility import). */
+```
+Avoid importing `tailwindcss` here to prevent shipping duplicated utilities.
+
+---
+## 6. Adding a New Package
+1. Create package with `src/` components
+2. (Optional) Add `src/styles.css` importing tokens
+3. Add its source glob to root `tailwind.config.ts` `content` if components use unique utilities internally
+4. Add its source glob to each app’s app-level `content` override if not relying solely on root inclusion
+5. Import and use components; rebuild – utilities appear automatically
+
+---
+## 7. Adding New Tokens
+1. Edit `design-tokens.css`
+2. Restart dev or touch any file to invalidate cache
+3. Use the new class (e.g. `bg-blue-1000`, `w-two-fifths`)
+
+Tailwind automatically derives utilities from the naming pattern: `--color-*` → color utilities, `--spacing-*` → width/height/basis/flex utilities.
+
+---
+## 8. Theming / Dark Mode
+Define semantic runtime vars (e.g. `--background`, `--foreground`) in the app’s `:root` / `.dark` scopes; tokens can reference them or you can map them in the Tailwind preset (`index.js`).
+
+```css
+.dark {
+  --color-blue-1000: #1d6dc1; /* Updates all related utilities */
 }
 ```
-Utilities retain the same class names; styles update through variable changes.
 
-## 8. Safelisting (Optional)
-If a utility is generated only dynamically (e.g. from CMS values) and not found in static source:
+---
+## 9. Safelisting Edge Cases
+Dynamic / CMS-driven class names absent from static scan:
 ```ts
+// tailwind.config.ts
 export default {
-  content: [/* globs */],
-  safelist: ["bg-blue-1000", "w-half"],
+  // ...
+  safelist: ['bg-blue-1000', 'w-half'],
 };
 ```
 
-## 9. Common Pitfalls & Fixes
+Prefer instead: ensure the dynamic set is small & render all potential classes somewhere in a scanned file.
+
+---
+## 10. Common Pitfalls
 | Problem | Cause | Fix |
 |---------|-------|-----|
-| `bg-blue-1000` missing | Tokens defined but Tailwind imported earlier | Ensure tokens file imported before `tailwindcss` OR tokens defined before import if combined |
-| Utility appears only after editing file | Content glob didn’t include library path at first | Add package paths to app `content` array |
-| Bloated CSS | Libraries prebuilt full utilities | Remove library-level Tailwind builds from production flow |
-| Color works in UI lib but not modules | App config scans UI path but not modules path | Add `../../packages/modules/src/**/*` to `content` |
-| Runtime theme not switching | Hard-coded colors instead of variables | Use custom properties & override them in theme scopes |
+| Missing utility | Tokens imported after Tailwind | Import tokens first (or keep tokens file token-only) |
+| Library styles unstyled | Package path not in `content` | Add package `src` to root/app config |
+| Bloated CSS | Multiple per-package builds emitting utilities | Rely on app-only Tailwind build |
+| Theme not switching | Hard-coded colors in components | Use CSS vars & override them in theme scopes |
+| Token edit ignored | Dev cache retained | Touch a scanned file / restart dev |
 
-## 10. Recommended Repository Conventions
-- Tokens live only in `@repo/tailwind-config/shared-styles.css`
-- No other file should define `@theme` (except small `@theme inline` overrides)
-- All apps import tokens first, then Tailwind
-- All apps include every library source path in `content`
-- Libraries do not publish full utility CSS to avoid duplication
+---
+## 11. Conventions (Adopt & Enforce)
+* Only `design-tokens.css` declares `@theme`
+* All apps: tokens → tailwindcss → optional library CSS
+* Root config owns the canonical `content` set
+* Packages never ship full utility CSS to consumers
+* Use runtime CSS custom properties for semantic theming
 
-## 11. Quick Start (Fresh Project Template)
-1. Create token package with `shared-styles.css` + `package.json` exporting it
-2. Add app `globals.css` with token + tailwind imports
-3. Add `tailwind.config.ts` in app pointing `content` to app + packages
-4. Import and use classes like `bg-blue-1000` in a component
-5. Run dev server; confirm utility exists in built CSS
+---
+## 12. Quick Start Checklist
+| Step | Action | Done? |
+|------|--------|-------|
+| 1 | Create `design-tokens.css` tokens file |  |
+| 2 | Root `tailwind.config.ts` with all content globs |  |
+| 3 | App `globals.css` import order correct |  |
+| 4 | Library `styles.css` (tokens only) optional |  |
+| 5 | Run dev & verify a token utility (e.g. `w-half`) compiles |  |
+| 6 | Add new token & confirm new utility appears |  |
 
-## 12. Verification Script (Optional)
-Create `scripts/check-tailwind.sh`:
+---
+## 13. Verification Script (Optional CI)
 ```bash
 #!/usr/bin/env bash
 set -euo pipefail
-needle="bg-blue-1000"
+needle="w-half"
 if ! grep -R "$needle" apps/blog/.next 2>/dev/null; then
   echo "[FAIL] Missing $needle in compiled output" >&2
   exit 1
 fi
 echo "[OK] Found $needle"
 ```
-Add to CI after build.
-
-## 13. Updating / Refactoring
-When adding a new package exporting React components:
-- Add its `src` glob to each app’s `tailwind.config.*`
-- Do **not** copy tokens or import Tailwind before tokens
-
-## 14. Performance Tips
-- Keep `content` globs as specific as practical to reduce scan time
-- Avoid building utilities inside every package during CI (build once per app)
-- Use Turborepo caching for the Tailwind build step
-
-## 15. Migration Checklist (If Adopting This Pattern Later)
-- [ ] Remove `@import "tailwindcss"` from token file if present
-- [ ] Ensure tokens appear before Tailwind import in all global styles
-- [ ] Centralize or synchronize `content` globs
-- [ ] Remove duplicate utility CSS from library bundles
-- [ ] Verify key token classes appear (`bg-blue-1000`, `w-half`)
 
 ---
-**Done.** This file can be copied into any similar monorepo to bootstrap Tailwind v4 with shared tokens. Keep it updated as new design primitives and theming strategies evolve.
+## 14. Performance Tips
+* Keep globs tight (`src/**/*` not the entire repo)
+* Avoid duplicate builds (only apps run Tailwind)
+* Leverage Turborepo caching for `next build`
+* Remove unused token experiments promptly
+
+---
+## 15. Optional Token File Rename Strategy
+Current name: `design-tokens.css`. (Earlier docs used `shared-styles.css`). Alternate shorter options: `tokens.css`, `theme-tokens.css`.
+Safe migration pattern:
+1. Add new file (e.g. `design-tokens.css`) with same content
+2. Replace imports across repo
+3. (If renaming again) Temporarily leave old filename containing `@import "./design-tokens.css";`
+4. Remove old file after stabilization
+
+---
+## 16. Migration Audit (Adopting Pattern Later)
+| Task | Status |
+|------|--------|
+| Remove Tailwind import from token file |  |
+| Centralize root config with all globs |  |
+| Update global CSS import order |  |
+| Stop shipping utilities from packages |  |
+| Add new tokens & verify sample utilities |  |
+
+---
+**Complete.** This guide reflects the current working implementation. Update it whenever token strategy, theming, or build layering changes.

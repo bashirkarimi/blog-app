@@ -6,7 +6,7 @@ Shared content modules.
 
 This package relies on the shared design tokens exported from `@repo/tailwind-config`.
 
-The shared theme (`shared-styles.css`) defines percentage spacing / width tokens such as:
+The shared token file (`design-tokens.css`) defines percentage spacing / width tokens such as:
 
 ```
 --spacing-half: 50%;
@@ -41,8 +41,8 @@ Then in the app's global stylesheet:
 
 ```css
 @config "./tailwind.config.js";
-@import "tailwindcss";
-@import "@repo/tailwind-config/shared-styles.css";
+@import "tailwindcss"; /* utilities */
+@import "@repo/tailwind-config/design-tokens.css"; /* tokens */
 @import "@repo/modules/styles.css"; /* component styles */
 ```
 
