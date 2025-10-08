@@ -7,7 +7,7 @@ const POST_LIST_PROJECTION = `
   title,
   "slug": slug.current,
   publishedAt,
-  mainImage,
+  "mainImage": mainImage.asset->url,
   excerpt,
   "author": author->{ _id, name },
   "categories": categories[]->{ _id, title }
@@ -29,16 +29,10 @@ const expandSections = defineQuery(`
       limit,
       title,
       mode,
-      "posts": select(
-        mode == "manual" => posts[]->{
-          ${POST_LIST_PROJECTION}
-        },
-        mode != "manual" => []
-      ),
-      "total": select(
-        mode == "manual" => count(posts[]),
-        mode != "manual" => count(*[_type == "post" && defined(slug.current)])
-      )
+      "posts": *[_type == "post" && defined(slug.current)]{
+        ${POST_LIST_PROJECTION}
+      },
+      "total": count(*[_type == "post" && defined(slug.current)])
     },
     _type == 'teaserList' => {
       ...,
