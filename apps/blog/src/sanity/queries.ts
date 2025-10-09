@@ -32,7 +32,6 @@ const expandSections = defineQuery(`
       "posts": *[_type == "post" && defined(slug.current)]{
         ${POST_LIST_PROJECTION}
       },
-      "total": count(*[_type == "post" && defined(slug.current)])
     },
     _type == 'teaserList' => {
       ...,

@@ -44,4 +44,33 @@ export interface HeaderModule extends BaseModule {
   }[];
 }
 
-export type AnyModule = AccordionModule | HeroModule | ImageTeaserModule | TeaserListModule;
+export interface PostCardModule extends BaseModule {
+  _type: "postCard";
+  _id: string;
+  title?: string;
+  slug?: string;
+  excerpt?: string;
+  mainImage?: string;
+  author?: {
+    name?: string;
+  };
+  categories?: {
+    title?: string;
+  }[];
+  href: string;
+}
+
+export interface BlogListModule extends BaseModule {
+  _type: "blogList";  
+  title?: string;
+  limit?: number;
+  mode?: "manual" | "auto";
+  posts?: PostCardModule[];
+}
+
+export type AnyModule =
+  | AccordionModule
+  | HeroModule
+  | ImageTeaserModule
+  | TeaserListModule
+  | BlogListModule;

@@ -3,7 +3,7 @@ import { TeaserList } from "@repo/modules/teaser-list";
 import { ImageTeaser } from "@repo/modules/image-teaser";
 import { Accordion } from "@repo/modules/accordion";
 import { RichText } from "./rich-text";
-import { BlogList } from "./blog-list";
+import { BlogList } from "@repo/modules/blog-list";
 import { Section } from "@repo/ui/section";
 import type { ComponentType } from "react";
 import { createComponentRegistry } from "@/lib/module-adapter";

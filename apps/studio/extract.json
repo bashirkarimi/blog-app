@@ -553,23 +553,6 @@
             "value": "teaserList"
           }
         },
-        "mode": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "union",
-            "of": [
-              {
-                "type": "string",
-                "value": "manual"
-              },
-              {
-                "type": "string",
-                "value": "posts"
-              }
-            ]
-          },
-          "optional": true
-        },
         "items": {
           "type": "objectAttribute",
           "value": {
@@ -660,7 +643,14 @@
                   },
                   "optional": true
                 },
-                "href": {
+                "Link": {
+                  "type": "objectAttribute",
+                  "value": {
+                    "type": "string"
+                  },
+                  "optional": true
+                },
+                "linkLabel": {
                   "type": "objectAttribute",
                   "value": {
                     "type": "string"
@@ -675,50 +665,6 @@
                   }
                 }
               },
-              "rest": {
-                "type": "object",
-                "attributes": {
-                  "_key": {
-                    "type": "objectAttribute",
-                    "value": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "optional": true
-        },
-        "postRefs": {
-          "type": "objectAttribute",
-          "value": {
-            "type": "array",
-            "of": {
-              "type": "object",
-              "attributes": {
-                "_ref": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "string"
-                  }
-                },
-                "_type": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "string",
-                    "value": "reference"
-                  }
-                },
-                "_weak": {
-                  "type": "objectAttribute",
-                  "value": {
-                    "type": "boolean"
-                  },
-                  "optional": true
-                }
-              },
-              "dereferencesTo": "post",
               "rest": {
                 "type": "object",
                 "attributes": {

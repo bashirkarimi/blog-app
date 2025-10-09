@@ -16,13 +16,17 @@
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js"
     },
+    "./styles.css": "./src/styles.css",
     "./accordion": "./src/modules/accordion/accordion.tsx",
     "./hero": "./src/modules/hero/hero.tsx",
     "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
     "./teaser-list": "./src/modules/teaser-list/teaser-list.tsx",
     "./header": "./src/modules/header/header.tsx",
     "./footer": "./src/modules/footer/footer.tsx",
-    "./styles.css": "./src/styles.css"
+    "./post-card": "./src/modules/post-card/post-card.tsx",
+    "./blog-item": "./src/modules/blog/blog-item.tsx",
+    "./blog-list": "./src/modules/blog/blog-list.tsx",
+    "./category-bar": "./src/modules/category-bar/category-bar.tsx"
   },
   "scripts": {
     "clean": "rm -rf dist",
