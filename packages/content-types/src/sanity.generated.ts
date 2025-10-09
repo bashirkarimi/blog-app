@@ -33,7 +33,9 @@ export type DetailsPage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList>;
+  } & TeaserList | {
+    _key: string;
+  } & Link>;
 };
 
 export type HomePage = {
@@ -56,7 +58,9 @@ export type HomePage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList>;
+  } & TeaserList | {
+    _key: string;
+  } & Link>;
 };
 
 export type SiteSettings = {
@@ -119,7 +123,7 @@ export type TeaserList = {
       crop?: SanityImageCrop;
       _type: "image";
     };
-    Link?: string;
+    link?: Link;
     linkLabel?: string;
     _type: "teaser";
     _key: string;
@@ -268,7 +272,9 @@ export type Sections = Array<{
   _key: string;
 } & RichText | {
   _key: string;
-} & TeaserList>;
+} & TeaserList | {
+  _key: string;
+} & Link>;
 
 export type BlockContent = Array<{
   children?: Array<{
@@ -440,8 +446,31 @@ export type LandingPage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList>;
+  } & TeaserList | {
+    _key: string;
+  } & Link>;
   description?: string;
+};
+
+export type Link = {
+  _type: "link";
+  label?: string;
+  linkType?: "internal" | "external";
+  internal?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "post";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "landingPage";
+  };
+  external?: string;
+  anchor?: string;
+  openInNewTab?: boolean;
+  ariaLabel?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -562,7 +591,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Tag | Menu | Post | Category | Author | LandingPage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Tag | Menu | Post | Category | Author | LandingPage | Link | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: expandSections
@@ -642,6 +671,26 @@ export type HOME_PAGE_QUERYResult = {
     description?: string;
   } | {
     _key: string;
+    _type: "link";
+    label?: string;
+    linkType?: "external" | "internal";
+    internal?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "landingPage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "post";
+    };
+    external?: string;
+    anchor?: string;
+    openInNewTab?: boolean;
+    ariaLabel?: string;
+  } | {
+    _key: string;
     _type: "richText";
     body?: Array<{
       children?: Array<{
@@ -691,7 +740,7 @@ export type HOME_PAGE_QUERYResult = {
         crop?: SanityImageCrop;
         _type: "image";
       };
-      Link?: string;
+      link?: Link;
       linkLabel?: string;
       _type: "teaser";
       _key: string;
@@ -774,6 +823,26 @@ export type LANDING_PAGE_QUERYResult = {
     description?: string;
   } | {
     _key: string;
+    _type: "link";
+    label?: string;
+    linkType?: "external" | "internal";
+    internal?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "landingPage";
+    } | {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "post";
+    };
+    external?: string;
+    anchor?: string;
+    openInNewTab?: boolean;
+    ariaLabel?: string;
+  } | {
+    _key: string;
     _type: "richText";
     body?: Array<{
       children?: Array<{
@@ -823,7 +892,7 @@ export type LANDING_PAGE_QUERYResult = {
         crop?: SanityImageCrop;
         _type: "image";
       };
-      Link?: string;
+      link?: Link;
       linkLabel?: string;
       _type: "teaser";
       _key: string;
