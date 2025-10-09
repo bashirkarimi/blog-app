@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
@@ -12,7 +11,6 @@ interface BlogListProps {
 }
 
 const BlogList = ({ data }: BlogListProps) => {
-  const title = data?.title ?? "From the blog";
   const initialPosts = data?.posts ?? [];
   const pageSize = Math.max(1, Number(data?.limit ?? 6));
 
@@ -38,50 +36,45 @@ const BlogList = ({ data }: BlogListProps) => {
     setVisibleCount((prev) => Math.min(prev + pageSize, totalPosts));
   }, [hasMore, pageSize, totalPosts]);
 
-  const onSelectCategory = useCallback((title: string) => {
-    setSelectedCategory(title);
-    setVisibleCount(pageSize); // reset pagination when category changes
-  }, [pageSize]);
+  const onSelectCategory = useCallback(
+    (title: string) => {
+      setSelectedCategory(title);
+      setVisibleCount(pageSize);
+    },
+    [pageSize]
+  );
 
   return (
-    <section className="w-full mx-auto" aria-labelledby="blog-title">
-      <h2
-        id="blog-title"
-        className="text-3xl font-bold text-gray-900 sm:text-4xl"
-      >
-        {title}
-      </h2>
-      <div className="mt-8">
-        <CategoryBar
-          posts={initialPosts}
-          selectedCategory={selectedCategory}
-          onSelect={onSelectCategory}
-        />
-        {totalPosts === 0 ? (
-          <p className="mt-6 text-center text-sm text-gray-500">No posts.</p>
-        ) : (
-          <>
-            <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {visiblePosts.map((post) => (
-                <li key={post._id}>
-                  <PostCard data={post} href={`post/${post.slug}`} />
-                </li>
-              ))}
-            </ul>
-            <div className="flex justify-center mt-8">
-              <Button
-                onClick={loadMore}
-                disabled={!hasMore}
-                variant="default"
-                aria-disabled={!hasMore}
-              >
-                {hasMore ? "Load more" : "No more posts"}
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-    </section>
+    <div className="mt-8">
+      <CategoryBar
+        posts={initialPosts}
+        selectedCategory={selectedCategory}
+        onSelect={onSelectCategory}
+      />
+      {totalPosts === 0 ? (
+        <p className="mt-6 text-center text-sm text-gray-500">No posts.</p>
+      ) : (
+        <>
+          <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {visiblePosts.map((post) => (
+              <li key={post._id}>
+                <PostCard data={post} href={`post/${post.slug}`} />
+              </li>
+            ))}
+          </ul>
+          <div className="flex justify-center mt-8">
+            <Button
+              onClick={loadMore}
+              disabled={!hasMore}
+              variant="default"
+              aria-disabled={!hasMore}
+            >
+              {hasMore ? "Load more" : "No more posts"}
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

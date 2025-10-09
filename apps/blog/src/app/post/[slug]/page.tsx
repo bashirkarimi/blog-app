@@ -4,9 +4,10 @@ import { POST_SLUGS_QUERY } from "@/sanity/queries";
 import { sanityFetch } from "@/sanity/live";
 import { client } from "@/sanity/client"; // use raw client for build-time SSG
 import Image from "next/image";
-import { NavigateHome } from "@/components/navigate-home";
+import Link from "next/link";
 import { RichText } from "@/components/rich-text";
 import { notFound } from "next/navigation";
+import { Button } from "@repo/ui/button";
 
 interface PageProps {
   params: {
@@ -42,7 +43,9 @@ export default async function Page({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="container mx-auto">
-        <NavigateHome />
+        <Button variant={"outline"} className="mb-4" asChild>
+          <Link href="/">Back to Home</Link>
+        </Button>
         <article className="bg-white p-8 md:p-12 rounded-xl shadow-lg">
           {post?.mainImage && (
             <Image
