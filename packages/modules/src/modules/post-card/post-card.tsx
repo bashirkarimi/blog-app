@@ -8,10 +8,11 @@ import {
   CardFooter,
 } from "@repo/ui/card";
 import { PostCardModule } from "../../types";
+import { Button } from "@repo/ui/button";
 
 const PostCard = ({ data, href }: { data: PostCardModule; href: string }) => {
   return (
-    <Card className="">
+    <Card>
       {data?.mainImage && (
         <Image
           src={data.mainImage}
@@ -25,12 +26,9 @@ const PostCard = ({ data, href }: { data: PostCardModule; href: string }) => {
         {data?.title && <CardTitle>{data.title}</CardTitle>}
         {data?.excerpt && <CardDescription>{data.excerpt}</CardDescription>}
         <CardFooter>
-          <Link
-            className="pt-4 p-1 text-blue-600 hover:text-blue-800 font-medium transition-colors duration-150"
-            href={`/${href}`}
-          >
-            Read more
-          </Link>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={`/${href}`}>Read more</Link>
+          </Button>
         </CardFooter>
       </CardContent>
     </Card>
