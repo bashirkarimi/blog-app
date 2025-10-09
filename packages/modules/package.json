@@ -24,8 +24,7 @@
     "./header": "./src/modules/header/header.tsx",
     "./footer": "./src/modules/footer/footer.tsx",
     "./post-card": "./src/modules/post-card/post-card.tsx",
-    "./blog-item": "./src/modules/blog/blog-item.tsx",
-    "./blog-list": "./src/modules/blog/blog-list.tsx",
+    "./blog-list": "./src/modules/blog-list/blog-list.tsx",
     "./category-bar": "./src/modules/category-bar/category-bar.tsx"
   },
   "scripts": {
