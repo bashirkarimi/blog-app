@@ -16,7 +16,7 @@ export const teaserListType = defineType({
             {name: 'title', type: 'string', validation: (r) => r.required()},
             {name: 'summary', type: 'text'},
             {name: 'image', type: 'image', options: {hotspot: true}},
-            {name: 'Link', type: 'url'},
+            {name: 'link', type: 'url'},
             {name: 'linkLabel', type: 'string'}
           ],
         },
