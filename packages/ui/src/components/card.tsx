@@ -1,32 +1,70 @@
-import { type ReactNode } from "react";
+import { forwardRef, type ComponentPropsWithoutRef } from "react";
+import { twMerge } from "tailwind-merge";
 
-const Card = ({
-  title,
-  children,
-  href,
-}: {
-  title: string;
-  children: ReactNode;
-  href: string;
-}) => {
-  return (
-    <a
-      className="ui:group ui:rounded-lg ui:border ui:border-transparent ui:px-5 ui:py-4 ui:transition-colors hover:ui:border-neutral-700 hover:ui:bg-neutral-800/30"
-      href={`${href}?utm_source=create-turbo&utm_medium=with-tailwind&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <h2 className="ui:mb-3 ui:text-2xl ui:font-semibold">
-        {title}
-        <span className="ui:inline-block ui:transition-transform group-hover:ui:translate-x-1 motion-reduce:ui:transform-none">
-          -&gt;
-        </span>
-      </h2>
-      <p className="ui:m-0 ui:max-w-[30ch] ui:text-sm ui:opacity-50">
-        {children}
-      </p>
-    </a>
-  );
-}
+const Card = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={twMerge(
+        "rounded-lg border shadow-sm  flex flex-col gap-4  h-full overflow-hidden",
+        className
+      )}
+      {...props}
+    />
+  )
+);
+Card.displayName = "Card";
 
-export { Card };
+const CardContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={twMerge(
+        "flex flex-col h-full gap-4 p-6 pt-0",
+        className
+      )}
+      {...props}
+    />
+  )
+);
+CardContent.displayName = "CardContent";
+
+const CardTitle = forwardRef<
+  HTMLHeadingElement,
+  ComponentPropsWithoutRef<"h3">
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={twMerge(
+      "text-2xl font-semibold leading-none tracking-tight",
+      className
+    )}
+    {...props}
+  />
+));
+CardTitle.displayName = "CardTitle";
+
+const CardDescription = forwardRef<
+  HTMLParagraphElement,
+  ComponentPropsWithoutRef<"p">
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={twMerge("text-muted-foreground", className)}
+    {...props}
+  />
+));
+CardDescription.displayName = "CardDescription";
+
+const CardFooter = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={twMerge("mt-auto", className)}
+      {...props}
+    />
+  )
+);
+CardFooter.displayName = "CardFooter";
+
+export { Card, CardTitle, CardDescription, CardContent, CardFooter };
