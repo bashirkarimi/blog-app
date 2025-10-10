@@ -59,6 +59,11 @@ const expandSections = defineQuery(`
     _type == 'postsModule' => {
       ...,
       tags[]->{ title, "slug": slug.current }
+    },
+    _type == 'imageTeaser' => {
+      ...,
+      "image": image.asset->url,
+      "link": link{ ${LINK_PROJECTION} }
     }
   }
 `);

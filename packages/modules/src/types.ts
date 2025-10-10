@@ -27,7 +27,7 @@ export interface ImageTeaserModule extends BaseModule {
   title?: string;
   description?: string;
   image?: string;
-  href?: string;
+  link?: Link;
 }
 
 export interface TeaserListModule extends BaseModule {

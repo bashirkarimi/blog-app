@@ -1060,17 +1060,18 @@
           },
           "optional": true
         },
-        "href": {
+        "description": {
           "type": "objectAttribute",
           "value": {
             "type": "string"
           },
           "optional": true
         },
-        "description": {
+        "link": {
           "type": "objectAttribute",
           "value": {
-            "type": "string"
+            "type": "inline",
+            "name": "link"
           },
           "optional": true
         }
