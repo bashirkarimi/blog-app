@@ -31,13 +31,6 @@ const mappers: { [K in ModuleType]: Mapper<K> } = {
     text: (doc.text as any[]) || [],
     image: safeImage(doc.image, 1600),
   }),
-  imageTeaser: (doc) => ({
-    _type: "imageTeaser",
-    title: doc.title || "",
-    description: doc.description || "",
-    image: safeImage(doc.image, 800),
-    href: doc.href || undefined,
-  }),
   // Add new mappers here.
 };
 

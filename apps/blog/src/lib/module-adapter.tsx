@@ -20,7 +20,7 @@ export function createModuleAdapter<TModule>(
  */
 export function isModuleType(type: string): type is ModuleType {
   // This list should match the keys in ModuleTypeMap
-  const moduleTypes: ModuleType[] = ["accordion", "hero", "imageTeaser"];
+  const moduleTypes: ModuleType[] = ["accordion", "hero"];
   return moduleTypes.includes(type as ModuleType);
 }
 
