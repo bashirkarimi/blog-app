@@ -72,7 +72,11 @@ const expandSections = defineQuery(`
 export const HOME_PAGE_QUERY = defineQuery(`
   *[_type=='homePage' && _id=='homePage'][0]{
     seoTitle,
-    heros[],
+    heros[] {
+      ...,
+      "image": image.asset->url,
+      "link": link{ ${LINK_PROJECTION} }
+    },
     ${expandSections}
   }
 `);
@@ -81,7 +85,11 @@ export const LANDING_PAGE_QUERY = defineQuery(`
   *[_type == 'landingPage' && slug.current == $slug][0]{
     seoTitle,
     title,
-    heros[],
+    heros[] {
+      ...,
+      "image": image.asset->url,
+      "link": link{ ${LINK_PROJECTION} }
+    },
     ${expandSections}
   }
 `);

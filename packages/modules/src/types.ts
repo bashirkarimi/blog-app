@@ -21,6 +21,7 @@ export interface HeroModule extends BaseModule {
   title?: string;
   text?: PortableTextBlock[];
   image?: string;
+  link?: Link;
 }
 export interface ImageTeaserModule extends BaseModule {
   _type: "imageTeaser";
