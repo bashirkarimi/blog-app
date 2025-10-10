@@ -7,86 +7,59 @@ This document describes the complete implementation of a type-safe, scalable mod
 ## Problem Solved
 
 Previously, adding a new module required:
-1. ✅ Add to `ModuleTypeMap` 
-2. ✅ Add mapper to `module-registry.ts`
-3. ❌ **Manual adapter creation** in `section-renderer.tsx`
-4. ❌ **Type imports and explicit wrapping**
+# Module Mapping Architecture (Deprecated)
 
-The new system reduces this to just updating the core type map and registry, with automatic detection and wrapping of module components.
+This document previously described a runtime “module mapping” layer that transformed raw Sanity documents into internal React component props. That system has been **removed**. All shaping now occurs directly in your Sanity GROQ queries so components can consume data without an additional mapping abstraction.
 
-## Architecture Overview
+## Removed Pieces
 
-```
-Raw Sanity Data → Module Registry → Module Adapter → React Component
-      ↓              ↓                ↓               ↓
-   { _type,       mapModule()    createModuleAdapter  <Accordion/>
-     title,         ↓               ↓                 <ImageTeaser/>
-     items }    AccordionModule  Auto-wrapping        <Hero/>
-```
+| Removed File / Concept | Replacement Strategy |
+|------------------------|----------------------|
+| `module-type-map.ts` | Use generated Sanity types directly (`@/sanity/types`) |
+| `module-registry.ts` | Perform field shaping in GROQ (aliases, dereferencing) |
+| `module-adapter.tsx` | Direct component imports; no auto‑wrapping |
 
-## Core Components
+## Why It Was Removed
 
-### 1. **Type System** (`types/module-type-map.ts`)
+- Cuts indirection & cognitive overhead
+- Avoids duplicate type layers when shapes are identical
+- Enables tree‑shaking and smaller bundles
+- Centralizes data normalization at fetch/query time (single source of truth)
 
-```ts
-import type { Accordion, Hero, ImageTeaser } from "@repo/content-types";
-import type { AccordionModule, HeroModule, ImageTeaserModule } from "@repo/modules/types";
+## Current Pattern
 
-export interface ModuleTypeMap {
-  accordion: { doc: Accordion; mapped: AccordionModule };
-  hero: { doc: Hero; mapped: HeroModule };
-  imageTeaser: { doc: ImageTeaser; mapped: ImageTeaserModule };
-  // Add new module types here.
+1. Author / update GROQ query to project exactly the fields the UI needs (resolve references, image URLs, computed slugs, etc.).
+2. Use generated Sanity TypeScript types (or augment them) to type props.
+3. Add the component to `section-renderer.tsx`’s `sections` map.
+
+Example GROQ projection for a hero module:
+
+```groq
+_type == "hero" => {
+  _type,
+  _key,
+  title,
+  text,
+  "imageUrl": mainImage.asset->url,
+  cta { label, href }
 }
-
-export type ModuleType = keyof ModuleTypeMap;
-export type SanityModuleDoc = ModuleTypeMap[ModuleType]["doc"];
-export type InternalModule = ModuleTypeMap[ModuleType]["mapped"];
 ```
 
-**Purpose**: Establishes the contract between Sanity types and internal module types, ensuring compile-time type safety.
+## Adding a New Module Now
 
-### 2. **Module Registry** (`lib/module-registry.ts`)
+1. Define/update the Sanity schema.
+2. Extend the page query with a projection block for the new `_type`.
+3. Create the React component (typed via the projected shape).
+4. Register it in the `sections` map.
 
-```ts
-import { urlFor } from "../sanity/image";
-import type { ModuleTypeMap, ModuleType, InternalModule, SanityModuleDoc } from "../types/module-type-map";
+## Heavy Transformations?
+Keep them in GROQ when possible. If transformation depends on runtime-only data (e.g. environment, feature flags), create a small helper colocated with the component rather than a global registry.
 
-type Mapper<K extends ModuleType> = (
-  doc: ModuleTypeMap[K]["doc"]
-) => ModuleTypeMap[K]["mapped"];
+## Next Cleanup Step
+If this historical note is no longer useful, you can safely delete this file.
 
-const mappers: { [K in ModuleType]: Mapper<K> } = {
-  accordion: (doc) => ({
-    _type: "accordion",
-    items: (doc.items || []).map((i) => ({
-      title: i?.title || "",
-      content: (i?.content as any[]) || [],
-    })),
-  }),
-  hero: (doc) => ({
-    _type: "hero",
-    title: doc.title || "",
-    text: (doc.text as any[]) || [],
-    image: doc.image ? urlFor(doc.image).width(1600).url() : undefined,
-  }),
-  imageTeaser: (doc) => ({
-    _type: "imageTeaser",
-    title: doc.title || "",
-    description: doc.description || "",
-    image: doc.image ? urlFor(doc.image).width(800).url() : undefined,
-    href: doc.href || undefined,
-  }),
-};
-
-export function mapModule(doc: SanityModuleDoc): InternalModule | null {
-  const type = doc._type as ModuleType;
-  const fn = (mappers as any)[type];
-  return fn ? fn(doc) : null;
-}
-
-export function mapModules(raw: SanityModuleDoc[]): InternalModule[] {
-  return raw.map((r) => mapModule(r)).filter(Boolean) as InternalModule[];
+---
+Historical reference only – runtime mapping layer removed.
 }
 ```
 
