@@ -38,15 +38,6 @@ const mappers: { [K in ModuleType]: Mapper<K> } = {
     image: safeImage(doc.image, 800),
     href: doc.href || undefined,
   }),
-  teaserList: (doc) => ({
-    _type: "teaserList",
-    items: (doc.items  || []).map((item) => ({
-      title: item?.title || "",
-      summary: item?.summary || "",
-      image: safeImage(item?.image, 400),
-      href: item?.href || undefined,
-    })),
-  }),
   // Add new mappers here.
 };
 
