@@ -1,6 +1,21 @@
 // ...existing code...
 import { defineQuery } from "next-sanity";
 
+// Reusable projection for the custom "link" object.
+// Computes an href depending on internal vs external, and surfaces authoring metadata.
+// Adjust internal path logic (e.g. prefix with "/blog") if your site structure changes.
+const LINK_PROJECTION = `
+  "href": select(
+    linkType == "external" => external,
+    linkType == "internal" && defined(internal->slug.current) => '/' + internal->slug.current,
+    '/'
+  ),
+  "label": label,
+  "ariaLabel": ariaLabel,
+  // only meaningful for external links; coalesce ensures boolean
+  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)
+`;
+
 // Slim projection for list views (removed body[0] to reduce payload)
 const POST_LIST_PROJECTION = `
   _id,
@@ -35,10 +50,10 @@ const expandSections = defineQuery(`
     },
     _type == 'teaserList' => {
       ...,
-      postRefs[]->{
-        title,
-        mainImage,
-        "slug": slug.current
+      items[] {
+        ...,
+        "image": image.asset->url,
+        "link": link{ ${LINK_PROJECTION} }
       }
     },
     _type == 'postsModule' => {

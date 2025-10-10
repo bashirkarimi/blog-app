@@ -3,6 +3,12 @@ export interface BaseModule {
   _type: string;
   _key?: string;
 }
+export interface Link {
+  label: string;
+  href: string;
+  ariaLabel?: string;
+  openInNewTab?: boolean;
+}
 export interface AccordionModule extends BaseModule {
   _type: "accordion";
   items: {
@@ -30,7 +36,7 @@ export interface TeaserListModule extends BaseModule {
     title?: string;
     summary?: string;
     image?: string;
-    href?: string;
+    link?: Link;
   }[];
 }
 

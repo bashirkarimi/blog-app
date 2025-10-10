@@ -16,7 +16,7 @@ const TeaserList = ({ data }: { data: TeaserListModule }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       {items.map((item) => (
-        <Card key={item.href || item.title}>
+        <Card key={item.title}>
           {item.image && (
             <Image
               src={item.image}
@@ -29,10 +29,10 @@ const TeaserList = ({ data }: { data: TeaserListModule }) => {
           <CardContent className="flex-1">
             <CardTitle className="font-semibold">{item.title}</CardTitle>
             {item.summary && <CardDescription>{item.summary}</CardDescription>}
-            {item.href && (
+            {item.link && (
               <CardFooter>
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href={item.href}>Read more</Link>
+                  <Link href={item.link.href}>{item.link.label}</Link>
                 </Button>
               </CardFooter>
             )}
