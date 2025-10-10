@@ -27,7 +27,7 @@ const PostCard = ({ data, href }: { data: PostCardModule; href: string }) => {
         {data?.excerpt && <CardDescription>{data.excerpt}</CardDescription>}
         <CardFooter>
           <Button variant="ghost" size="sm" asChild>
-            <Link href={`/${href}`}>Read more</Link>
+            <Link aria-label={`Read more: ${data.title}`} href={`/${href}`}>Read more</Link>
           </Button>
         </CardFooter>
       </CardContent>
