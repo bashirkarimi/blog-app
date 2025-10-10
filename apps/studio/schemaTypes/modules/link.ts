@@ -52,13 +52,6 @@ export const linkType = defineType({
         }),
     }),
     defineField({
-      name: 'anchor',
-      title: 'Anchor (optional)',
-      type: 'string',
-      description: 'No # prefix. Example: faq-section',
-      validation: r => r.regex(/^[a-z0-9-]+$/i, {name: 'slug-format'}).warning('Letters, numbers, hyphens only'),
-    }),
-    defineField({
       name: 'openInNewTab',
       type: 'boolean',
       title: 'Open in new tab',

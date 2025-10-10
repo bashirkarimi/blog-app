@@ -17,7 +17,6 @@ export const teaserListType = defineType({
             {name: 'summary', type: 'text'},
             {name: 'image', type: 'image', options: {hotspot: true}},
             {name: 'link', type: 'link'},
-            {name: 'linkLabel', type: 'string'}
           ],
         },
       ],
