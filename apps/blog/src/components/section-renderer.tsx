@@ -7,29 +7,27 @@ import { BlogList } from "@repo/modules/blog-list";
 import { Section } from "@repo/ui/section";
 import type { ComponentType } from "react";
 
-type SectionTypeName = Sections[number]["_type"];
-type SectionByType<T extends SectionTypeName> = Extract<
-  Sections[number],
-  { _type: T }
->;
+type SectionTypeName = Sections[number]["_type"]; 
 
+// Until all module components are updated to use exact Sanity-projected shapes,
+// keep a permissive prop signature to avoid cascading refactors.
 type SectionComponents = {
-  [K in SectionTypeName]: ComponentType<{ data: SectionByType<K> }>;
+  [K in SectionTypeName]: ComponentType<{ data: Extract<Sections[number], { _type: K }> }> | ComponentType<any>;
 };
 
-// Direct component map (mapping layer removed)
-export const sections: SectionComponents = {
-  teaserList: TeaserList as any,
-  imageTeaser: ImageTeaser as any,
-  accordion: Accordion as any,
-  richText: RichText as any,
-  blogList: BlogList as any,
-};
+export const sections = {
+  teaserList: TeaserList,
+  imageTeaser: ImageTeaser,
+  accordion: Accordion,
+  richText: RichText,
+  blogList: BlogList,
+} as SectionComponents;
 
 const SectionRenderer = ({ section }: { section: Sections[number] }) => {
-  const Component = sections[section._type] as ComponentType<{ data: typeof section }>;
+  const Component = sections[section._type];
+  if (!Component) return null;
   return (
-    <Section key={section._key}>
+    <Section>
       <Component data={section} />
     </Section>
   );
