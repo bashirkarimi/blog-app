@@ -1,12 +1,10 @@
 import type {
   Accordion,
-  Hero,
 } from "@repo/content-types";
-import type { AccordionModule, HeroModule, ImageTeaserModule, TeaserListModule } from "@repo/modules/types";
+import type { AccordionModule } from "@repo/modules/types";
 
 export interface ModuleTypeMap {
   accordion: { doc: Accordion; mapped: AccordionModule };
-  hero: { doc: Hero; mapped: HeroModule };
   // Add new module types here.
 }
 

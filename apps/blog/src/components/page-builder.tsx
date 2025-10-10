@@ -1,6 +1,6 @@
 import { SectionRenderer } from "./section-renderer";
-import { HeroRenderer } from "./hero-renderer";
 import { Sections } from "@/sanity/types";  
+import { Hero } from "@repo/modules/hero";
 
 export interface PageProps {
   data: any;
@@ -16,7 +16,7 @@ const PageBuilder = ({ data }: PageProps) => {
           <h1 className={heros?.length > 0 ? "sr-only" : ""}>{title}</h1>
         )}
         {heros?.map((hero: any) => (
-          <HeroRenderer key={hero._key} hero={hero} />
+          <Hero key={hero._key} data={hero} />
         ))}
 
         {sections && (

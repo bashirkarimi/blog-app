@@ -25,12 +25,6 @@ const mappers: { [K in ModuleType]: Mapper<K> } = {
       content: (i?.content as any[]) || [],
     })),
   }),
-  hero: (doc) => ({
-    _type: "hero",
-    title: doc.title || "",
-    text: (doc.text as any[]) || [],
-    image: safeImage(doc.image, 1600),
-  }),
   // Add new mappers here.
 };
 
