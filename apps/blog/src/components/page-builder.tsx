@@ -18,13 +18,12 @@ const PageBuilder = ({ data }: PageProps) => {
   const { heros = [], sections = [], title } = data;
   const showStandaloneH1 = !!title && heros.length === 0;
 
-
   return (
     <main id="main-content">
       {showStandaloneH1 && <h1>{title}</h1>}
 
-      {heros.map((hero) => (
-        <Hero key={hero._key} data={hero as any} />
+      {heros.map(({ _key, ...hero }) => (
+        <Hero key={_key} data={hero as any} />
       ))}
 
       {sections.map((section) => (
