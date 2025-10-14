@@ -2,6 +2,15 @@
 module.exports = {
   content: [],
   theme: {
+    screens: {
+      xs: '320px', // small phones
+      sm: '480px', // phones / small devices
+      md: '768px', // tablets
+      lg: '960px', // small laptops (SBB mid breakpoint)
+      xl: '1280px', // desktops
+      '2xl': '1600px', // large desktops
+      '3xl': '1940px', // page cap width for container alignment
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
