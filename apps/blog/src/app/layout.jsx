@@ -49,10 +49,13 @@ export default async function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header data={headerData} />
-        {children}
-        <SanityLive />
-        <Footer />
+        {/* Page width container */}
+        <div className="mx-auto max-w-[var(--layout-max)] px-4 md:px-8">
+          <Header data={headerData} />
+          {children}
+          <SanityLive />
+          <Footer />
+        </div>
       </body>
     </html>
   );

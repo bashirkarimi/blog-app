@@ -15,8 +15,6 @@ export default async function Home(props: HomeProps) {
   }
 
   return (
-    <div className="container mx-auto">
-      <PageBuilder data={homePage} />
-    </div>
+    <PageBuilder data={homePage} />
   );
 }
