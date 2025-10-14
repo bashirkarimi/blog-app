@@ -1,5 +1,6 @@
 import {defineField, defineType} from 'sanity'
 import { TextIcon } from '@sanity/icons'
+import {sectionFields} from './partials/section-fields'
 
 export const blogListType = defineType({
   name: 'blogList',
@@ -7,7 +8,15 @@ export const blogListType = defineType({
   type: 'object',
   initialValue: {mode: 'latest', limit: 3, posts: []},
   icon: TextIcon,
+  fieldsets: [
+    {
+      name: 'sectionSettings',
+      title: 'Section Settings',
+      options: {collapsible: true, collapsed: true},
+    },
+  ],
   fields: [
+    ...sectionFields,
     defineField({
       name: 'title',
       title: 'Title',

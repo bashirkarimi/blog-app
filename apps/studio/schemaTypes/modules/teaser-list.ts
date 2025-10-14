@@ -1,10 +1,19 @@
 import {defineType, defineField} from 'sanity'
+import {sectionFields} from './partials/section-fields'
 
 export const teaserListType = defineType({
   name: 'teaserList',
   title: 'Teaser List',
   type: 'object',
+  fieldsets: [
+    {
+      name: 'sectionSettings',
+      title: 'Section Settings',
+      options: {collapsible: true, collapsed: true},
+    },
+  ],
   fields: [
+    ...sectionFields,
     defineField({
       name: 'items',
       type: 'array',
@@ -29,6 +38,6 @@ export const teaserListType = defineType({
       return {
         title: title ? `Teaser List: ${title}` : 'Teaser List',
       }
-    }
+    },
   },
 })

@@ -4,7 +4,7 @@ import { ImageTeaser } from "@repo/modules/image-teaser";
 import { Accordion } from "@repo/modules/accordion";
 import { RichText } from "./rich-text";
 import { BlogList } from "@repo/modules/blog-list";
-import { Section } from "@repo/ui/section";
+import { Section, SectionContent, SectionTitle } from "@repo/ui/section";
 import type { ComponentType } from "react";
 
 type SectionTypeName = Sections[number]["_type"]; 
@@ -26,9 +26,18 @@ export const sections = {
 const SectionRenderer = ({ section }: { section: Sections[number] }) => {
   const Component = sections[section._type];
   if (!Component) return null;
+
   return (
     <Section>
-      <Component data={section} />
+      <SectionContent
+        variant={section.sectionVariant || 'default'}
+        background={section.sectionBackground || 'none'}
+      >
+        {section.sectionTitle && (
+          <SectionTitle>{section.sectionTitle}</SectionTitle>
+        )}
+        <Component data={section} />
+      </SectionContent>
     </Section>
   );
 };

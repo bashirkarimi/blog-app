@@ -33,9 +33,7 @@ export type DetailsPage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList | {
-    _key: string;
-  } & Link>;
+  } & TeaserList>;
 };
 
 export type HomePage = {
@@ -58,9 +56,7 @@ export type HomePage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList | {
-    _key: string;
-  } & Link>;
+  } & TeaserList>;
 };
 
 export type SiteSettings = {
@@ -108,6 +104,9 @@ export type SiteSettings = {
 
 export type TeaserList = {
   _type: "teaserList";
+  sectionTitle?: string;
+  sectionVariant?: "default" | "narrow" | "fullWidth";
+  sectionBackground?: "none" | "gray";
   items?: Array<{
     title?: string;
     summary?: string;
@@ -131,6 +130,9 @@ export type TeaserList = {
 
 export type RichText = {
   _type: "richText";
+  sectionTitle?: string;
+  sectionVariant?: "default" | "narrow" | "fullWidth";
+  sectionBackground?: "none" | "gray";
   body?: Array<{
     children?: Array<{
       marks?: Array<string>;
@@ -165,6 +167,9 @@ export type RichText = {
 
 export type ImageTeaser = {
   _type: "imageTeaser";
+  sectionTitle?: string;
+  sectionVariant?: "default" | "narrow" | "fullWidth";
+  sectionBackground?: "none" | "gray";
   title?: string;
   image?: {
     asset?: {
@@ -184,6 +189,9 @@ export type ImageTeaser = {
 
 export type Accordion = {
   _type: "accordion";
+  sectionTitle?: string;
+  sectionVariant?: "default" | "narrow" | "fullWidth";
+  sectionBackground?: "none" | "gray";
   items?: Array<{
     title?: string;
     content?: Array<{
@@ -210,6 +218,9 @@ export type Accordion = {
 
 export type BlogList = {
   _type: "blogList";
+  sectionTitle?: string;
+  sectionVariant?: "default" | "narrow" | "fullWidth";
+  sectionBackground?: "none" | "gray";
   title?: string;
   mode?: "latest" | "manual";
   limit?: number;
@@ -272,9 +283,7 @@ export type Sections = Array<{
   _key: string;
 } & RichText | {
   _key: string;
-} & TeaserList | {
-  _key: string;
-} & Link>;
+} & TeaserList>;
 
 export type BlockContent = Array<{
   children?: Array<{
@@ -446,9 +455,7 @@ export type LandingPage = {
     _key: string;
   } & RichText | {
     _key: string;
-  } & TeaserList | {
-    _key: string;
-  } & Link>;
+  } & TeaserList>;
   description?: string;
 };
 
@@ -633,6 +640,9 @@ export type HOME_PAGE_QUERYResult = {
   sections: Array<{
     _key: string;
     _type: "accordion";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     items?: Array<{
       title?: string;
       content?: Array<{
@@ -658,6 +668,9 @@ export type HOME_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "blogList";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     title: string | null;
     mode: "latest" | "manual" | null;
     limit: number | null;
@@ -680,6 +693,9 @@ export type HOME_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "imageTeaser";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     title?: string;
     image: string | null;
     description?: string;
@@ -691,26 +707,10 @@ export type HOME_PAGE_QUERYResult = {
     } | null;
   } | {
     _key: string;
-    _type: "link";
-    label?: string;
-    linkType?: "external" | "internal";
-    internal?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "landingPage";
-    } | {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "post";
-    };
-    external?: string;
-    openInNewTab?: boolean;
-    ariaLabel?: string;
-  } | {
-    _key: string;
     _type: "richText";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     body?: Array<{
       children?: Array<{
         marks?: Array<string>;
@@ -744,6 +744,9 @@ export type HOME_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "teaserList";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     items: Array<{
       title?: string;
       summary?: string;
@@ -797,6 +800,9 @@ export type LANDING_PAGE_QUERYResult = {
   sections: Array<{
     _key: string;
     _type: "accordion";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     items?: Array<{
       title?: string;
       content?: Array<{
@@ -822,6 +828,9 @@ export type LANDING_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "blogList";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     title: string | null;
     mode: "latest" | "manual" | null;
     limit: number | null;
@@ -844,6 +853,9 @@ export type LANDING_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "imageTeaser";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     title?: string;
     image: string | null;
     description?: string;
@@ -855,26 +867,10 @@ export type LANDING_PAGE_QUERYResult = {
     } | null;
   } | {
     _key: string;
-    _type: "link";
-    label?: string;
-    linkType?: "external" | "internal";
-    internal?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "landingPage";
-    } | {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "post";
-    };
-    external?: string;
-    openInNewTab?: boolean;
-    ariaLabel?: string;
-  } | {
-    _key: string;
     _type: "richText";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     body?: Array<{
       children?: Array<{
         marks?: Array<string>;
@@ -908,6 +904,9 @@ export type LANDING_PAGE_QUERYResult = {
   } | {
     _key: string;
     _type: "teaserList";
+    sectionTitle?: string;
+    sectionVariant?: "default" | "fullWidth" | "narrow";
+    sectionBackground?: "gray" | "none";
     items: Array<{
       title?: string;
       summary?: string;

@@ -2,6 +2,10 @@ import type { PortableTextBlock } from "@portabletext/types";
 export interface BaseModule {
   _type: string;
   _key?: string;
+  // Section meta fields (added via shared sectionFields schema)
+  sectionTitle?: string;
+  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
+  sectionBackground?: 'none' | 'gray';
 }
 export interface Link {
   label: string;

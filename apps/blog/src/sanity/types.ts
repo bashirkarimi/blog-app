@@ -267,14 +267,29 @@ export type Heros = Array<{
 
 export type Sections = Array<{
   _key: string;
+  sectionTitle?: string;
+  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
+  sectionBackground?: 'none' | 'gray';
 } & BlogList | {
   _key: string;
+  sectionTitle?: string;
+  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
+  sectionBackground?: 'none' | 'gray';
 } & Accordion | {
   _key: string;
+  sectionTitle?: string;
+  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
+  sectionBackground?: 'none' | 'gray';
 } & ImageTeaser | {
   _key: string;
+  sectionTitle?: string;
+  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
+  sectionBackground?: 'none' | 'gray';
 } & RichText | {
   _key: string;
+  sectionTitle?: string;
+  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
+  sectionBackground?: 'none' | 'gray';
 } & TeaserList>;
 
 export type BlockContent = Array<{

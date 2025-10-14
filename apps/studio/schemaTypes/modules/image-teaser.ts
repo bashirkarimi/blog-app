@@ -1,10 +1,19 @@
 import {defineType, defineField} from 'sanity'
+import { sectionFields } from './partials/section-fields';
 
 export const imageTeaserType = defineType({
   name: 'imageTeaser',
   title: 'Image Teaser',
   type: 'object',
+  fieldsets: [
+    {
+      name: 'sectionSettings',
+      title: 'Section Settings',
+      options: {collapsible: true, collapsed: true}
+    }
+  ],
   fields: [
+    ...sectionFields,
     defineField({name: 'title', type: 'string', validation: (r) => r.required()}),
     defineField({
       name: 'image',

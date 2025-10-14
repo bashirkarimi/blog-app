@@ -1,12 +1,21 @@
 import {defineType, defineField} from 'sanity'
 import {BlockElementIcon} from '@sanity/icons'
+import { sectionFields } from './partials/section-fields'
 
 export const accordionType = defineType({
   name: 'accordion',
   title: 'Accordion',
   type: 'object',
   icon: BlockElementIcon,
+  fieldsets: [
+    {
+      name: 'sectionSettings',
+      title: 'Section Settings',
+      options: {collapsible: true, collapsed: true}
+    }
+  ],
   fields: [
+    ...sectionFields,
     defineField({
       name: 'items',
       type: 'array',
