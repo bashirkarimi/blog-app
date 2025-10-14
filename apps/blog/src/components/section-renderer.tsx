@@ -28,14 +28,14 @@ const SectionRenderer = ({ section }: { section: Sections[number] }) => {
   if (!Component) return null;
 
   return (
-    <Section>
-      <SectionContent
-        variant={section.sectionVariant || 'default'}
-        background={section.sectionBackground || 'none'}
-      >
-        {section.sectionTitle && (
-          <SectionTitle>{section.sectionTitle}</SectionTitle>
-        )}
+    <Section
+      background={(section.sectionBackground as any)}
+      variant={(section.sectionVariant as any)}
+    >
+      {section.sectionTitle && (
+        <SectionTitle>{section.sectionTitle}</SectionTitle>
+      )}
+      <SectionContent variant={(section.sectionVariant as any)}>
         <Component data={section} />
       </SectionContent>
     </Section>
