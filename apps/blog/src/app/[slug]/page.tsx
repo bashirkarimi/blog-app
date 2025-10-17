@@ -5,9 +5,9 @@ import { notFound } from "next/navigation";
 
 export default async function landingPage({ params }: any) {
   const { slug } = await params;
-  const { data } = await sanityFetch({ 
+  const { data } = await sanityFetch({
     query: LANDING_PAGE_QUERY,
-    params: { slug }
+    params: { slug },
   });
   if (!data) {
     return notFound();

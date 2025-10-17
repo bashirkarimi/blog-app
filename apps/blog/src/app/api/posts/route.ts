@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const limit = Math.min(
       Math.max(Number(searchParams.get("limit")) || 6, 1),
-      50
+      50,
     );
     const offset = Math.max(Number(searchParams.get("offset")) || 0, 0);
     const category = searchParams.get("category") || "";
@@ -29,12 +29,12 @@ export async function GET(req: NextRequest) {
 
     return new Response(
       JSON.stringify({ posts, total, offset, limit, hasMore, category }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      { status: 200, headers: { "Content-Type": "application/json" } },
     );
   } catch (e: unknown) {
     return new Response(
       JSON.stringify({ error: (e as Error).message || "Unknown error" }),
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

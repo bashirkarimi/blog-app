@@ -4,8 +4,8 @@ export interface BaseModule {
   _key?: string;
   // Section meta fields (added via shared sectionFields schema)
   sectionTitle?: string;
-  sectionVariant?: 'default' | 'narrow' | 'fullWidth';
-  sectionBackground?: 'none' | 'gray';
+  sectionVariant?: "default" | "narrow" | "fullWidth";
+  sectionBackground?: "none" | "gray";
 }
 export interface Link {
   label: string;
@@ -72,7 +72,7 @@ export interface PostCardModule extends BaseModule {
 }
 
 export interface BlogListModule extends BaseModule {
-  _type: "blogList";  
+  _type: "blogList";
   title?: string;
   limit?: number;
   mode?: "manual" | "auto";

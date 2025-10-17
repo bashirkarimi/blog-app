@@ -9,7 +9,7 @@ export const linkType = defineType({
     defineField({
       name: 'label',
       type: 'string',
-      validation: r => r.required().min(1).max(120),
+      validation: (r) => r.required().min(1).max(120),
     }),
     defineField({
       name: 'linkType',
@@ -24,28 +24,26 @@ export const linkType = defineType({
           {title: 'External', value: 'external'},
         ],
       },
-      validation: r => r.required(),
+      validation: (r) => r.required(),
     }),
     defineField({
       name: 'internal',
       title: 'Internal document',
       type: 'reference',
-      to: [
-        {type: 'post'},
-        {type: 'landingPage'},
-      ],
+      to: [{type: 'post'}, {type: 'landingPage'}],
       hidden: ({parent}) => parent?.linkType !== 'internal',
-      validation: r => r.custom((val, ctx) => {
-        const parent = ctx.parent as {linkType?: string}
-        return parent?.linkType === 'internal' && !val ? 'Select a document' : true
-      }),
+      validation: (r) =>
+        r.custom((val, ctx) => {
+          const parent = ctx.parent as {linkType?: string}
+          return parent?.linkType === 'internal' && !val ? 'Select a document' : true
+        }),
     }),
     defineField({
       name: 'external',
       title: 'External URL',
       type: 'url',
       hidden: ({parent}) => parent?.linkType !== 'external',
-      validation: r =>
+      validation: (r) =>
         r.uri({scheme: ['http', 'https']}).custom((val, ctx) => {
           const parent = ctx.parent as {linkType?: string}
           return parent?.linkType === 'external' && !val ? 'Enter a URL' : true
@@ -73,7 +71,8 @@ export const linkType = defineType({
       external: 'external',
     },
     prepare({label, linkType, internalTitle, external}) {
-      const subtitle = linkType === 'internal' ? (internalTitle ? `→ ${internalTitle}` : '→ (unlinked)') : external
+      const subtitle =
+        linkType === 'internal' ? (internalTitle ? `→ ${internalTitle}` : '→ (unlinked)') : external
       return {
         title: label || '(no label)',
         subtitle,

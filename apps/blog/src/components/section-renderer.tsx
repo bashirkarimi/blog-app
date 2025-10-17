@@ -7,12 +7,14 @@ import { BlogList } from "@repo/modules/blog-list";
 import { Section, SectionContent, SectionTitle } from "@repo/ui/section";
 import type { ComponentType } from "react";
 
-type SectionTypeName = Sections[number]["_type"]; 
+type SectionTypeName = Sections[number]["_type"];
 
 // Until all module components are updated to use exact Sanity-projected shapes,
 // keep a permissive prop signature to avoid cascading refactors.
 type SectionComponents = {
-  [K in SectionTypeName]: ComponentType<{ data: Extract<Sections[number], { _type: K }> }> | ComponentType<any>;
+  [K in SectionTypeName]:
+    | ComponentType<{ data: Extract<Sections[number], { _type: K }> }>
+    | ComponentType<any>;
 };
 
 export const sections = {
@@ -29,13 +31,13 @@ const SectionRenderer = ({ section }: { section: Sections[number] }) => {
 
   return (
     <Section
-      background={(section.sectionBackground as any)}
-      variant={(section.sectionVariant as any)}
+      background={section.sectionBackground as any}
+      variant={section.sectionVariant as any}
     >
       {section.sectionTitle && (
         <SectionTitle>{section.sectionTitle}</SectionTitle>
       )}
-      <SectionContent variant={(section.sectionVariant as any)}>
+      <SectionContent variant={section.sectionVariant as any}>
         <Component data={section} />
       </SectionContent>
     </Section>

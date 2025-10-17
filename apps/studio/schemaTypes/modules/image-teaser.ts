@@ -1,5 +1,5 @@
 import {defineType, defineField} from 'sanity'
-import { sectionFields } from './partials/section-fields';
+import {sectionFields} from './partials/section-fields'
 
 export const imageTeaserType = defineType({
   name: 'imageTeaser',
@@ -9,8 +9,8 @@ export const imageTeaserType = defineType({
     {
       name: 'sectionSettings',
       title: 'Section Settings',
-      options: {collapsible: true, collapsed: true}
-    }
+      options: {collapsible: true, collapsed: true},
+    },
   ],
   fields: [
     ...sectionFields,

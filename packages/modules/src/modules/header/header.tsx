@@ -20,7 +20,7 @@ const Header = ({ data }: { data: HeaderModule }) => {
             <strong>{data?.siteTitle ?? "Site"}</strong>
           </Link>
         </div>
-        <nav className="flex gap-6 ml-8">
+        <nav className="ml-8 flex gap-6">
           {data?.headerMenu?.map((menu) => (
             <Link key={menu?.href} href={`/${menu?.href}`}>
               {menu?.label}

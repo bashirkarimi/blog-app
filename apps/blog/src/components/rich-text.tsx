@@ -3,8 +3,11 @@ import Image from "next/image";
 import { urlFor } from "@/sanity/image";
 import { RichText as RichTextType } from "@/sanity/types";
 
-
-const RichText = ({ data }: { data?: { body: RichTextType} | Partial<RichTextType> | any }) => {
+const RichText = ({
+  data,
+}: {
+  data?: { body: RichTextType } | Partial<RichTextType> | any;
+}) => {
   const customBlockComponents = {
     types: {
       image: ({ value }: { value: any }) => {
@@ -53,10 +56,7 @@ const RichText = ({ data }: { data?: { body: RichTextType} | Partial<RichTextTyp
     },
   };
   return (
-    <PortableText
-      value={data?.body ?? []}
-      components={customBlockComponents}
-    />
+    <PortableText value={data?.body ?? []} components={customBlockComponents} />
   );
 };
 

@@ -24,7 +24,9 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { data: siteSettings } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
+  const { data: siteSettings } = await sanityFetch({
+    query: SITE_SETTINGS_QUERY,
+  });
 
   if (!siteSettings) {
     return notFound();
@@ -34,14 +36,14 @@ export default async function RootLayout({ children }) {
   const headerData = {
     _type: "header",
     siteTitle: siteSettings.siteTitle ?? undefined,
-    logo: siteSettings.logo ? urlFor(siteSettings.logo).width(128).height(128).url() : undefined,
+    logo: siteSettings.logo
+      ? urlFor(siteSettings.logo).width(128).height(128).url()
+      : undefined,
     headerMenu:
-      siteSettings.headerMenu?.items
-        ?.filter(Boolean)
-        .map((item) => ({
-          label: item?.label || "",
-          href: item?.target?.slug || "",
-        })) || [],
+      siteSettings.headerMenu?.items?.filter(Boolean).map((item) => ({
+        label: item?.label || "",
+        href: item?.target?.slug || "",
+      })) || [],
   };
 
   return (

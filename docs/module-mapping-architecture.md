@@ -7,17 +7,18 @@ This document describes the complete implementation of a type-safe, scalable mod
 ## Problem Solved
 
 Previously, adding a new module required:
+
 # Module Mapping Architecture (Deprecated)
 
 This document previously described a runtime “module mapping” layer that transformed raw Sanity documents into internal React component props. That system has been **removed**. All shaping now occurs directly in your Sanity GROQ queries so components can consume data without an additional mapping abstraction.
 
 ## Removed Pieces
 
-| Removed File / Concept | Replacement Strategy |
-|------------------------|----------------------|
-| `module-type-map.ts` | Use generated Sanity types directly (`@/sanity/types`) |
-| `module-registry.ts` | Perform field shaping in GROQ (aliases, dereferencing) |
-| `module-adapter.tsx` | Direct component imports; no auto‑wrapping |
+| Removed File / Concept | Replacement Strategy                                   |
+| ---------------------- | ------------------------------------------------------ |
+| `module-type-map.ts`   | Use generated Sanity types directly (`@/sanity/types`) |
+| `module-registry.ts`   | Perform field shaping in GROQ (aliases, dereferencing) |
+| `module-adapter.tsx`   | Direct component imports; no auto‑wrapping             |
 
 ## Why It Was Removed
 
@@ -53,15 +54,19 @@ _type == "hero" => {
 4. Register it in the `sections` map.
 
 ## Heavy Transformations?
+
 Keep them in GROQ when possible. If transformation depends on runtime-only data (e.g. environment, feature flags), create a small helper colocated with the component rather than a global registry.
 
 ## Next Cleanup Step
+
 If this historical note is no longer useful, you can safely delete this file.
 
 ---
+
 Historical reference only – runtime mapping layer removed.
 }
-```
+
+````
 
 **Key Features**:
 - **Type-safe mappers**: Each mapper is constrained to the correct input/output types
@@ -94,7 +99,7 @@ export function createComponentRegistry<T extends Record<string, ComponentType<a
   components: T
 ): Record<keyof T, ComponentType<any>> {
   const registry = {} as Record<keyof T, ComponentType<any>>;
-  
+
   for (const [key, Component] of Object.entries(components)) {
     if (isModuleType(key)) {
       // Auto-wrap module components
@@ -104,12 +109,13 @@ export function createComponentRegistry<T extends Record<string, ComponentType<a
       registry[key as keyof T] = Component;
     }
   }
-  
+
   return registry;
 }
-```
+````
 
 **Key Features**:
+
 - **Auto-detection**: `isModuleType()` determines if a component needs mapping
 - **Generic wrapping**: `createModuleAdapter()` works with any component shape
 - **Registry pattern**: `createComponentRegistry()` automatically applies correct wrapping
@@ -141,7 +147,7 @@ type SectionComponents = {
 export const sections = createComponentRegistry({
   teaserList: TeaserList,        // ← Raw Sanity data (no mapping)
   imageTeaser: ImageTeaser,      // ← Auto-wrapped with mapping
-  accordion: Accordion,          // ← Auto-wrapped with mapping  
+  accordion: Accordion,          // ← Auto-wrapped with mapping
   richText: RichText,           // ← Raw Sanity data (no mapping)
   blogList: BlogList,           // ← Raw Sanity data (no mapping)
 }) as SectionComponents;
@@ -159,6 +165,7 @@ const SectionRenderer = ({ section }: { section: Sections[number] }) => {
 ## Data Flow Diagrams
 
 ### Module Component Flow
+
 ```
 Sanity Data    Module Registry    Auto Adapter      React Component
 ┌─────────────┐ ┌──────────────┐ ┌──────────────┐ ┌─────────────────┐
@@ -171,6 +178,7 @@ Sanity Data    Module Registry    Auto Adapter      React Component
 ```
 
 ### Non-Module Component Flow
+
 ```
 Sanity Data    Auto Registry      React Component
 ┌─────────────┐ ┌──────────────┐ ┌─────────────────┐
@@ -191,8 +199,12 @@ The system uses TypeScript's mapped types to ensure completeness:
 ```ts
 // This will cause a compile error if any ModuleType lacks a mapper
 const mappers: { [K in ModuleType]: Mapper<K> } = {
-  accordion: (doc) => ({ /* must return AccordionModule */ }),
-  hero: (doc) => ({ /* must return HeroModule */ }),
+  accordion: (doc) => ({
+    /* must return AccordionModule */
+  }),
+  hero: (doc) => ({
+    /* must return HeroModule */
+  }),
   // Missing imageTeaser would cause compile error
 };
 ```
@@ -203,7 +215,7 @@ const mappers: { [K in ModuleType]: Mapper<K> } = {
 export function mapModule(doc: SanityModuleDoc): InternalModule | null {
   const type = doc._type as ModuleType;
   const fn = (mappers as any)[type];
-  
+
   // Returns null for unknown types instead of throwing
   return fn ? fn(doc) : null;
 }
@@ -224,6 +236,7 @@ if (isModuleType(sectionType)) {
 ### Example: Adding a `Gallery` module
 
 #### Step 1: Define Types (`packages/modules/src/types.ts`)
+
 ```ts
 export interface GalleryModule extends BaseModule {
   _type: "gallery";
@@ -232,10 +245,15 @@ export interface GalleryModule extends BaseModule {
   columns?: number;
 }
 
-export type AnyModule = AccordionModule | HeroModule | ImageTeaserModule | GalleryModule;
+export type AnyModule =
+  | AccordionModule
+  | HeroModule
+  | ImageTeaserModule
+  | GalleryModule;
 ```
 
 #### Step 2: Update Type Map (`types/module-type-map.ts`)
+
 ```ts
 import type { Gallery } from "@repo/content-types";
 import type { GalleryModule } from "@repo/modules/types";
@@ -249,32 +267,35 @@ export interface ModuleTypeMap {
 ```
 
 #### Step 3: Add Mapper (`module-registry.ts`)
+
 ```ts
 const mappers: { [K in ModuleType]: Mapper<K> } = {
   // ...existing mappers
   gallery: (doc) => ({
     _type: "gallery",
     title: doc.title || "",
-    images: doc.images?.map(img => urlFor(img).width(800).url()) || [],
+    images: doc.images?.map((img) => urlFor(img).width(800).url()) || [],
     columns: doc.columns || 3,
   }),
 };
 ```
 
 #### Step 4: Update Module Detection (`module-adapter.tsx`)
+
 ```ts
 export function isModuleType(type: string): type is ModuleType {
   const moduleTypes: ModuleType[] = [
-    "accordion", 
-    "hero", 
+    "accordion",
+    "hero",
     "imageTeaser",
-    "gallery"  // ← Add this
+    "gallery", // ← Add this
   ];
   return moduleTypes.includes(type as ModuleType);
 }
 ```
 
 #### Step 5: Create Component (`packages/modules/src/modules/gallery/gallery.tsx`)
+
 ```ts
 import Image from "next/image";
 import type { GalleryModule } from "../../types";
@@ -296,6 +317,7 @@ export { Gallery };
 ```
 
 #### Step 6: Add to Registry (`section-renderer.tsx`)
+
 ```ts
 import { Gallery } from "@repo/modules/gallery";
 
@@ -303,7 +325,7 @@ export const sections = createComponentRegistry({
   teaserList: TeaserList,
   imageTeaser: ImageTeaser,
   accordion: Accordion,
-  gallery: Gallery,        // ← Add this (auto-mapped!)
+  gallery: Gallery, // ← Add this (auto-mapped!)
   richText: RichText,
   blogList: BlogList,
 });
@@ -320,11 +342,11 @@ export const sections = createComponentRegistry({
 export function mapModule(doc: SanityModuleDoc): InternalModule | null {
   const type = doc._type as ModuleType;
   const fn = (mappers as any)[type];
-  
+
   if (process.env.NODE_ENV !== "production" && !fn) {
     console.warn(`No mapper registered for module type "${type}"`, doc);
   }
-  
+
   return fn ? fn(doc) : null;
 }
 
@@ -347,7 +369,7 @@ test("hero mapper transforms image URLs", () => {
     title: "Test Hero",
     image: { asset: { _ref: "image-123" } }
   };
-  
+
   const result = mapModule(mockHero);
   expect(result).toMatchObject({
     _type: "hero",
@@ -360,7 +382,7 @@ test("hero mapper transforms image URLs", () => {
 test("createComponentRegistry wraps module components", () => {
   const MockComponent = ({ data }) => <div>{data.title}</div>;
   const registry = createComponentRegistry({ hero: MockComponent });
-  
+
   expect(typeof registry.hero).toBe("function");
   // Test rendering with mock data
 });
@@ -389,6 +411,7 @@ export const sections = createComponentRegistry({
 If you have existing manual adapters:
 
 #### Phase 1: Replace Individual Adapters
+
 ```ts
 // Before
 const AccordionSection = ({ data }) => {
@@ -401,6 +424,7 @@ const AccordionSection = createModuleAdapter<AccordionModule>(Accordion);
 ```
 
 #### Phase 2: Use Auto-Registry
+
 ```ts
 // Before
 export const sections = {
@@ -411,13 +435,14 @@ export const sections = {
 
 // After
 export const sections = createComponentRegistry({
-  accordion: Accordion,     // Auto-wrapped
+  accordion: Accordion, // Auto-wrapped
   imageTeaser: ImageTeaser, // Auto-wrapped
-  richText: RichText,       // Pass-through
+  richText: RichText, // Pass-through
 });
 ```
 
 #### Phase 3: Clean Up
+
 - Remove manual adapter functions
 - Remove explicit type imports for adapters
 - Update documentation
@@ -425,10 +450,12 @@ export const sections = createComponentRegistry({
 ## Best Practices
 
 ### 1. **Consistent Naming**
+
 - Module types should match component names exactly
 - Use camelCase for both type names and component exports
 
 ### 2. **Error Boundaries**
+
 ```ts
 const ModuleErrorBoundary = ({ children, moduleName }) => (
   <ErrorBoundary fallback={<div>Failed to render {moduleName}</div>}>
@@ -438,6 +465,7 @@ const ModuleErrorBoundary = ({ children, moduleName }) => (
 ```
 
 ### 3. **Type Exports**
+
 ```ts
 // Re-export types for consumers
 export type { ModuleType, InternalModule } from "./types/module-type-map";
@@ -445,6 +473,7 @@ export { mapModule, mapModules } from "./lib/module-registry";
 ```
 
 ### 4. **Development Tools**
+
 ```ts
 // Development helper to list all registered modules
 export function getRegisteredModules(): ModuleType[] {
@@ -455,31 +484,37 @@ export function getRegisteredModules(): ModuleType[] {
 ## Benefits Summary
 
 ### ✅ **Scalable**
+
 - Adding modules requires minimal changes across files
 - No repetitive adapter code
 - Automatic detection and wrapping
 
 ### ✅ **Type-Safe**
+
 - Compile-time errors if mappers are missing
 - Strong typing preserved end-to-end
 - TypeScript ensures mapper completeness
 
 ### ✅ **Maintainable**
+
 - Clear separation of concerns
 - Single source of truth for module logic
 - Consistent patterns across all components
 
 ### ✅ **Developer Experience**
+
 - Zero configuration for new modules
 - Auto-completion and IntelliSense support
 - Clear error messages
 
 ### ✅ **Performance**
+
 - No runtime overhead compared to manual approach
 - Tree-shaking friendly (unused modules eliminated)
 - Lazy loading compatible
 
 ### ✅ **Testable**
+
 - Individual mappers can be unit tested
 - Registry can be integration tested
 - Clear dependency injection points

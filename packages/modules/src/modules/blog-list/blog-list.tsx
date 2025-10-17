@@ -23,7 +23,7 @@ const BlogList = ({ data }: BlogListProps) => {
   const filteredPosts = useMemo(() => {
     if (!selectedCategory) return initialPosts;
     return initialPosts.filter((p) =>
-      p.categories?.some((c) => c?.title === selectedCategory)
+      p.categories?.some((c) => c?.title === selectedCategory),
     );
   }, [initialPosts, selectedCategory]);
 
@@ -41,7 +41,7 @@ const BlogList = ({ data }: BlogListProps) => {
       setSelectedCategory(title);
       setVisibleCount(pageSize);
     },
-    [pageSize]
+    [pageSize],
   );
 
   return (
@@ -55,14 +55,14 @@ const BlogList = ({ data }: BlogListProps) => {
         <p className="mt-6 text-center text-sm text-gray-500">No posts.</p>
       ) : (
         <>
-          <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <ul className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {visiblePosts.map((post) => (
               <li key={post._id}>
                 <PostCard data={post} href={`post/${post.slug}`} />
               </li>
             ))}
           </ul>
-          <div className="flex justify-center mt-8">
+          <div className="mt-8 flex justify-center">
             <Button
               onClick={loadMore}
               disabled={!hasMore}

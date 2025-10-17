@@ -5,11 +5,11 @@ import type { ImageTeaserModule } from "../../types";
 
 const ImageTeaser = ({ data }: { data: ImageTeaserModule }) => {
   return (
-    <div className="grid md:grid-cols-2 gap-4">
-      <div className="order-2 md:order-0 p-4 md:p-0 flex flex-col gap-4">
-        <h3 className="font-semibold mb-2">{data.title}</h3>
+    <div className="grid gap-4 md:grid-cols-2">
+      <div className="order-2 flex flex-col gap-4 p-4 md:order-0 md:p-0">
+        <h3 className="mb-2 font-semibold">{data.title}</h3>
         {data.description && (
-          <p className="text-gray-700 leading-relaxed">{data.description}</p>
+          <p className="leading-relaxed text-gray-700">{data.description}</p>
         )}
         {data.link && (
           <Button asChild variant="default" className="">

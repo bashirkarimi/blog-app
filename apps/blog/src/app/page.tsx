@@ -14,7 +14,5 @@ export default async function Home(props: HomeProps) {
     return notFound();
   }
 
-  return (
-    <PageBuilder data={homePage} />
-  );
+  return <PageBuilder data={homePage} />;
 }

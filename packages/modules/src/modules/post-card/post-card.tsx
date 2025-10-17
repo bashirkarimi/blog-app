@@ -17,7 +17,7 @@ const PostCard = ({ data, href }: { data: PostCardModule; href: string }) => {
         <Image
           src={data.mainImage}
           alt={data?.title ?? ""}
-          className="w-full aspect-video object-cover object-center"
+          className="aspect-video w-full object-cover object-center"
           width={768}
           height={200}
         />
@@ -27,7 +27,9 @@ const PostCard = ({ data, href }: { data: PostCardModule; href: string }) => {
         {data?.excerpt && <CardDescription>{data.excerpt}</CardDescription>}
         <CardFooter>
           <Button variant="ghost" size="sm" asChild>
-            <Link aria-label={`Read more: ${data.title}`} href={`/${href}`}>Read more</Link>
+            <Link aria-label={`Read more: ${data.title}`} href={`/${href}`}>
+              Read more
+            </Link>
           </Button>
         </CardFooter>
       </CardContent>

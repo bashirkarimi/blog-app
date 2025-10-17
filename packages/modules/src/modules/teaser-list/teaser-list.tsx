@@ -14,7 +14,7 @@ const TeaserList = ({ data }: { data: TeaserListModule }) => {
   const items = data.items || [];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
       {items.map((item) => (
         <Card key={item.title}>
           {item.image && (
@@ -23,7 +23,7 @@ const TeaserList = ({ data }: { data: TeaserListModule }) => {
               alt={item.title ?? "Image"}
               width={400}
               height={300}
-              className="w-full aspect-video object-cover"
+              className="aspect-video w-full object-cover"
             />
           )}
           <CardContent className="flex-1">

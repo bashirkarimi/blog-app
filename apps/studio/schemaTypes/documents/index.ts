@@ -5,4 +5,11 @@ import {postType} from './post'
 import {menuType} from './menu'
 import {tagType} from './tag'
 
-export const documentTypes = [landingPageType, authorType, categoryType, postType, menuType, tagType];
+export const documentTypes = [
+  landingPageType,
+  authorType,
+  categoryType,
+  postType,
+  menuType,
+  tagType,
+]

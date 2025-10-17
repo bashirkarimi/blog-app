@@ -11,7 +11,7 @@ interface HeroProps {
 
 const Hero: ComponentType<HeroProps> = ({ data }) => (
   <section
-    className="relative w-full aspect-[21/6] flex overflow-hidden"
+    className="relative flex aspect-[21/6] w-full overflow-hidden"
     aria-label={data.title || "Hero section"}
   >
     {data.image && (
@@ -26,10 +26,10 @@ const Hero: ComponentType<HeroProps> = ({ data }) => (
     )}
     {/* dark overlay */}
     <div className="absolute inset-0 bg-gray-900/60" aria-hidden="true" />
-    <div className="relative w-full md:w-1/2 lg:w-1/3 p-8 mt-auto text-white z-10 backdrop-blur-xs bg-gray-900/30">
+    <div className="relative z-10 mt-auto w-full bg-gray-900/30 p-8 text-white backdrop-blur-xs md:w-1/2 lg:w-1/3">
       {data.title && <h2 className="text-4xl font-bold">{data.title}</h2>}
       {data.text && (
-        <div className="mt-4 prose prose-invert max-w-none">
+        <div className="prose prose-invert mt-4 max-w-none">
           <PortableText value={data.text} />
         </div>
       )}

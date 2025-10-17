@@ -20,20 +20,28 @@ export type DetailsPage = {
   _updatedAt: string;
   _rev: string;
   useDefaultHero?: boolean;
-  heros?: Array<{
-    _key: string;
-  } & Hero>;
-  sections?: Array<{
-    _key: string;
-  } & BlogList | {
-    _key: string;
-  } & Accordion | {
-    _key: string;
-  } & ImageTeaser | {
-    _key: string;
-  } & RichText | {
-    _key: string;
-  } & TeaserList>;
+  heros?: Array<
+    {
+      _key: string;
+    } & Hero
+  >;
+  sections?: Array<
+    | ({
+        _key: string;
+      } & BlogList)
+    | ({
+        _key: string;
+      } & Accordion)
+    | ({
+        _key: string;
+      } & ImageTeaser)
+    | ({
+        _key: string;
+      } & RichText)
+    | ({
+        _key: string;
+      } & TeaserList)
+  >;
 };
 
 export type HomePage = {
@@ -43,20 +51,28 @@ export type HomePage = {
   _updatedAt: string;
   _rev: string;
   seoTitle?: string;
-  heros?: Array<{
-    _key: string;
-  } & Hero>;
-  sections?: Array<{
-    _key: string;
-  } & BlogList | {
-    _key: string;
-  } & Accordion | {
-    _key: string;
-  } & ImageTeaser | {
-    _key: string;
-  } & RichText | {
-    _key: string;
-  } & TeaserList>;
+  heros?: Array<
+    {
+      _key: string;
+    } & Hero
+  >;
+  sections?: Array<
+    | ({
+        _key: string;
+      } & BlogList)
+    | ({
+        _key: string;
+      } & Accordion)
+    | ({
+        _key: string;
+      } & ImageTeaser)
+    | ({
+        _key: string;
+      } & RichText)
+    | ({
+        _key: string;
+      } & TeaserList)
+  >;
 };
 
 export type SiteSettings = {
@@ -133,36 +149,39 @@ export type RichText = {
   sectionTitle?: string;
   sectionVariant?: "default" | "narrow" | "fullWidth";
   sectionBackground?: "none" | "gray";
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-    listItem?: "bullet";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    asset?: {
-      _ref: string;
-      _type: "reference";
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: "image";
-    _key: string;
-  }>;
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+        listItem?: "bullet";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+        _key: string;
+      }
+  >;
 };
 
 export type ImageTeaser = {
@@ -269,52 +288,63 @@ export type Hero = {
   link?: Link;
 };
 
-export type Heros = Array<{
-  _key: string;
-} & Hero>;
-
-export type Sections = Array<{
-  _key: string;
-} & BlogList | {
-  _key: string;
-} & Accordion | {
-  _key: string;
-} & ImageTeaser | {
-  _key: string;
-} & RichText | {
-  _key: string;
-} & TeaserList>;
-
-export type BlockContent = Array<{
-  children?: Array<{
-    marks?: Array<string>;
-    text?: string;
-    _type: "span";
+export type Heros = Array<
+  {
     _key: string;
-  }>;
-  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
-  listItem?: "bullet";
-  markDefs?: Array<{
-    href?: string;
-    _type: "link";
-    _key: string;
-  }>;
-  level?: number;
-  _type: "block";
-  _key: string;
-} | {
-  asset?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-  };
-  media?: unknown;
-  hotspot?: SanityImageHotspot;
-  crop?: SanityImageCrop;
-  _type: "image";
-  _key: string;
-}>;
+  } & Hero
+>;
+
+export type Sections = Array<
+  | ({
+      _key: string;
+    } & BlogList)
+  | ({
+      _key: string;
+    } & Accordion)
+  | ({
+      _key: string;
+    } & ImageTeaser)
+  | ({
+      _key: string;
+    } & RichText)
+  | ({
+      _key: string;
+    } & TeaserList)
+>;
+
+export type BlockContent = Array<
+  | {
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    }
+  | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+      _key: string;
+    }
+>;
 
 export type Tag = {
   _id: string;
@@ -442,20 +472,28 @@ export type LandingPage = {
   _rev: string;
   title?: string;
   slug?: Slug;
-  heros?: Array<{
-    _key: string;
-  } & Hero>;
-  sections?: Array<{
-    _key: string;
-  } & BlogList | {
-    _key: string;
-  } & Accordion | {
-    _key: string;
-  } & ImageTeaser | {
-    _key: string;
-  } & RichText | {
-    _key: string;
-  } & TeaserList>;
+  heros?: Array<
+    {
+      _key: string;
+    } & Hero
+  >;
+  sections?: Array<
+    | ({
+        _key: string;
+      } & BlogList)
+    | ({
+        _key: string;
+      } & Accordion)
+    | ({
+        _key: string;
+      } & ImageTeaser)
+    | ({
+        _key: string;
+      } & RichText)
+    | ({
+        _key: string;
+      } & TeaserList)
+  >;
   description?: string;
 };
 
@@ -463,17 +501,19 @@ export type Link = {
   _type: "link";
   label?: string;
   linkType?: "internal" | "external";
-  internal?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "post";
-  } | {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "landingPage";
-  };
+  internal?:
+    | {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "post";
+      }
+    | {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "landingPage";
+      };
   external?: string;
   openInNewTab?: boolean;
   ariaLabel?: string;
@@ -597,7 +637,37 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = DetailsPage | HomePage | SiteSettings | TeaserList | RichText | ImageTeaser | Accordion | BlogList | Hero | Heros | Sections | BlockContent | Tag | Menu | Post | Category | Author | LandingPage | Link | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes =
+  | DetailsPage
+  | HomePage
+  | SiteSettings
+  | TeaserList
+  | RichText
+  | ImageTeaser
+  | Accordion
+  | BlogList
+  | Hero
+  | Heros
+  | Sections
+  | BlockContent
+  | Tag
+  | Menu
+  | Post
+  | Category
+  | Author
+  | LandingPage
+  | Link
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageHotspot
+  | SanityImageCrop
+  | SanityFileAsset
+  | SanityImageAsset
+  | SanityImageMetadata
+  | Geopoint
+  | Slug
+  | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ../blog/src/sanity/queries.ts
 // Variable: expandSections
@@ -637,130 +707,147 @@ export type HOME_PAGE_QUERYResult = {
       openInNewTab: boolean | false;
     } | null;
   }> | null;
-  sections: Array<{
-    _key: string;
-    _type: "accordion";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    items?: Array<{
-      title?: string;
-      content?: Array<{
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
+  sections: Array<
+    | {
         _key: string;
-      }>;
-      _key: string;
-    }>;
-  } | {
-    _key: string;
-    _type: "blogList";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    title: string | null;
-    mode: "latest" | "manual" | null;
-    limit: number | null;
-    posts: Array<{
-      _id: string;
-      title: string | null;
-      slug: string | null;
-      publishedAt: string | null;
-      mainImage: string | null;
-      excerpt: string | null;
-      author: {
-        _id: string;
-        name: string | null;
-      } | null;
-      categories: Array<{
-        _id: string;
+        _type: "accordion";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        items?: Array<{
+          title?: string;
+          content?: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?:
+              | "blockquote"
+              | "h1"
+              | "h2"
+              | "h3"
+              | "h4"
+              | "h5"
+              | "h6"
+              | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }>;
+          _key: string;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "blogList";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
         title: string | null;
-      }> | null;
-    }>;
-  } | {
-    _key: string;
-    _type: "imageTeaser";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    title?: string;
-    image: string | null;
-    description?: string;
-    link: {
-      href: string | "/" | null;
-      label: string | null;
-      ariaLabel: string | null;
-      openInNewTab: boolean | false;
-    } | null;
-  } | {
-    _key: string;
-    _type: "richText";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    body?: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
+        mode: "latest" | "manual" | null;
+        limit: number | null;
+        posts: Array<{
+          _id: string;
+          title: string | null;
+          slug: string | null;
+          publishedAt: string | null;
+          mainImage: string | null;
+          excerpt: string | null;
+          author: {
+            _id: string;
+            name: string | null;
+          } | null;
+          categories: Array<{
+            _id: string;
+            title: string | null;
+          }> | null;
+        }>;
+      }
+    | {
         _key: string;
-      }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-      listItem?: "bullet";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
+        _type: "imageTeaser";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        title?: string;
+        image: string | null;
+        description?: string;
+        link: {
+          href: string | "/" | null;
+          label: string | null;
+          ariaLabel: string | null;
+          openInNewTab: boolean | false;
+        } | null;
+      }
+    | {
         _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    } | {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-      _key: string;
-    }>;
-  } | {
-    _key: string;
-    _type: "teaserList";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    items: Array<{
-      title?: string;
-      summary?: string;
-      image: string | null;
-      link: {
-        href: string | "/" | null;
-        label: string | null;
-        ariaLabel: string | null;
-        openInNewTab: boolean | false;
-      } | null;
-      _type: "teaser";
-      _key: string;
-    }> | null;
-  }> | null;
+        _type: "richText";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        body?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+              _key: string;
+            }
+        >;
+      }
+    | {
+        _key: string;
+        _type: "teaserList";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        items: Array<{
+          title?: string;
+          summary?: string;
+          image: string | null;
+          link: {
+            href: string | "/" | null;
+            label: string | null;
+            ariaLabel: string | null;
+            openInNewTab: boolean | false;
+          } | null;
+          _type: "teaser";
+          _key: string;
+        }> | null;
+      }
+  > | null;
 } | null;
 // Variable: LANDING_PAGE_QUERY
 // Query: *[_type == 'landingPage' && slug.current == $slug][0]{    seoTitle,    title,    heros[] {      ...,      "image": image.asset->url,      "link": link{   "href": select(    linkType == "external" => external,    linkType == "internal" && defined(internal->slug.current) => '/' + internal->slug.current,    '/'  ),  "label": label,  "ariaLabel": ariaLabel,  // only meaningful for external links; coalesce ensures boolean  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false) }    },      sections[]{    ...,    _type == 'blogList' => {      limit,      title,      mode,      "posts": *[_type == "post" && defined(slug.current)]{          _id,  title,  "slug": slug.current,  publishedAt,  "mainImage": mainImage.asset->url,  excerpt,  "author": author->{ _id, name },  "categories": categories[]->{ _id, title }      },    },    _type == 'teaserList' => {      ...,      items[] {        ...,        "image": image.asset->url,        "link": link{   "href": select(    linkType == "external" => external,    linkType == "internal" && defined(internal->slug.current) => '/' + internal->slug.current,    '/'  ),  "label": label,  "ariaLabel": ariaLabel,  // only meaningful for external links; coalesce ensures boolean  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false) }      }    },    _type == 'postsModule' => {      ...,      tags[]->{ title, "slug": slug.current }    },    _type == 'imageTeaser' => {      ...,      "image": image.asset->url,      "link": link{   "href": select(    linkType == "external" => external,    linkType == "internal" && defined(internal->slug.current) => '/' + internal->slug.current,    '/'  ),  "label": label,  "ariaLabel": ariaLabel,  // only meaningful for external links; coalesce ensures boolean  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false) }    }  }  }
@@ -797,130 +884,147 @@ export type LANDING_PAGE_QUERYResult = {
       openInNewTab: boolean | false;
     } | null;
   }> | null;
-  sections: Array<{
-    _key: string;
-    _type: "accordion";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    items?: Array<{
-      title?: string;
-      content?: Array<{
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
+  sections: Array<
+    | {
         _key: string;
-      }>;
-      _key: string;
-    }>;
-  } | {
-    _key: string;
-    _type: "blogList";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    title: string | null;
-    mode: "latest" | "manual" | null;
-    limit: number | null;
-    posts: Array<{
-      _id: string;
-      title: string | null;
-      slug: string | null;
-      publishedAt: string | null;
-      mainImage: string | null;
-      excerpt: string | null;
-      author: {
-        _id: string;
-        name: string | null;
-      } | null;
-      categories: Array<{
-        _id: string;
+        _type: "accordion";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        items?: Array<{
+          title?: string;
+          content?: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?:
+              | "blockquote"
+              | "h1"
+              | "h2"
+              | "h3"
+              | "h4"
+              | "h5"
+              | "h6"
+              | "normal";
+            listItem?: "bullet" | "number";
+            markDefs?: Array<{
+              href?: string;
+              _type: "link";
+              _key: string;
+            }>;
+            level?: number;
+            _type: "block";
+            _key: string;
+          }>;
+          _key: string;
+        }>;
+      }
+    | {
+        _key: string;
+        _type: "blogList";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
         title: string | null;
-      }> | null;
-    }>;
-  } | {
-    _key: string;
-    _type: "imageTeaser";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    title?: string;
-    image: string | null;
-    description?: string;
-    link: {
-      href: string | "/" | null;
-      label: string | null;
-      ariaLabel: string | null;
-      openInNewTab: boolean | false;
-    } | null;
-  } | {
-    _key: string;
-    _type: "richText";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    body?: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
+        mode: "latest" | "manual" | null;
+        limit: number | null;
+        posts: Array<{
+          _id: string;
+          title: string | null;
+          slug: string | null;
+          publishedAt: string | null;
+          mainImage: string | null;
+          excerpt: string | null;
+          author: {
+            _id: string;
+            name: string | null;
+          } | null;
+          categories: Array<{
+            _id: string;
+            title: string | null;
+          }> | null;
+        }>;
+      }
+    | {
         _key: string;
-      }>;
-      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
-      listItem?: "bullet";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
+        _type: "imageTeaser";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        title?: string;
+        image: string | null;
+        description?: string;
+        link: {
+          href: string | "/" | null;
+          label: string | null;
+          ariaLabel: string | null;
+          openInNewTab: boolean | false;
+        } | null;
+      }
+    | {
         _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    } | {
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: "image";
-      _key: string;
-    }>;
-  } | {
-    _key: string;
-    _type: "teaserList";
-    sectionTitle?: string;
-    sectionVariant?: "default" | "fullWidth" | "narrow";
-    sectionBackground?: "gray" | "none";
-    items: Array<{
-      title?: string;
-      summary?: string;
-      image: string | null;
-      link: {
-        href: string | "/" | null;
-        label: string | null;
-        ariaLabel: string | null;
-        openInNewTab: boolean | false;
-      } | null;
-      _type: "teaser";
-      _key: string;
-    }> | null;
-  }> | null;
+        _type: "richText";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        body?: Array<
+          | {
+              children?: Array<{
+                marks?: Array<string>;
+                text?: string;
+                _type: "span";
+                _key: string;
+              }>;
+              style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+              listItem?: "bullet";
+              markDefs?: Array<{
+                href?: string;
+                _type: "link";
+                _key: string;
+              }>;
+              level?: number;
+              _type: "block";
+              _key: string;
+            }
+          | {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+              _key: string;
+            }
+        >;
+      }
+    | {
+        _key: string;
+        _type: "teaserList";
+        sectionTitle?: string;
+        sectionVariant?: "default" | "fullWidth" | "narrow";
+        sectionBackground?: "gray" | "none";
+        items: Array<{
+          title?: string;
+          summary?: string;
+          image: string | null;
+          link: {
+            href: string | "/" | null;
+            label: string | null;
+            ariaLabel: string | null;
+            openInNewTab: boolean | false;
+          } | null;
+          _type: "teaser";
+          _key: string;
+        }> | null;
+      }
+  > | null;
 } | null;
 // Variable: SITE_SETTINGS_QUERY
 // Query: *[_type=='siteSettings' && _id=='siteSettings'][0]{    siteTitle,    logo,    defaultSeo,    headerMenu->{      title,      items[]{label, target->{"_id": _id, title, "slug": slug.current}}    }  }
@@ -1043,15 +1147,15 @@ export type CATEGORIES_WITH_COUNTS_QUERYResult = Array<{
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": *[_type == \"post\" && defined(slug.current)]{\n        \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  \"mainImage\": mainImage.asset->url,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n      },\n    },\n    _type == 'teaserList' => {\n      ...,\n      items[] {\n        ...,\n        \"image\": image.asset->url,\n        \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    },\n    _type == 'imageTeaser' => {\n      ...,\n      \"image\": image.asset->url,\n      \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n    }\n  }\n": ExpandSectionsResult;
-    "\n  *[_type=='homePage' && _id=='homePage'][0]{\n    seoTitle,\n    heros[] {\n      ...,\n      \"image\": image.asset->url,\n      \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n    },\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": *[_type == \"post\" && defined(slug.current)]{\n        \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  \"mainImage\": mainImage.asset->url,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n      },\n    },\n    _type == 'teaserList' => {\n      ...,\n      items[] {\n        ...,\n        \"image\": image.asset->url,\n        \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    },\n    _type == 'imageTeaser' => {\n      ...,\n      \"image\": image.asset->url,\n      \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n    }\n  }\n\n  }\n": HOME_PAGE_QUERYResult;
-    "\n  *[_type == 'landingPage' && slug.current == $slug][0]{\n    seoTitle,\n    title,\n    heros[] {\n      ...,\n      \"image\": image.asset->url,\n      \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n    },\n    \n  sections[]{\n    ...,\n    _type == 'blogList' => {\n      limit,\n      title,\n      mode,\n      \"posts\": *[_type == \"post\" && defined(slug.current)]{\n        \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  \"mainImage\": mainImage.asset->url,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n      },\n    },\n    _type == 'teaserList' => {\n      ...,\n      items[] {\n        ...,\n        \"image\": image.asset->url,\n        \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n      }\n    },\n    _type == 'postsModule' => {\n      ...,\n      tags[]->{ title, \"slug\": slug.current }\n    },\n    _type == 'imageTeaser' => {\n      ...,\n      \"image\": image.asset->url,\n      \"link\": link{ \n  \"href\": select(\n    linkType == \"external\" => external,\n    linkType == \"internal\" && defined(internal->slug.current) => '/' + internal->slug.current,\n    '/'\n  ),\n  \"label\": label,\n  \"ariaLabel\": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  \"openInNewTab\": coalesce(linkType == \"external\" && openInNewTab, false)\n }\n    }\n  }\n\n  }\n": LANDING_PAGE_QUERYResult;
+    '\n  sections[]{\n    ...,\n    _type == \'blogList\' => {\n      limit,\n      title,\n      mode,\n      "posts": *[_type == "post" && defined(slug.current)]{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  "mainImage": mainImage.asset->url,\n  excerpt,\n  "author": author->{ _id, name },\n  "categories": categories[]->{ _id, title }\n\n      },\n    },\n    _type == \'teaserList\' => {\n      ...,\n      items[] {\n        ...,\n        "image": image.asset->url,\n        "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n      }\n    },\n    _type == \'postsModule\' => {\n      ...,\n      tags[]->{ title, "slug": slug.current }\n    },\n    _type == \'imageTeaser\' => {\n      ...,\n      "image": image.asset->url,\n      "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n    }\n  }\n': ExpandSectionsResult;
+    '\n  *[_type==\'homePage\' && _id==\'homePage\'][0]{\n    seoTitle,\n    heros[] {\n      ...,\n      "image": image.asset->url,\n      "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n    },\n    \n  sections[]{\n    ...,\n    _type == \'blogList\' => {\n      limit,\n      title,\n      mode,\n      "posts": *[_type == "post" && defined(slug.current)]{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  "mainImage": mainImage.asset->url,\n  excerpt,\n  "author": author->{ _id, name },\n  "categories": categories[]->{ _id, title }\n\n      },\n    },\n    _type == \'teaserList\' => {\n      ...,\n      items[] {\n        ...,\n        "image": image.asset->url,\n        "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n      }\n    },\n    _type == \'postsModule\' => {\n      ...,\n      tags[]->{ title, "slug": slug.current }\n    },\n    _type == \'imageTeaser\' => {\n      ...,\n      "image": image.asset->url,\n      "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n    }\n  }\n\n  }\n': HOME_PAGE_QUERYResult;
+    '\n  *[_type == \'landingPage\' && slug.current == $slug][0]{\n    seoTitle,\n    title,\n    heros[] {\n      ...,\n      "image": image.asset->url,\n      "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n    },\n    \n  sections[]{\n    ...,\n    _type == \'blogList\' => {\n      limit,\n      title,\n      mode,\n      "posts": *[_type == "post" && defined(slug.current)]{\n        \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  "mainImage": mainImage.asset->url,\n  excerpt,\n  "author": author->{ _id, name },\n  "categories": categories[]->{ _id, title }\n\n      },\n    },\n    _type == \'teaserList\' => {\n      ...,\n      items[] {\n        ...,\n        "image": image.asset->url,\n        "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n      }\n    },\n    _type == \'postsModule\' => {\n      ...,\n      tags[]->{ title, "slug": slug.current }\n    },\n    _type == \'imageTeaser\' => {\n      ...,\n      "image": image.asset->url,\n      "link": link{ \n  "href": select(\n    linkType == "external" => external,\n    linkType == "internal" && defined(internal->slug.current) => \'/\' + internal->slug.current,\n    \'/\'\n  ),\n  "label": label,\n  "ariaLabel": ariaLabel,\n  // only meaningful for external links; coalesce ensures boolean\n  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)\n }\n    }\n  }\n\n  }\n': LANDING_PAGE_QUERYResult;
     "\n  *[_type=='siteSettings' && _id=='siteSettings'][0]{\n    siteTitle,\n    logo,\n    defaultSeo,\n    headerMenu->{\n      title,\n      items[]{label, target->{\"_id\": _id, title, \"slug\": slug.current}}\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
-    "\n  *[_type == \"post\"\n    && defined(slug.current)\n    && (!defined($category) || $category == \"\" || $category in categories[]->title)\n  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{\n    \n  _id,\n  title,\n  \"slug\": slug.current,\n  publishedAt,\n  \"mainImage\": mainImage.asset->url,\n  excerpt,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n  }\n": POSTS_QUERYResult;
-    "\n  *[_type == \"post\" && slug.current == $slug][0]{\n    \n  ...,\n  \"author\": author->{ _id, name },\n  \"categories\": categories[]->{ _id, title }\n\n  }\n": POST_BY_SLUG_QUERYResult;
-    "\n  *[_type == \"post\" && defined(slug.current)]{\n    \"slug\": slug.current\n  }\n": POST_SLUGS_QUERYResult;
-    "\n  array::unique(\n    *[_type == \"post\" && count(categories[]->title) > 0].categories[]->title\n  ) | order(@ asc)\n": UNIQUE_CATEGORIES_QUERYResult;
-    "\n  *[_type == \"post\" && count(categories[]->title) > 0]{\n    \"categories\": categories[]->title\n  }\n": CATEGORIES_IN_POST_QUERYResult;
-    "\n  *[_type == \"category\"]{\n    _id,\n    title,\n    \"count\": count(*[_type == \"post\" && references(^._id) && defined(slug.current)])\n  } | order(title asc)\n": CATEGORIES_WITH_COUNTS_QUERYResult;
+    '\n  *[_type == "post"\n    && defined(slug.current)\n    && (!defined($category) || $category == "" || $category in categories[]->title)\n  ] | order(coalesce(publishedAt, _createdAt) desc)[0...$limit]{\n    \n  _id,\n  title,\n  "slug": slug.current,\n  publishedAt,\n  "mainImage": mainImage.asset->url,\n  excerpt,\n  "author": author->{ _id, name },\n  "categories": categories[]->{ _id, title }\n\n  }\n': POSTS_QUERYResult;
+    '\n  *[_type == "post" && slug.current == $slug][0]{\n    \n  ...,\n  "author": author->{ _id, name },\n  "categories": categories[]->{ _id, title }\n\n  }\n': POST_BY_SLUG_QUERYResult;
+    '\n  *[_type == "post" && defined(slug.current)]{\n    "slug": slug.current\n  }\n': POST_SLUGS_QUERYResult;
+    '\n  array::unique(\n    *[_type == "post" && count(categories[]->title) > 0].categories[]->title\n  ) | order(@ asc)\n': UNIQUE_CATEGORIES_QUERYResult;
+    '\n  *[_type == "post" && count(categories[]->title) > 0]{\n    "categories": categories[]->title\n  }\n': CATEGORIES_IN_POST_QUERYResult;
+    '\n  *[_type == "category"]{\n    _id,\n    title,\n    "count": count(*[_type == "post" && references(^._id) && defined(slug.current)])\n  } | order(title asc)\n': CATEGORIES_WITH_COUNTS_QUERYResult;
   }
 }

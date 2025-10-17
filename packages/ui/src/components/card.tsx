@@ -6,12 +6,12 @@ const Card = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
     <div
       ref={ref}
       className={twMerge(
-        "rounded-lg border shadow-sm  flex flex-col gap-4  h-full overflow-hidden",
-        className
+        "flex h-full flex-col gap-4 overflow-hidden rounded-lg border shadow-sm",
+        className,
       )}
       {...props}
     />
-  )
+  ),
 );
 Card.displayName = "Card";
 
@@ -19,13 +19,10 @@ const CardContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={twMerge(
-        "flex flex-col h-full gap-4 p-6 pt-0",
-        className
-      )}
+      className={twMerge("flex h-full flex-col gap-4 p-6 pt-0", className)}
       {...props}
     />
-  )
+  ),
 );
 CardContent.displayName = "CardContent";
 
@@ -36,8 +33,8 @@ const CardTitle = forwardRef<
   <h3
     ref={ref}
     className={twMerge(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
+      "text-2xl leading-none font-semibold tracking-tight",
+      className,
     )}
     {...props}
   />
@@ -58,12 +55,8 @@ CardDescription.displayName = "CardDescription";
 
 const CardFooter = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
   ({ className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={twMerge("mt-auto", className)}
-      {...props}
-    />
-  )
+    <div ref={ref} className={twMerge("mt-auto", className)} {...props} />
+  ),
 );
 CardFooter.displayName = "CardFooter";
 

@@ -24,7 +24,7 @@ export async function generateStaticParams() {
   } catch (err) {
     console.warn(
       "generateStaticParams: failed to fetch slugs, falling back to empty list",
-      err
+      err,
     );
     return [];
   }
@@ -36,7 +36,7 @@ export default async function Page({ params }: PageProps) {
     query: POST_BY_SLUG_QUERY,
     params: { slug },
   });
-  
+
   if (!post) {
     notFound();
   }
@@ -46,20 +46,20 @@ export default async function Page({ params }: PageProps) {
         <Button variant={"outline"} className="mb-4" asChild>
           <Link href="/">Back to Home</Link>
         </Button>
-        <article className="bg-white p-8 md:p-12 rounded-xl shadow-lg">
+        <article className="rounded-xl bg-white p-8 shadow-lg md:p-12">
           {post?.mainImage && (
             <Image
               src={urlFor(post.mainImage).url()}
               alt={post?.title ?? ""}
-              className="w-full max-h-96 object-cover object-center aspect-video"
+              className="aspect-video max-h-96 w-full object-cover object-center"
               width={600}
               height={400}
             />
           )}
-          <h1 className="text-3xl md:text-5xl font-extrabold text-gray-900 my-2 pt-2 leading-tight">
+          <h1 className="my-2 pt-2 text-3xl leading-tight font-extrabold text-gray-900 md:text-5xl">
             {post?.title}
           </h1>
-          <div className="text-sm text-gray-500 mb-6">
+          <div className="mb-6 text-sm text-gray-500">
             <span>By {post?.author?.name}</span>
             <span className="ml-4">
               Published on{" "}
@@ -74,7 +74,7 @@ export default async function Page({ params }: PageProps) {
                 : ""}
             </span>
           </div>
-          <div className="prose max-w-[80%] mx-auto mt-10 text-gray-700 leading-relaxed space-y-6">
+          <div className="prose mx-auto mt-10 max-w-[80%] space-y-6 leading-relaxed text-gray-700">
             <RichText data={post} />
           </div>
         </article>

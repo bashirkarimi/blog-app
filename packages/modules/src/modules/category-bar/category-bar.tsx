@@ -17,7 +17,11 @@ interface CategoryBarProps {
 // Derives category list (with counts) from provided posts.
 // Filtering of posts happens in parent; this component focuses only on
 // computing categories + rendering selection UI.
-const CategoryBar = ({ posts, selectedCategory, onSelect }: CategoryBarProps) => {
+const CategoryBar = ({
+  posts,
+  selectedCategory,
+  onSelect,
+}: CategoryBarProps) => {
   const categories: CategoryCount[] = useMemo(() => {
     const map = new Map<string, number>();
     posts.forEach((p) => {
@@ -42,7 +46,7 @@ const CategoryBar = ({ posts, selectedCategory, onSelect }: CategoryBarProps) =>
             type="button"
             onClick={() => onSelect("")}
             aria-pressed={selectedCategory === ""}
-            className={`text-sm font-medium px-3 py-1 rounded-full transition-colors ${
+            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
               selectedCategory === ""
                 ? "bg-blue-800 text-white"
                 : "bg-blue-100 text-blue-800 hover:bg-blue-200"
@@ -53,33 +57,33 @@ const CategoryBar = ({ posts, selectedCategory, onSelect }: CategoryBarProps) =>
         </li>
         {categories.map((cat) => {
           const active = cat.title === selectedCategory;
-            return (
-              <li key={cat.title}>
-                <button
-                  type="button"
-                  onClick={() => onSelect(cat.title)}
-                  aria-pressed={active}
-                  className={`text-sm font-medium px-3 py-1 rounded-full transition-colors ${
-                    active
-                      ? "bg-blue-800 text-white"
-                      : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                  }`}
-                >
-                  {cat.title}
-                  {cat.count > 1 && (
-                    <span
-                      className={`ml-1 inline-block rounded-full px-1 text-xs ${
-                        active
-                          ? "bg-white text-blue-800"
-                          : "text-gray-600 border border-gray-400"
-                      }`}
-                    >
-                      {cat.count}
-                    </span>
-                  )}
-                </button>
-              </li>
-            );
+          return (
+            <li key={cat.title}>
+              <button
+                type="button"
+                onClick={() => onSelect(cat.title)}
+                aria-pressed={active}
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+                  active
+                    ? "bg-blue-800 text-white"
+                    : "bg-blue-100 text-blue-800 hover:bg-blue-200"
+                }`}
+              >
+                {cat.title}
+                {cat.count > 1 && (
+                  <span
+                    className={`ml-1 inline-block rounded-full px-1 text-xs ${
+                      active
+                        ? "bg-white text-blue-800"
+                        : "border border-gray-400 text-gray-600"
+                    }`}
+                  >
+                    {cat.count}
+                  </span>
+                )}
+              </button>
+            </li>
+          );
         })}
       </ul>
     </div>

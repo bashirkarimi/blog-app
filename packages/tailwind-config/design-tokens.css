@@ -9,21 +9,20 @@
   --radius-xl: 1rem;
 
   /* Breakpoints (layout): follow a conventional scale + project-specific caps. */
-  --breakpoint-xs: 320px;      /* small phones */
-  --breakpoint-sm: 480px;      /* phones */
-  --breakpoint-md: 768px;      /* tablets */
-  --breakpoint-lg: 1024px;     /* small laptops */
-  --breakpoint-xl: 1280px;     /* desktops */
-  --breakpoint-2xl: 1600px;    /* large desktops */
-  --breakpoint-3xl: 1940px;    /* page cap */
+  --breakpoint-xs: 320px; /* small phones */
+  --breakpoint-sm: 480px; /* phones */
+  --breakpoint-md: 768px; /* tablets */
+  --breakpoint-lg: 1024px; /* small laptops */
+  --breakpoint-xl: 1280px; /* desktops */
+  --breakpoint-2xl: 1600px; /* large desktops */
+  --breakpoint-3xl: 1940px; /* page cap */
 
   /* Semantic layout widths */
-  --layout-max-page: var(--breakpoint-3xl);   /* overall page cap */
-  --layout-max-content: var(--breakpoint-lg);/* standard content width */
-  --layout-max-panel: 1040px;  /* gray panel width */
-  --layout-max-reading: 65ch;  /* prose reading width */
+  --layout-max-page: var(--breakpoint-3xl); /* overall page cap */
+  --layout-max-content: var(--breakpoint-lg); /* standard content width */
+  --layout-max-panel: 1040px; /* gray panel width */
+  --layout-max-reading: 65ch; /* prose reading width */
 }
-
 
 :root {
   --background: oklch(1 0 0);

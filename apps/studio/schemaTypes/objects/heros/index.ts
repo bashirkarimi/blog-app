@@ -1,5 +1,3 @@
-import { heroType } from "./hero"
+import {heroType} from './hero'
 
-export const heroTypes = [
-  heroType
-]
+export const heroTypes = [heroType]
