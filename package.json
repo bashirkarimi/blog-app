@@ -6,8 +6,7 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "check-types": "turbo run check-types",
-  "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,mdx,css}\"",
-  "lint:tailwind": "eslint . --max-warnings=0 --rule 'tailwindcss/classnames-order: error'"
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,mdx,css}\""
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.12",
