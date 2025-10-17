@@ -6,7 +6,7 @@ const Card = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
     <div
       ref={ref}
       className={twMerge(
-        "flex h-full flex-col gap-4 overflow-hidden rounded-lg border shadow-sm",
+        "flex h-full flex-col gap-4 overflow-hidden rounded-lg border border-gray-200 shadow-md",
         className,
       )}
       {...props}
@@ -32,10 +32,7 @@ const CardTitle = forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={twMerge(
-      "text-2xl leading-none font-semibold tracking-tight",
-      className,
-    )}
+    className={twMerge("text-2xl font-semibold tracking-tight", className)}
     {...props}
   />
 ));
