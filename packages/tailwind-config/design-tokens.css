@@ -1,6 +1,7 @@
 /* Design tokens: colors, spacing, radii, semantic scales.
  * No Tailwind import here. Consuming apps must import this BEFORE `@import "tailwindcss"`.
  */
+
 @theme {
   /* Radii */
   --radius-sm: 0.125rem;
@@ -22,40 +23,102 @@
   --layout-max-content: var(--breakpoint-lg); /* standard content width */
   --layout-max-panel: 1040px; /* gray panel width */
   --layout-max-reading: 65ch; /* prose reading width */
+  /* Colors */
+  --color-astral-50: #f3f8fc;
+  --color-astral-100: #e5f0f9;
+  --color-astral-200: #c6e1f1;
+  --color-astral-300: #94c9e5;
+  --color-astral-400: #5badd5;
+  --color-astral-500: #3186b1;
+  --color-astral-600: #2676a3;
+  --color-astral-700: #205e84;
+  --color-astral-800: #1e506e;
+  --color-astral-900: #1e435c;
+  --color-astral-950: #142c3d;
+
+/* Neutrals - Light mode */
+  --background: var(--color-astral-50);
+  --foreground: var(--color-astral-950);
+
+  /* Card surfaces */
+  --card: #ffffff;
+  --card-foreground: var(--color-astral-950);
+
+  /* Popovers */
+  --popover: #ffffff;
+  --popover-foreground: var(--color-astral-950);
+
+  /* Primary - Astral 600 for strong brand presence */
+  --primary: var(--color-astral-600);
+  --primary-foreground: #ffffff;
+
+  /* Secondary - Astral 200 for subtle actions */
+  --secondary: var(--color-astral-200);
+  --secondary-foreground: var(--color-astral-900);
+
+  /* Muted elements */
+  --muted: var(--color-astral-100);
+  --muted-foreground: var(--color-astral-700);
+
+  /* Accent - Astral 500 for highlights */
+  --accent: var(--color-astral-500);
+  --accent-foreground: #ffffff;
+
+  /* Success - Professional Green */
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+
+  /* Destructive - Refined Red */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* Borders and inputs */
+  --border: var(--color-astral-200);
+  --input: var(--color-astral-200);
+  --ring: var(--color-astral-500);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-}
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
+  /* Dark mode using astral palette */
+  /* Neutrals - Dark mode */
+  --background: var(--color-astral-950);
+  --foreground: var(--color-astral-50);
+
+  /* Card surfaces */
+  --card: var(--color-astral-900);
+  --card-foreground: var(--color-astral-50);
+
+  /* Popovers */
+  --popover: var(--color-astral-900);
+  --popover-foreground: var(--color-astral-50);
+
+  /* Primary - Brighter astral for dark mode */
+  --primary: var(--color-astral-400);
+  --primary-foreground: var(--color-astral-950);
+
+  /* Secondary - Darker astral for subtle actions */
+  --secondary: var(--color-astral-800);
+  --secondary-foreground: var(--color-astral-100);
+
+  /* Muted elements */
+  --muted: var(--color-astral-900);
+  --muted-foreground: var(--color-astral-400);
+
+  /* Accent - Bright astral for highlights */
+  --accent: var(--color-astral-500);
+  --accent-foreground: #ffffff;
+
+  /* Success - Bright Green */
+  --success: #22c55e;
+  --success-foreground: var(--color-astral-950);
+
+  /* Destructive - Bright Red */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Borders and inputs */
+  --border: var(--color-astral-800);
+  --input: var(--color-astral-800);
+  --ring: var(--color-astral-400);
 }
