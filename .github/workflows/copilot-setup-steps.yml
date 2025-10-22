@@ -1,0 +1,53 @@
+name: "Copilot Setup Steps"
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  # The job MUST be called `copilot-setup-steps` or it will not be picked up by Copilot.
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        run: pnpm check-types
+
+      - name: Run linter
+        run: pnpm lint
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Run tests
+        run: pnpm test --run
+
+      - name: Check for build artifacts
+        run: |
+          echo "Checking build outputs..."
+          ls -la apps/blog/.next/ || echo "Blog build not found"
+          ls -la apps/docs/.next/ || echo "Docs build not found"
+          ls -la packages/ui/dist/ || echo "UI package dist not found"
