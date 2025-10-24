@@ -18,7 +18,7 @@ const Accordion: ComponentType<AccordionProps> = ({ data }) => {
 function Item({ item }: { item: any }) {
   return (
     <details
-      className="group peer border-b last:border-0"
+      className="group border-b last:border-0"
       name="accordion-item"
     >
       <summary className="relative w-full list-none p-4 py-2 text-left font-medium hover:cursor-pointer">
