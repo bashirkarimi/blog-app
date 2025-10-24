@@ -5,11 +5,13 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "design-tokens.css"
+    "design-tokens.css",
+    "postcss.mjs"
   ],
   "exports": {
     ".": "./index.js",
-    "./design-tokens.css": "./design-tokens.css"
+    "./design-tokens.css": "./design-tokens.css",
+    "./postcss": "./postcss.mjs"
   },
   "dependencies": {
     "tailwindcss": "^4.0.0"

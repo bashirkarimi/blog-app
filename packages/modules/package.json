@@ -31,6 +31,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "pnpm -F @repo/ui build",
+    "build:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify",
     "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
     "dev:components": "tsc --watch"
   },
