@@ -41,40 +41,40 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen p-8">
       <div className="container mx-auto">
         <Button variant={"outline"} className="mb-4" asChild>
           <Link href="/">Back to Home</Link>
         </Button>
-        <article className="rounded-xl bg-white p-8 shadow-lg md:p-12">
-          {post?.mainImage && (
-            <Image
-              src={urlFor(post.mainImage).url()}
-              alt={post?.title ?? ""}
-              className="aspect-video max-h-96 w-full object-cover object-center"
-              width={600}
-              height={400}
-            />
-          )}
-          <h1 className="my-2 pt-2 text-3xl leading-tight font-extrabold text-gray-900 md:text-5xl">
-            {post?.title}
-          </h1>
-          <div className="mb-6 text-sm text-gray-500">
-            <span>By {post?.author?.name}</span>
-            <span className="ml-4">
-              Published on{" "}
-              {post?.publishedAt
-                ? new Date(post.publishedAt).toLocaleDateString()
-                : ""}
-            </span>
-            <span className="ml-4">
-              Updated on{" "}
-              {post?._updatedAt
-                ? new Date(post._updatedAt).toLocaleDateString()
-                : ""}
-            </span>
-          </div>
-          <div className="prose mx-auto mt-10 max-w-[80%] space-y-6 leading-relaxed text-gray-700">
+        <article className="p-8 md:p-12">
+          <header className="grid">
+            <h1 className="order-2 mt-4">{post?.title}</h1>
+            {post?.mainImage && (
+              <Image
+                src={urlFor(post.mainImage).url()}
+                alt={post?.title ?? ""}
+                className="aspect-video max-h-96 w-full object-cover object-center"
+                width={600}
+                height={400}
+              />
+            )}
+            <div className="order-3 mb-6 text-sm text-gray-500">
+              <span>By {post?.author?.name}</span>
+              <span className="ml-4">
+                Published on{" "}
+                {post?.publishedAt
+                  ? new Date(post.publishedAt).toLocaleDateString()
+                  : ""}
+              </span>
+              <span className="ml-4">
+                Updated on{" "}
+                {post?._updatedAt
+                  ? new Date(post._updatedAt).toLocaleDateString()
+                  : ""}
+              </span>
+            </div>
+          </header>
+          <div className="mx-auto mt-10 w-[var(--layout-max-reading)] space-y-6">
             <RichText data={post} />
           </div>
         </article>
