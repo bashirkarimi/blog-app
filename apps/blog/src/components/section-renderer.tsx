@@ -1,47 +1,15 @@
-import { Sections } from "@/sanity/types";
-import { TeaserList } from "@repo/modules/teaser-list";
-import { ImageTeaser } from "@repo/modules/image-teaser";
-import { Accordion } from "@repo/modules/accordion";
+import {
+  SectionRenderer as BaseSectionRenderer,
+  defaultSectionComponents,
+} from "@repo/modules/section-renderer";
 import { RichText } from "./rich-text";
-import { BlogList } from "@repo/modules/blog-list";
-import { Section, SectionContent, SectionTitle } from "@repo/ui/section";
-import type { ComponentType } from "react";
+import { Sections } from "@/sanity/types";
 
-type SectionTypeName = Sections[number]["_type"];
+// Extend default module mapping with app-specific RichText component.
+const components = { ...defaultSectionComponents, richText: RichText };
 
-// Until all module components are updated to use exact Sanity-projected shapes,
-// keep a permissive prop signature to avoid cascading refactors.
-type SectionComponents = {
-  [K in SectionTypeName]:
-    | ComponentType<{ data: Extract<Sections[number], { _type: K }> }>
-    | ComponentType<any>;
-};
-
-export const sections = {
-  teaserList: TeaserList,
-  imageTeaser: ImageTeaser,
-  accordion: Accordion,
-  richText: RichText,
-  blogList: BlogList,
-} as SectionComponents;
-
-const SectionRenderer = ({ section }: { section: Sections[number] }) => {
-  const Component = sections[section._type];
-  if (!Component) return null;
-
-  return (
-    <Section
-      background={section.sectionBackground as any}
-      variant={section.sectionVariant as any}
-    >
-      {section.sectionTitle && (
-        <SectionTitle>{section.sectionTitle}</SectionTitle>
-      )}
-      <SectionContent variant={section.sectionVariant as any}>
-        <Component data={section} />
-      </SectionContent>
-    </Section>
-  );
-};
+const SectionRenderer = ({ section }: { section: Sections[number] }) => (
+  <BaseSectionRenderer section={section as any} components={components} />
+);
 
 export { SectionRenderer };

@@ -25,7 +25,8 @@
     "./footer": "./src/modules/footer/footer.tsx",
     "./post-card": "./src/modules/post-card/post-card.tsx",
     "./blog-list": "./src/modules/blog-list/blog-list.tsx",
-    "./category-bar": "./src/modules/category-bar/category-bar.tsx"
+    "./category-bar": "./src/modules/category-bar/category-bar.tsx",
+    "./section-renderer": "./src/modules/sections/section-renderer.tsx"
   },
   "scripts": {
     "clean": "rm -rf dist",
