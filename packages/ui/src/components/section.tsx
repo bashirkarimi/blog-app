@@ -63,11 +63,7 @@ const SectionTitle = forwardRef<
   HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => {
   return (
-    <h2
-      ref={ref}
-      className={twMerge("mb-4 text-2xl font-bold md:mb-10", className)}
-      {...props}
-    />
+    <h2 ref={ref} className={twMerge("mb-4 md:mb-10", className)} {...props} />
   );
 });
 SectionTitle.displayName = "SectionTitle";
