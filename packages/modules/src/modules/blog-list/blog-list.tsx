@@ -62,16 +62,18 @@ const BlogList = ({ data }: BlogListProps) => {
               </li>
             ))}
           </ul>
-          <div className="mt-8 flex justify-center">
-            <Button
-              onClick={loadMore}
-              disabled={!hasMore}
-              variant="default"
-              aria-disabled={!hasMore}
-            >
-              {hasMore ? "Load more" : "No more posts"}
-            </Button>
-          </div>
+          {hasMore && (
+            <div className="mt-8 flex justify-center">
+              <Button
+                onClick={loadMore}
+                disabled={!hasMore}
+                variant="primary"
+                aria-disabled={!hasMore}
+              >
+                Load more
+              </Button>
+            </div>
+          )}
         </>
       )}
     </div>

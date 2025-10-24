@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { PostCardModule } from "../../types";
+import { Button } from "@repo/ui/button";
 
 export interface CategoryCount {
   title: string;
@@ -42,32 +43,26 @@ const CategoryBar = ({
     <div className="py-4" role="navigation" aria-label="Filter by category">
       <ul className="flex flex-wrap gap-2">
         <li>
-          <button
-            type="button"
+          <Button
             onClick={() => onSelect("")}
             aria-pressed={selectedCategory === ""}
-            className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
-              selectedCategory === ""
-                ? "bg-blue-800 text-white"
-                : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-            }`}
+            size={"sm"}
+            variant={"outline"}
+            className={` ${selectedCategory === "" ? "bg-astral-200" : ""}`}
           >
             All
-          </button>
+          </Button>
         </li>
         {categories.map((cat) => {
           const active = cat.title === selectedCategory;
           return (
             <li key={cat.title}>
-              <button
-                type="button"
+              <Button
                 onClick={() => onSelect(cat.title)}
                 aria-pressed={active}
-                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
-                  active
-                    ? "bg-blue-800 text-white"
-                    : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                }`}
+                size={"sm"}
+                variant={"outline"}
+                className={`${active ? "bg-astral-200" : ""}`}
               >
                 {cat.title}
                 {cat.count > 1 && (
@@ -75,13 +70,13 @@ const CategoryBar = ({
                     className={`ml-1 inline-block rounded-full px-1 text-xs ${
                       active
                         ? "bg-white text-blue-800"
-                        : "border border-gray-400 text-gray-600"
+                        : "border-astral-400 border text-gray-600"
                     }`}
                   >
                     {cat.count}
                   </span>
                 )}
-              </button>
+              </Button>
             </li>
           );
         })}

@@ -34,7 +34,7 @@ const Hero: ComponentType<HeroProps> = ({ data }) => (
         </div>
       )}
       {data.link && (
-        <Button variant="default" className="mt-4" asChild>
+        <Button variant="secondary" className="mt-4" asChild>
           <Link
             href={data.link.href}
             {...(data.link.openInNewTab

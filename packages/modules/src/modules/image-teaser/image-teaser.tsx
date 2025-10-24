@@ -12,15 +12,17 @@ const ImageTeaser = ({ data }: { data: ImageTeaserModule }) => {
           <p className="leading-relaxed text-gray-700">{data.description}</p>
         )}
         {data.link && (
-          <Button asChild variant="default" className="">
-            <Link
-              href={data.link.href}
-              target={data.link.openInNewTab ? "_blank" : "_self"}
-              aria-label={data.link.ariaLabel}
-            >
-              {data.link.label}
-            </Link>
-          </Button>
+          <div className="flex gap-4">
+            <Button asChild variant="primary">
+              <Link
+                href={data.link.href}
+                target={data.link.openInNewTab ? "_blank" : "_self"}
+                aria-label={data.link.ariaLabel}
+              >
+                {data.link.label}
+              </Link>
+            </Button>
+          </div>
         )}
       </div>
       {data?.image && (
