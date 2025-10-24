@@ -5,6 +5,10 @@ module.exports = {
   // Content is defined in each consuming app for proper tree-shaking.
   theme: {
     extend: {
+      fontFamily: {
+        sans: "var(--font-family-sans)",
+        mono: "var(--font-family-mono)",
+      },
       colors: {
         border: "var(--border)",
         input: "var(--input)",
@@ -25,6 +29,17 @@ module.exports = {
   plugins: [
     plugin(function ({ addBase, addComponents }) {
       addBase({
+        body: {
+          fontFamily: "var(--font-family-sans)",
+          fontFeatureSettings: '"kern"',
+          fontOpticalSizing: "auto",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+        },
+        "code, pre, kbd, samp": {
+          fontFamily: "var(--font-family-mono)",
+          fontSize: "0.95em",
+        },
         "h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6": {
           scrollMarginTop: "2rem",
           color: "var(--foreground)",

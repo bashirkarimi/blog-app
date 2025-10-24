@@ -4,18 +4,15 @@ import { Footer } from "@repo/modules/footer";
 import { sanityFetch } from "@/sanity/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { notFound } from "next/navigation";
+import { Inter } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata = {
@@ -48,9 +45,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${inter.variable} ${inter.variable} antialiased`}>
         <div className="mx-auto max-w-[var(--layout-max)] px-4 md:px-8">
           <Header data={headerData} />
           {children}

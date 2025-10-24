@@ -25,6 +25,9 @@
   --layout-max-reading: 65ch; /* prose reading width */
 
   /* Typography - Headings */
+  /* Font families (Inter via next/font variable fallback). Apps should load Inter using next/font and expose --font-inter. */
+  --font-family-sans: var(--font-inter, "Inter"), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   /* Font sizes with fluid scaling */
   --font-size-h1: clamp(2.25rem, 5vw, 3.75rem); /* 36px - 60px */
   --font-size-h2: clamp(1.875rem, 4vw, 3rem); /* 30px - 48px */
