@@ -11,25 +11,13 @@ interface HeroProps {
 
 const Hero: ComponentType<HeroProps> = ({ data }) => (
   <section
-    className="relative flex aspect-[21/6] w-full overflow-hidden"
+    className="grid grid-cols-12 overflow-hidden"
     aria-label={data.title || "Hero section"}
   >
-    {data.image && (
-      <Image
-        className="object-cover object-center select-none"
-        src={data.image}
-        alt={data.title || "Hero image"}
-        fill
-        priority
-        sizes="100vw"
-      />
-    )}
-    {/* dark overlay */}
-    <div className="absolute inset-0 bg-gray-900/60" aria-hidden="true" />
-    <div className="relative z-10 mt-auto w-full bg-gray-900/30 p-8 text-white backdrop-blur-xs md:w-1/2 lg:w-1/3">
-      {data.title && <h2 className="text-4xl font-bold">{data.title}</h2>}
+    <div className="relative z-10 col-start-1 col-end-13 row-start-1 mt-auto w-full p-8 text-white backdrop-blur-xs md:col-end-6 md:rounded-tr-xl">
+      {data.title && <h2 className="text-astral-50">{data.title}</h2>}
       {data.text && (
-        <div className="prose prose-invert mt-4 max-w-none">
+        <div className="mt-4">
           <PortableText value={data.text} />
         </div>
       )}
@@ -47,6 +35,18 @@ const Hero: ComponentType<HeroProps> = ({ data }) => (
         </Button>
       )}
     </div>
+    {data.image && (
+      <div className="relative col-start-1 col-end-13 row-start-1 block aspect-video h-full w-full md:aspect-[21/6]">
+        <Image
+          className="object-cover object-center select-none"
+          src={data.image}
+          alt={data.title || "Hero image"}
+          fill
+          priority
+          sizes="100vw"
+        />
+      </div>
+    )}
   </section>
 );
 
