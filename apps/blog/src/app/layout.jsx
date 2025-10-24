@@ -45,7 +45,7 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${inter.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <div className="mx-auto max-w-[var(--layout-max)] px-4 md:px-8">
           <Header data={headerData} />
           {children}
