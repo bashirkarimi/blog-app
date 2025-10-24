@@ -1,32 +1,102 @@
-import { type ReactNode } from "react";
+import { forwardRef, type ComponentPropsWithoutRef } from "react";
+import { twMerge } from "tailwind-merge";
 
-const Card = ({
-  title,
-  children,
-  href,
-}: {
-  title: string;
-  children: ReactNode;
-  href: string;
-}) => {
+const Card = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={twMerge(
+        "border border-astral-200 flex h-full flex-col gap-4 overflow-hidden rounded-lg shadow-md",
+        className,
+      )}
+      {...props}
+    />
+  ),
+);
+Card.displayName = "Card";
+
+const CardHeader = ({
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"div">) => {
   return (
-    <a
-      className="ui:group ui:rounded-lg ui:border ui:border-transparent ui:px-5 ui:py-4 ui:transition-colors hover:ui:border-neutral-700 hover:ui:bg-neutral-800/30"
-      href={`${href}?utm_source=create-turbo&utm_medium=with-tailwind&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <h2 className="ui:mb-3 ui:text-2xl ui:font-semibold">
-        {title}
-        <span className="ui:inline-block ui:transition-transform group-hover:ui:translate-x-1 motion-reduce:ui:transform-none">
-          -&gt;
-        </span>
-      </h2>
-      <p className="ui:m-0 ui:max-w-[30ch] ui:text-sm ui:opacity-50">
-        {children}
-      </p>
-    </a>
+    <div
+      data-slot="card-header"
+      className={twMerge(
+        "@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6",
+        className,
+      )}
+      {...props}
+    />
   );
-}
+};
+CardHeader.displayName = "CardHeader";
 
-export { Card };
+const CardTitle = forwardRef<
+  HTMLHeadingElement,
+  ComponentPropsWithoutRef<"h3">
+>(({ className, ...props }, ref) => (
+  <h3
+    ref={ref}
+    className={twMerge("text-2xl font-semibold tracking-tight", className)}
+    {...props}
+  />
+));
+CardTitle.displayName = "CardTitle";
+
+const CardDescription = forwardRef<
+  HTMLParagraphElement,
+  ComponentPropsWithoutRef<"p">
+>(({ className, ...props }, ref) => (
+  <p
+    ref={ref}
+    className={twMerge("text-muted-foreground", className)}
+    {...props}
+  />
+));
+CardDescription.displayName = "CardDescription";
+
+const CardAction = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        data-slot="card-action"
+        className={twMerge(
+          "col-start-2 row-span-2 row-start-1 self-start justify-self-end",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      />
+    );
+  },
+);
+CardAction.displayName = "CardAction";
+
+const CardContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={twMerge("flex h-full flex-col gap-4 p-6 pt-0", className)}
+      {...props}
+    />
+  ),
+);
+CardContent.displayName = "CardContent";
+
+const CardFooter = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<"div">>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={twMerge("mt-auto", className)} {...props} />
+  ),
+);
+CardFooter.displayName = "CardFooter";
+
+export {
+  Card,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+  CardAction,
+  CardHeader,
+};

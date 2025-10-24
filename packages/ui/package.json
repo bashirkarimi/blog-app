@@ -5,21 +5,20 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src/styles.css"
   ],
+  "license": "MIT",
   "exports": {
     "./button": "./src/components/button.tsx",
     "./section": "./src/components/section.tsx",
     "./card": "./src/components/card.tsx",
     "./gradient": "./src/components/gradient.tsx",
-    "./styles.css": "./dist/index.css"
+    "./styles.css": "./src/styles.css"
   },
-  "license": "MIT",
   "scripts": {
-  "build:styles": "tailwindcss -c ./tailwind.config.js -i ./src/styles.css -o ./dist/index.css",
-  "build:components": "tsc",
+    "build:components": "tsc",
     "check-types": "tsc --noEmit",
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --content './src/**/*.{js,jsx,ts,tsx}' --watch",
     "dev:components": "tsc --watch",
     "lint": "eslint src --max-warnings 0"
   },

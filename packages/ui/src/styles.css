@@ -1,4 +1,5 @@
-/* Component-level styles for the UI package */
-/* Use relative path to avoid export resolution issues during isolated builds */
-@import "@repo/tailwind-config/shared-styles.css"; /* tokens */
-@import "tailwindcss"; /* utilities generated using tokens */
+/* Optional UI library stylesheet.
+ * For production apps, it's recommended to rely on the app's Tailwind build
+ * instead of shipping utilities here. Keep library-specific custom CSS only.
+ * Tokens are imported to allow authoring custom selectors against vars. */
+@import "@repo/tailwind-config/design-tokens.css";

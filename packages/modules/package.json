@@ -6,29 +6,33 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src/styles.css"
   ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "./accordion": "./src/modules/accordion/accordion.tsx",
-    "./hero": "./src/modules/hero/hero.tsx",
     "./types": {
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js"
     },
-    "./styles.css": {
-      "development": "./src/styles.css",
-      "production": "./dist/index.css",
-      "default": "./src/styles.css"
-    }
+    "./styles.css": "./src/styles.css",
+    "./accordion": "./src/modules/accordion/accordion.tsx",
+    "./hero": "./src/modules/hero/hero.tsx",
+    "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
+    "./teaser-list": "./src/modules/teaser-list/teaser-list.tsx",
+    "./header": "./src/modules/header/header.tsx",
+    "./footer": "./src/modules/footer/footer.tsx",
+    "./post-card": "./src/modules/post-card/post-card.tsx",
+    "./blog-list": "./src/modules/blog-list/blog-list.tsx",
+    "./category-bar": "./src/modules/category-bar/category-bar.tsx",
+    "./section-renderer": "./src/modules/sections/section-renderer.tsx"
   },
   "scripts": {
-  "clean": "rm -rf dist",
+    "clean": "rm -rf dist",
     "prebuild": "pnpm -F @repo/ui build",
-    "build:styles": "tailwindcss -c ./tailwind.config.ts -i ./src/styles.css -o ./dist/index.css",
+    "build:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify",
     "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --content './src/**/*.{js,jsx,ts,tsx}' --watch",
     "dev:components": "tsc --watch"
   },
   "peerDependencies": {
@@ -45,6 +49,7 @@
     "@portabletext/types": "^2.0.15",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/tailwind-config": "workspace:*",
     "@tailwindcss/cli": "^4.1.5",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",

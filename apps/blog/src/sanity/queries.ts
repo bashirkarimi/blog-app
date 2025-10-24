@@ -1,13 +1,28 @@
 // ...existing code...
 import { defineQuery } from "next-sanity";
 
+// Reusable projection for the custom "link" object.
+// Computes an href depending on internal vs external, and surfaces authoring metadata.
+// Adjust internal path logic (e.g. prefix with "/blog") if your site structure changes.
+const LINK_PROJECTION = `
+  "href": select(
+    linkType == "external" => external,
+    linkType == "internal" && defined(internal->slug.current) => '/' + internal->slug.current,
+    '/'
+  ),
+  "label": label,
+  "ariaLabel": ariaLabel,
+  // only meaningful for external links; coalesce ensures boolean
+  "openInNewTab": coalesce(linkType == "external" && openInNewTab, false)
+`;
+
 // Slim projection for list views (removed body[0] to reduce payload)
 const POST_LIST_PROJECTION = `
   _id,
   title,
   "slug": slug.current,
   publishedAt,
-  mainImage,
+  "mainImage": mainImage.asset->url,
   excerpt,
   "author": author->{ _id, name },
   "categories": categories[]->{ _id, title }
@@ -29,28 +44,26 @@ const expandSections = defineQuery(`
       limit,
       title,
       mode,
-      "posts": select(
-        mode == "manual" => posts[]->{
-          ${POST_LIST_PROJECTION}
-        },
-        mode != "manual" => []
-      ),
-      "total": select(
-        mode == "manual" => count(posts[]),
-        mode != "manual" => count(*[_type == "post" && defined(slug.current)])
-      )
+      "posts": *[_type == "post" && defined(slug.current)]{
+        ${POST_LIST_PROJECTION}
+      },
     },
     _type == 'teaserList' => {
       ...,
-      postRefs[]->{
-        title,
-        mainImage,
-        "slug": slug.current
+      items[] {
+        ...,
+        "image": image.asset->url,
+        "link": link{ ${LINK_PROJECTION} }
       }
     },
     _type == 'postsModule' => {
       ...,
       tags[]->{ title, "slug": slug.current }
+    },
+    _type == 'imageTeaser' => {
+      ...,
+      "image": image.asset->url,
+      "link": link{ ${LINK_PROJECTION} }
     }
   }
 `);
@@ -59,7 +72,11 @@ const expandSections = defineQuery(`
 export const HOME_PAGE_QUERY = defineQuery(`
   *[_type=='homePage' && _id=='homePage'][0]{
     seoTitle,
-    heros[],
+    heros[] {
+      ...,
+      "image": image.asset->url,
+      "link": link{ ${LINK_PROJECTION} }
+    },
     ${expandSections}
   }
 `);
@@ -68,7 +85,11 @@ export const LANDING_PAGE_QUERY = defineQuery(`
   *[_type == 'landingPage' && slug.current == $slug][0]{
     seoTitle,
     title,
-    heros[],
+    heros[] {
+      ...,
+      "image": image.asset->url,
+      "link": link{ ${LINK_PROJECTION} }
+    },
     ${expandSections}
   }
 `);

@@ -1,12 +1,17 @@
-// Tailwind v4 config for the blog app.
-// IMPORTANT: We must scan shared package source so utilities referenced only
-// inside packages (e.g. @repo/modules, @repo/ui) are generated. Otherwise
-// classes used in a library component won't appear because
-// they never show up in the app's own source glob.
-export default {
+// App-level Tailwind config extends the root monorepo config. Keeping this file
+// (instead of deleting) preserves per-app overrides if needed later.
+import type { Config } from "tailwindcss";
+import root from "../../tailwind.config";
+
+const config: Config = {
+  ...root,
+  // Narrow to just what this app actually needs while ensuring package src
+  // stays included so utilities (e.g. 'relative' inside @repo/modules) build.
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "../../packages/modules/src/**/*.{js,jsx,ts,tsx}",
-    "../../packages/ui/src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{js,jsx,ts,tsx,mdx}",
+    "../../packages/modules/src/**/*.{js,jsx,ts,tsx,mdx}",
   ],
 };
+
+export default config;

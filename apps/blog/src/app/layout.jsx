@@ -1,22 +1,18 @@
 import { SanityLive } from "@/sanity/live";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
+import { Header } from "@repo/modules/header";
+import { Footer } from "@repo/modules/footer";
 import { sanityFetch } from "@/sanity/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/queries";
-import { Geist, Geist_Mono } from "next/font/google";
+import { urlFor } from "@/sanity/image";
 import "./globals.css";
-import "@repo/ui/styles.css";
-import "@repo/modules/styles.css";
 import { notFound } from "next/navigation";
+import { Inter } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata = {
@@ -25,21 +21,37 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { data: settings } = await sanityFetch({ query: SITE_SETTINGS_QUERY });
+  const { data: siteSettings } = await sanityFetch({
+    query: SITE_SETTINGS_QUERY,
+  });
 
-  if (!settings) {
+  if (!siteSettings) {
     return notFound();
   }
 
+  // Map the raw site settings document to the HeaderModule shape expected by <Header />.
+  const headerData = {
+    _type: "header",
+    siteTitle: siteSettings.siteTitle ?? undefined,
+    logo: siteSettings.logo
+      ? urlFor(siteSettings.logo).width(128).height(128).url()
+      : undefined,
+    headerMenu:
+      siteSettings.headerMenu?.items?.filter(Boolean).map((item) => ({
+        label: item?.label || "",
+        href: item?.target?.slug || "",
+      })) || [],
+  };
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Header settings={settings} />
-        {children}
-        <SanityLive />
-        <Footer />
+      <body className={`${inter.variable} antialiased`}>
+        <div className="mx-auto max-w-[var(--layout-max)] px-4 md:px-8">
+          <Header data={headerData} />
+          {children}
+          <SanityLive />
+          <Footer />
+        </div>
       </body>
     </html>
   );

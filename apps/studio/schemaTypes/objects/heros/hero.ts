@@ -20,6 +20,10 @@ export const heroType = defineType({
       name: 'image',
       type: 'image',
     }),
+    defineField({
+      name: 'link',
+      type: 'link',
+    }),
   ],
   preview: {
     select: {

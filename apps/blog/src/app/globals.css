@@ -1,76 +1,8 @@
-/* Tailwind v4: ensure we include module package sources so custom spacing, colors
-  utilities are generated even when only
-  referenced inside the app (and not inside @repo/modules source). */
+/* Point Tailwind at the monorepo root config so external package sources are scanned. */
+@config "../../../../tailwind.config.ts";
+/* 1. Tokens */
+@import "@repo/tailwind-config/design-tokens.css";
+/* 2. Tailwind utilities generated from tokens */
+@import "tailwindcss";
 
-  @import "@repo/tailwind-config/shared-styles.css";
-  @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-/* Heading variables - used by global heading rules below */
-:root {
-  --heading-color: #0f172a; /* slate-900 */
-  --heading-weight: 700;
-  --h1-size: clamp(1.75rem, 3.6vw, 3rem); /* ~28px - 48px */
-  --h2-size: clamp(1.375rem, 2.6vw, 2.25rem); /* ~22px - 36px */
-  --h3-size: clamp(1.125rem, 2vw, 1.75rem); /* ~18px - 28px */
-  --heading-line-height: 1.1;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Global default heading styles (keeps headings semantic and prevents inconsistent nested headings) */
-h1,
-h2,
-h3 {
-  color: var(--heading-color);
-  font-weight: var(--heading-weight);
-  line-height: var(--heading-line-height);
-  letter-spacing: -0.01em;
-}
-
-h1 {
-  font-size: var(--h1-size);
-}
-
-h2 {
-  font-size: var(--h2-size);
-}
-
-h3 {
-  font-size: var(--h3-size);
-}
-
-a:hover,
-button:hover {
-  cursor: pointer;
-}
-
-/* Small tweak for prose content to keep consistent spacing inside .typography */
-.typography h1,
-.typography h2,
-.typography h3 {
-  margin-top: 1.25rem;
-  margin-bottom: 0.75rem;
-}
+@custom-variant dark (&:is(.dark *));
