@@ -32,7 +32,7 @@
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "pnpm -F @repo/ui build",
-    "build:styles": "mkdir -p dist && cp ./src/styles.css ./dist/styles.css",
+    "build:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/index.css --minify",
     "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
     "dev:components": "tsc --watch",
     "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch"
@@ -50,6 +50,7 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/tailwind-config": "workspace:*",
     "@tailwindcss/cli": "^4.1.16",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
