@@ -14,12 +14,14 @@
     "./section": "./src/components/section.tsx",
     "./card": "./src/components/card.tsx",
     "./gradient": "./src/components/gradient.tsx",
-    "./styles.css": "./src/styles.css"
+    "./styles.css": "./dist/index.css",
+    "./*": "./dist/*.js"
   },
   "scripts": {
     "build:components": "tsc",
     "check-types": "tsc --noEmit",
     "dev:components": "tsc --watch",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "lint": "eslint src --max-warnings 0"
   },
   "peerDependencies": {
@@ -28,8 +30,11 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/cli": "^4.1.16",
     "@types/react": "^19.1.0",
     "eslint": "^9.33.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:"
   },
   "dependencies": {

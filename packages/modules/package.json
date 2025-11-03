@@ -16,7 +16,7 @@
       "types": "./dist/types.d.ts",
       "import": "./dist/types.js"
     },
-    "./styles.css": "./src/styles.css",
+    "./styles.css": "./dist/index.css",
     "./accordion": "./src/modules/accordion/accordion.tsx",
     "./hero": "./src/modules/hero/hero.tsx",
     "./image-teaser": "./src/modules/image-teaser/image-teaser.tsx",
@@ -26,14 +26,16 @@
     "./post-card": "./src/modules/post-card/post-card.tsx",
     "./blog-list": "./src/modules/blog-list/blog-list.tsx",
     "./category-bar": "./src/modules/category-bar/category-bar.tsx",
-    "./section-renderer": "./src/modules/sections/section-renderer.tsx"
+    "./section-renderer": "./src/modules/sections/section-renderer.tsx",
+    "./*": "./dist/*.js"
   },
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "pnpm -F @repo/ui build",
     "build:styles": "mkdir -p dist && cp ./src/styles.css ./dist/styles.css",
     "build": "pnpm run clean && pnpm run build:styles && tsc -p tsconfig.json",
-    "dev:components": "tsc --watch"
+    "dev:components": "tsc --watch",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch"
   },
   "peerDependencies": {
     "next": "catalog:",
@@ -41,16 +43,19 @@
     "react-dom": "catalog:"
   },
   "dependencies": {
-    "@portabletext/react": "^4.0.3",
-    "@repo/ui": "workspace:*"
+    "@portabletext/react": "^4.0.3"
   },
   "devDependencies": {
     "@portabletext/types": "^2.0.15",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "@tailwindcss/cli": "^4.1.16",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "eslint": "^9.33.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }
 }
