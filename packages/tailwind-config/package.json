@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./design-tokens.css",
+    "./base.css": "./base.css",
     "./postcss": "./postcss.config.js"
   },
   "devDependencies": {

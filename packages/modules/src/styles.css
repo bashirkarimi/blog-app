@@ -2,5 +2,6 @@
 /* Import Tailwind first to establish layers, then design tokens so they are available to utilities */
 @import "tailwindcss";
 @import "@repo/tailwind-config";
+@import "@repo/tailwind-config/base.css";
 
 /* Additional component specific extensions can go below */
