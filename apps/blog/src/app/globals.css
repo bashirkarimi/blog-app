@@ -1,8 +1,0 @@
-/* Point Tailwind at the monorepo root config so external package sources are scanned. */
-@config "../../../../tailwind.config.ts";
-/* 1. Tokens */
-@import "@repo/tailwind-config/design-tokens.css";
-/* 2. Tailwind utilities generated from tokens */
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
