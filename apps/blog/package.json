@@ -3,14 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001 --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
-    "@repo/modules": "workspace:*",
-    "@repo/ui": "workspace:*",
     "@sanity/image-url": "^1.2.0",
     "next": "catalog:",
     "next-sanity": "^10.0.16",
@@ -21,12 +19,18 @@
     "@next/eslint-plugin-next": "^15.4.6",
     "@repo/content-types": "workspace:*",
     "@repo/eslint-config": "workspace:*",
+    "@repo/modules": "workspace:*",
+    "@repo/tailwind-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@sanity/client": "^7.11.0",
+    "@tailwindcss/postcss": "^4.1.16",
     "@types/node": "^22.15.30",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
     "eslint": "^9.33.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "catalog:",
     "typescript": "catalog:"
   }
 }
