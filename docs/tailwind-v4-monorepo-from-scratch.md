@@ -14,28 +14,30 @@ tags:
   ]
 ---
 
-# Tailwind CSS v4 in a Monorepo (PNPM + Turborepo) – From Scratch
+# Tailwind CSS v4 Monorepo Implementation (Blog-App)
 
-Tailwind v4 simplifies a ton of historical config churn. In a monorepo, the _biggest_ wins come from:
+Authoritative, up‑to‑date description of how Tailwind v4 is implemented in this PNPM + Turborepo workspace. This replaces earlier “from scratch” and “implementation” guides — duplication removed.
 
-1. Declaring **design tokens once** (`@theme`)
-2. Generating **utilities only in apps** (not per package)
-3. Letting library packages stay **utility-aware** without shipping bloated CSS
-4. Centralizing **content scanning + presets** in a root config
+## 🎯 Core Principles (Current Implementation)
 
-This guide builds a working architecture you can transplant into any multi‑package codebase.
+1. Token + utility bootstrap happens once per app via a single global stylesheet import sequence.
+2. Design tokens live in `@repo/tailwind-config/design-tokens.css` and (currently) include `@import "tailwindcss"` followed by `@theme { ... }` for simplicity.
+3. The Tailwind preset (`packages/tailwind-config/index.js`) maps CSS variables to semantic theme values (e.g. colors, fonts).
+4. Packages (`@repo/ui`, `@repo/modules`, etc.) do **not** pre‑generate Tailwind output; they only reference utility classes.
+5. Dark mode and future theming use CSS custom properties; overriding variables updates all dependent utilities.
+6. Each app controls its own `content` globs (no central root `tailwind.config.*` file at present). This keeps tree‑shaking local and explicit.
+
+> NOTE: Earlier docs described a pure token file (without importing Tailwind) plus a shared root `tailwind.config.ts`. The current codebase diverges: `design-tokens.css` imports Tailwind directly; there is no root config file. This document reflects reality. If we later revert to the earlier pattern, update this section.
 
 ---
 
-## ✅ Outcome (What You Get by the End)
+## ✅ What Exists Today
 
-You’ll have:
-
-- `packages/design-system` (or `tailwind-config`) exporting `design-tokens.css` + a Tailwind preset
-- A root `tailwind.config.(js|ts)` scanning all apps + library source
-- One or more Next.js (or other framework) apps consuming tokens + utilities
-- UI / Modules packages that use Tailwind utility classes but do **not** prebuild Tailwind themselves
-- Predictable dark mode + runtime theming via CSS custom properties
+- `packages/tailwind-config/design-tokens.css` – imports Tailwind core then declares all tokens + dark theme overrides.
+- `packages/tailwind-config/index.js` – Tailwind preset extending fonts/colors from variables.
+- `apps/blog/src/app/globals.css` – minimal bootstrap: `@import "tailwindcss"; @import "@repo/tailwind-config";` (via package export mapping to token file).
+- `apps/docs` currently uses a custom CSS without Tailwind integration (can adopt pattern later).
+- No root `tailwind.config.ts`; each app should add its own when Tailwind customization is needed (plugins, safelist, etc.).
 
 ---
 
@@ -55,7 +57,7 @@ node -v
 
 ---
 
-## 🗂 1. Workspace Skeleton
+## 🗂 1. Workspace Skeleton (Simplified)
 
 ```
 my-monorepo/
@@ -120,37 +122,123 @@ Create `packages/tailwind-config/package.json`:
 }
 ```
 
-`design-tokens.css` (tokens only – **no** `@import "tailwindcss"`):
+`design-tokens.css` (current state – includes Tailwind import + tokens):
 
 ```css
+@import "tailwindcss";
 @theme {
-  /* Brand palette */
-  --color-brand-50: #f5f8ff;
-  --color-brand-500: #3b82f6;
-  --color-brand-700: #1d4ed8;
-  --color-accent-500: #e11d48;
-
-  /* Layout fractions */
-  --spacing-half: 50%;
-  --spacing-third: 33.333333%;
-  --spacing-two-thirds: 66.666667%;
-  --spacing-quarter: 25%;
-  --spacing-three-quarters: 75%;
-
-  /* Extended spacing */
-  --spacing-72: 18rem;
-  --spacing-80: 20rem;
-  --spacing-96: 24rem;
-
   /* Radii */
   --radius-sm: 0.125rem;
   --radius-md: 0.375rem;
   --radius-lg: 0.625rem;
   --radius-xl: 1rem;
+
+  /* Breakpoints */
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1600px;
+  --breakpoint-3xl: 1940px;
+
+  /* Layout widths */
+  --layout-max-page: var(--breakpoint-3xl);
+  --layout-max-content: var(--breakpoint-lg);
+  --layout-max-panel: 1040px;
+  --layout-max-reading: 65ch;
+
+  /* Heading typography (fluid clamp sizes) */
+  --font-family-sans: var(--font-inter, "Inter"), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-size-h1: clamp(2.25rem, 5vw, 3.75rem);
+  --font-size-h2: clamp(1.875rem, 4vw, 3rem);
+  --font-size-h3: clamp(1.5rem, 3vw, 2.25rem);
+  --font-size-h4: clamp(1.25rem, 2.5vw, 1.875rem);
+  --font-size-h5: clamp(1.125rem, 2vw, 1.5rem);
+  --font-size-h6: clamp(1rem, 1.5vw, 1.25rem);
+  --line-height-h1: 1.1;
+  --line-height-h2: 1.2;
+  --line-height-h3: 1.25;
+  --line-height-h4: 1.3;
+  --line-height-h5: 1.35;
+  --line-height-h6: 1.4;
+  --font-weight-h1: 800;
+  --font-weight-h2: 700;
+  --font-weight-h3: 600;
+  --font-weight-h4: 500;
+  --font-weight-h5: 500;
+  --font-weight-h6: 500;
+  --letter-spacing-h1: -0.02em;
+  --letter-spacing-h2: -0.015em;
+  --letter-spacing-h3: -0.01em;
+  --letter-spacing-h4: -0.005em;
+  --letter-spacing-h5: 0;
+  --letter-spacing-h6: 0;
+
+  /* Astral palette subset */
+  --color-astral-50: #f3f8fc;
+  --color-astral-100: #e5f0f9;
+  --color-astral-200: #c6e1f1;
+  --color-astral-300: #94c9e5;
+  --color-astral-400: #5badd5;
+  --color-astral-500: #3186b1;
+  --color-astral-600: #2676a3;
+  --color-astral-700: #205e84;
+  --color-astral-800: #1e506e;
+  --color-astral-900: #1e435c;
+  --color-astral-950: #142c3d;
+
+  /* Semantic surfaces (light) */
+  --background: var(--color-astral-50);
+  --foreground: var(--color-astral-950);
+  --card: #ffffff;
+  --card-foreground: var(--color-astral-950);
+  --popover: #ffffff;
+  --popover-foreground: var(--color-astral-950);
+  --primary: var(--color-astral-600);
+  --primary-foreground: #ffffff;
+  --secondary: var(--color-astral-200);
+  --secondary-foreground: var(--color-astral-900);
+  --muted: var(--color-astral-100);
+  --muted-foreground: var(--color-astral-700);
+  --accent: var(--color-astral-500);
+  --accent-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: var(--color-astral-200);
+  --input: var(--color-astral-200);
+  --ring: var(--color-astral-500);
+}
+
+.dark {
+  --background: var(--color-astral-950);
+  --foreground: var(--color-astral-50);
+  --card: var(--color-astral-900);
+  --card-foreground: var(--color-astral-50);
+  --popover: var(--color-astral-900);
+  --popover-foreground: var(--color-astral-50);
+  --primary: var(--color-astral-400);
+  --primary-foreground: var(--color-astral-950);
+  --secondary: var(--color-astral-800);
+  --secondary-foreground: var(--color-astral-100);
+  --muted: var(--color-astral-900);
+  --muted-foreground: var(--color-astral-400);
+  --accent: var(--color-astral-500);
+  --accent-foreground: #ffffff;
+  --success: #22c55e;
+  --success-foreground: var(--color-astral-950);
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: var(--color-astral-800);
+  --input: var(--color-astral-800);
+  --ring: var(--color-astral-400);
 }
 ```
 
-`index.js` (Tailwind preset / extension – semantic mapping, optional):
+`index.js` (preset excerpt – maps variables):
 
 ```js
 /** @type {import('tailwindcss').Config} */
@@ -178,33 +266,42 @@ module.exports = {
 };
 ```
 
-> Why split CSS tokens + JS config? Tokens remain framework‑agnostic; the preset adds semantic sugar + future plugins.
+> Why keep tokens + preset separate? Tokens remain declarative; preset adds semantics/plugins. Import path simplicity currently exposes token file directly as default export (`"."` maps to `design-tokens.css`).
 
 ---
 
-## 🏛 3. Root Tailwind Config (`/tailwind.config.ts`)
+## 🏛 3. Tailwind Config Strategy
 
-Centralizes content scanning so utilities inside packages generate even if not referenced directly in app code yet.
+There is **no root** `tailwind.config.ts` right now. Each app should create its own when it needs to:
+
+- Add plugins
+- Extend theme (safelist, etc.)
+- Narrow/widen `content` globs
+
+Minimal per‑app config example (create `apps/blog/tailwind.config.ts`):
 
 ```ts
 import type { Config } from "tailwindcss";
+// Use preset from package
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const designSystem = require("./packages/tailwind-config");
+const preset = require("@repo/tailwind-config/index.js");
 
 const config: Config = {
+  presets: [preset],
   content: [
-    "./apps/**/*.{js,jsx,ts,tsx,mdx}",
-    "./packages/ui/src/**/*.{js,jsx,ts,tsx,mdx}",
-    "./packages/modules/src/**/*.{js,jsx,ts,tsx,mdx}",
+    "./src/**/*.{js,jsx,ts,tsx,mdx}",
+    "../../packages/ui/src/**/*.{js,jsx,ts,tsx,mdx}",
+    "../../packages/modules/src/**/*.{js,jsx,ts,tsx,mdx}",
   ],
-  presets: [designSystem],
 };
 export default config;
 ```
 
+Future improvement (optional): reintroduce a shared root config to reduce duplication. When doing so, remove the `@import "tailwindcss"` from `design-tokens.css` and import tokens first in `globals.css`.
+
 ---
 
-## 🧪 4. Create an App (`apps/web`)
+## 🧪 4. App Bootstrap (`apps/blog` example)
 
 Example with Next.js (adjust commands if using another framework):
 
@@ -212,13 +309,13 @@ Example with Next.js (adjust commands if using another framework):
 pnpm dlx create-next-app@latest apps/web --ts --eslint --app --tailwind false
 ```
 
-Remove the generated Tailwind setup (since we’ll wire v4 manually) and add a minimal `postcss.config.mjs`:
+Add (if missing) a `postcss.config.mjs` or `postcss.config.js` with Tailwind v4 PostCSS plugin:
 
 ```js
 export default { plugins: { "@tailwindcss/postcss": {} } };
 ```
 
-App `package.json` excerpt:
+App `package.json` excerpt (ensure workspace deps):
 
 ```json
 {
@@ -234,7 +331,7 @@ App `package.json` excerpt:
 }
 ```
 
-App-level Tailwind config (optional override) `apps/web/tailwind.config.ts`:
+App-level Tailwind config (if/when needed) see Section 3.
 
 ```ts
 import type { Config } from "tailwindcss";
@@ -251,21 +348,20 @@ const config: Config = {
 export default config;
 ```
 
-### Global stylesheet `apps/web/src/app/globals.css` (order matters!)
+### Global stylesheet `apps/blog/src/app/globals.css`
+
+Current minimal implementation:
 
 ```css
-@config "../../../../tailwind.config.ts"; /* root config */
-@import "@repo/tailwind-config/design-tokens.css"; /* tokens */
-@import "tailwindcss"; /* utilities */
-/* Optional component layer(s) */
-@import "@repo/ui/styles.css";
-@import "@repo/modules/styles.css";
+@import "tailwindcss"; /* Tailwind core */
+@import "@repo/tailwind-config"; /* tokens + variables (design-tokens.css) */
+```
 
-/* App semantic or runtime vars */
-:root {
-}
-.dark {
-}
+If we switch back to token‑first pattern later it would become:
+
+```css
+@import "@repo/tailwind-config/design-tokens.css"; /* tokens */
+@import "tailwindcss"; /* utilities built from tokens */
 ```
 
 In your root layout/component just import `./globals.css` once.
@@ -289,13 +385,7 @@ In your root layout/component just import `./globals.css` once.
 }
 ```
 
-`src/styles.css`:
-
-```css
-@import "@repo/tailwind-config/design-tokens.css"; /* local custom CSS may follow */
-```
-
-> Do **not** import `tailwindcss` here; you want to avoid re‑generating utilities.
+Guideline: Components use utility classes directly; avoid importing `tailwindcss` inside the package to prevent duplicate builds. If package‑level custom selectors are needed, create a `styles.css` that imports only tokens.
 
 Component file example:
 
@@ -309,7 +399,7 @@ export const Button = ({ children, variant = "primary" }) => (
 
 ---
 
-## 🧱 6. Feature / Modules Package (Pattern Reuse)
+## 🧱 6. Modules Package Pattern
 
 Exactly the same approach: import tokens in a local optional stylesheet, export raw components referencing utilities.
 
@@ -317,7 +407,7 @@ Exactly the same approach: import tokens in a local optional stylesheet, export 
 
 ## 🌗 7. Dark Mode / Theming
 
-Add or override CSS variables in scopes; utilities stay stable:
+Override variables in `.dark` or `[data-theme=...]` scopes; utilities referencing semantic colors update automatically:
 
 ```css
 :root {
@@ -341,7 +431,7 @@ If you map semantic colors in the preset (e.g. `brand.500`), updates flow automa
 2. Touch a scanned file or restart dev
 3. Use the new utility immediately (e.g. `bg-brand-700`)
 
-> If a class relies on dynamic runtime data (CMS, user themes) and never appears in static source, add it to a `safelist` in root config.
+If a future per‑app Tailwind config is added and you rely on dynamic class names (from CMS), introduce a `safelist` there.
 
 ---
 
@@ -358,15 +448,16 @@ Or open DevTools → Sources → compiled CSS and search.
 
 ---
 
-## ⚠️ 10. Common Pitfalls
+## ⚠️ 10. Common Pitfalls (Current State)
 
-| Issue                    | Cause                               | Fix                                           |
-| ------------------------ | ----------------------------------- | --------------------------------------------- |
-| Missing utility          | Tokens imported after `tailwindcss` | Ensure token import precedes utilities        |
-| Library classes unstyled | Package path absent from `content`  | Add `packages/<name>/src/**/*` to root config |
-| Huge CSS bundle          | Each package ran Tailwind           | Generate utilities only in apps               |
-| Theme not updating       | Hard-coded hex vs. CSS vars         | Use custom properties & override scopes       |
-| Token change ignored     | Cache / dev server stale            | Restart or modify a scanned file              |
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Variables not applied | Missing token import in app | Import `@repo/tailwind-config` in `globals.css` |
+| Utility class missing | Content globs too narrow in app config | Add package/component paths to `content` array |
+| Duplicate CSS | Imported `tailwindcss` inside a package | Restrict Tailwind import to app global stylesheet |
+| Theme not switching | Hard-coded hex values instead of vars | Use semantic CSS variables and override them |
+| Stale design change | Dev server cache | Touch a watched file or restart dev |
+
 
 ---
 
@@ -421,15 +512,14 @@ echo "[OK] Core utilities present"
 
 ## 🗺 15. Quick Copy Templates
 
-**Root import block (globals.css)**:
+**Current import block (globals.css)**:
 
 ```css
-@config "../../../../tailwind.config.ts";
-@import "@repo/tailwind-config/design-tokens.css";
 @import "tailwindcss";
+@import "@repo/tailwind-config";
 ```
 
-**Package styles.css skeleton**:
+**Package styles.css skeleton (optional)**:
 
 ```css
 @import "@repo/tailwind-config/design-tokens.css"; /* tokens only */
@@ -472,6 +562,10 @@ If something is missing ask: “Which layer failed?”
 ---
 
 ## 🎯 Conclusion
+
+This consolidated guide matches the current implementation (token file imports Tailwind directly; no root shared config). Future refactors can revert to the purist layering (tokens → Tailwind import in app) to improve portability. Keep this document updated whenever the strategy changes rather than adding new overlapping guides.
+
+For exhaustive token lists and typography utilities, see `packages/tailwind-config/README.md` (avoid duplicating that content here).
 
 You now have a **future‑proof, low‑duplication Tailwind v4 monorepo architecture**. Scaling to more apps or themes means: add a token, import once, ship. No purge battles. No duplicated CSS. Clear layering.
 
