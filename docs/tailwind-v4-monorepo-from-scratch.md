@@ -40,8 +40,9 @@ Authoritative, up‑to‑date description of how Tailwind v4 is implemented in t
 - `packages/tailwind-config/design-tokens.css` – imports Tailwind core then declares all tokens + dark theme overrides.
 - `packages/tailwind-config/index.js` – Tailwind preset extending fonts/colors from variables.
 - `apps/blog/src/app/globals.css` – minimal bootstrap: `@import "tailwindcss"; @import "@repo/tailwind-config";` (via package export mapping to token file).
+- `apps/blog/postcss.config.mjs` – PostCSS configuration with `@tailwindcss/postcss` plugin.
 - `apps/docs` currently uses a custom CSS without Tailwind integration (can adopt pattern later).
-- No root `tailwind.config.ts`; each app should add its own when Tailwind customization is needed (plugins, safelist, etc.).
+- **No `tailwind.config.ts` files** – neither at root nor in any app. Tailwind v4's CSS-first approach allows configuration via `@theme` in design tokens. Per-app configs can be added when plugins or custom content globs are needed.
 
 ---
 
@@ -74,8 +75,9 @@ my-monorepo/
   package.json
   pnpm-workspace.yaml
   turbo.json
-  tailwind.config.ts (root)
 ```
+
+> **Note:** No root `tailwind.config.ts` is used in the current implementation. Tailwind v4's CSS-first approach allows all configuration via `@theme` in the design tokens file.
 
 `pnpm-workspace.yaml`:
 
@@ -276,13 +278,25 @@ module.exports = {
 
 ## 🏛 3. Tailwind Config Strategy
 
-There is **no root** `tailwind.config.ts` right now. Each app should create its own when it needs to:
+### Current Implementation
 
-- Add plugins
-- Extend theme (safelist, etc.)
-- Narrow/widen `content` globs
+**No per-app or root `tailwind.config.ts` exists.** The current implementation relies entirely on:
 
-Minimal per‑app config example (create `apps/blog/tailwind.config.ts`):
+1. CSS-based configuration via `@theme` in `design-tokens.css`
+2. The Tailwind preset in `packages/tailwind-config/index.js`
+3. PostCSS with `@tailwindcss/postcss` plugin
+
+This means `apps/blog` does **not** have a `tailwind.config.ts` file. Tailwind v4's CSS-first approach handles configuration through the design tokens CSS file.
+
+### When to Add a Per-App Config (Optional)
+
+You may optionally create a per-app Tailwind config if you need to:
+
+- Add Tailwind plugins
+- Extend theme with app-specific values (safelist, etc.)
+- Customize `content` globs beyond defaults
+
+**Example** (only create if needed, e.g., `apps/your-app/tailwind.config.ts`):
 
 ```ts
 import type { Config } from "tailwindcss";
@@ -301,7 +315,11 @@ const config: Config = {
 export default config;
 ```
 
-Future improvement (optional): reintroduce a shared root config to reduce duplication. When doing so, remove the `@import "tailwindcss"` from `design-tokens.css` and import tokens first in `globals.css`.
+> **Note:** The example above is for reference only. Currently, no app in this monorepo uses a `tailwind.config.ts` file.
+
+### Future Improvements
+
+Consider reintroducing a shared root config to reduce duplication across apps. When doing so, remove the `@import "tailwindcss"` from `design-tokens.css` and import tokens first in `globals.css`.
 
 ---
 
@@ -335,22 +353,7 @@ App `package.json` excerpt (ensure workspace deps):
 }
 ```
 
-App-level Tailwind config (if/when needed) see Section 3.
-
-```ts
-import type { Config } from "tailwindcss";
-import root from "../../tailwind.config";
-
-const config: Config = {
-  ...root,
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx,mdx}",
-    "../../packages/ui/src/**/*.{js,jsx,ts,tsx,mdx}",
-    "../../packages/modules/src/**/*.{js,jsx,ts,tsx,mdx}",
-  ],
-};
-export default config;
-```
+App-level Tailwind config is optional. See Section 3 for when to add one and example configuration.
 
 ### Global stylesheet `apps/blog/src/app/globals.css`
 
@@ -554,14 +557,15 @@ If something is missing ask: “Which layer failed?”
 
 ## 🏁 17. Final Checklist
 
-| Step                                   | Verified |
-| -------------------------------------- | -------- |
-| Root config scans all source           |          |
-| Token file imported before Tailwind    |          |
-| No package ships compiled utilities    |          |
-| New tokens produce utilities instantly |          |
-| Dark mode overrides only vars          |          |
-| CI script validates critical utilities |          |
+| Step                                              | Verified |
+| ------------------------------------------------- | -------- |
+| Design tokens defined in `design-tokens.css`      |          |
+| Token file imported in app's `globals.css`        |          |
+| PostCSS config uses `@tailwindcss/postcss`        |          |
+| No package ships compiled Tailwind utilities      |          |
+| New tokens produce utilities instantly            |          |
+| Dark mode overrides only CSS variables            |          |
+| (Optional) Per-app config added if plugins needed |          |
 
 ---
 
