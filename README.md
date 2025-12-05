@@ -1,12 +1,24 @@
-# 📝 Blog App Monorepo
+# 📝 App Monorepo
 
-A modern, full-stack blog platform built with Next.js 15, Sanity CMS, and Turborepo. This monorepo showcases best practices for building scalable content-driven applications with cutting-edge web technologies.
+A full-stack platform built with Turborepo to host React based Apps with Sanity CMS.
+The primary purpose of this Monorepo is the provide a plateform for a developer(FE) to create a small component, experiment a new feature of technology, experience new framework/technology or create a full functional App.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.4-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1-blue?style=flat-square&logo=react)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![Turborepo](https://img.shields.io/badge/Turborepo-2.5-ef4444?style=flat-square)](https://turbo.build/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+
+## Why a Monorepo?
+
+This repository uses a monorepo to:
+- Share UI components and Modules to multiple apps
+- Create Apps for differenct usecase 
+- Share TypeScript types between Studio and Blog
+- Reuse design tokens and Tailwind config
+- Keep CMS schemas aligned with frontend components
+- Simplify tooling, dependencies, and builds
+
 
 ## ✨ Features
 
@@ -19,6 +31,40 @@ A modern, full-stack blog platform built with Next.js 15, Sanity CMS, and Turbor
 - 🎯 **Type-Safe** with TypeScript throughout
 - 🔥 **Hot Module Replacement** with Turbopack
 - 📐 **ESLint & Prettier** configured for code quality
+
+## 🏗️ Project Structure
+
+```
+blog-app/
+├── apps/
+│   ├── blog/
+│   │   ├── src/
+│   │   │   ├── app/              # Next.js App Router
+│   │   │   ├── components/       # React components
+│   │   │   └── sanity/           # Sanity client & queries
+│   │   └── package.json
+│   ├── docs/
+│   └── studio/
+│       ├── schemaTypes/          # Sanity schema definitions
+│       │   ├── documents/        # Document types
+│       │   ├── objects/          # Object types
+│       │   └── modules/          # Module types
+│       └── structure/            # Studio structure
+├── packages/
+│   ├── ui/
+│   │   └── src/
+│   │       ├── components/       # Shared components
+│   │       └── lib/              # Utilities
+│   ├── modules/
+│   │   └── src/
+│   │       └── modules/          # Content modules
+│   └── tailwind-config/
+│       └── design-tokens.css     # Global design tokens
+├── docs/                         # Documentation
+├── package.json                  # Root package.json
+├── pnpm-workspace.yaml           # Workspace configuration
+└── turbo.json                    # Turborepo configuration
+```
 
 ## 📦 What's Inside?
 
@@ -149,39 +195,6 @@ Build specific app:
 pnpm --filter blog build
 ```
 
-## 🏗️ Project Structure
-
-```
-blog-app/
-├── apps/
-│   ├── blog/
-│   │   ├── src/
-│   │   │   ├── app/              # Next.js App Router
-│   │   │   ├── components/       # React components
-│   │   │   └── sanity/           # Sanity client & queries
-│   │   └── package.json
-│   ├── docs/
-│   └── studio/
-│       ├── schemaTypes/          # Sanity schema definitions
-│       │   ├── documents/        # Document types
-│       │   ├── objects/          # Object types
-│       │   └── modules/          # Module types
-│       └── structure/            # Studio structure
-├── packages/
-│   ├── ui/
-│   │   └── src/
-│   │       ├── components/       # Shared components
-│   │       └── lib/              # Utilities
-│   ├── modules/
-│   │   └── src/
-│   │       └── modules/          # Content modules
-│   └── tailwind-config/
-│       └── design-tokens.css     # Global design tokens
-├── docs/                         # Documentation
-├── package.json                  # Root package.json
-├── pnpm-workspace.yaml           # Workspace configuration
-└── turbo.json                    # Turborepo configuration
-```
 
 ## 🎨 Design System
 
@@ -191,6 +204,22 @@ This project uses Tailwind CSS v4 with a custom design system:
 - **Component Library**: Built with Radix UI primitives
 - **Variants**: Managed with `class-variance-authority`
 - **Dark Mode**: Full dark mode support
+
+## 🧱 Architecture Overview
+
+- **Data loading & preview**: Server Components call `sanityFetch` (see `apps/blog/src/sanity/live.ts`) so every route benefits from ISR-friendly caching and Sanity Live Preview via `<SanityLive />` in `layout.jsx`. If critical settings are missing, routes short-circuit to `notFound()` to avoid partially rendered pages.
+- **Composable page builder**: `PageBuilder` renders heros and sections based on Sanity documents. It extends the shared `@repo/modules` registry with a local `RichText` renderer that handles Portable Text images, external link security attributes, and internal links for accessible content blocks.
+- **Blog routing**: Static post pages (`app/post/[slug]/page.tsx`) opt into `generateStaticParams()` for SSG while still using `sanityFetch` at runtime for fresh data. Landing pages under `/[slug]` reuse the same builder for marketing-style content without duplicating layout logic.
+- **API surface**: `GET /api/posts` is a dynamic route that streams paginated posts from GROQ. It accepts `limit` (1-50, default 6), `offset`, `category`, and `mode` query params and responds with `{ posts, total, offset, limit, hasMore, category }`, making it easy to power infinite scroll or “load more” UIs without exposing Sanity directly.
+
+## 🛠️ Sanity Workflows
+
+| Command | Description |
+|---------|-------------|
+| `pnpm --filter @repo/studio dev` | Run Sanity Studio locally with hot reloads |
+| `pnpm --filter @repo/studio typegen` | Regenerate `apps/blog/src/sanity/types.ts` via `sanity schema extract` + `sanity typegen generate` |
+| `pnpm --filter @repo/studio deploy` | Deploy the Studio to the managed Sanity hosting |
+| `pnpm --filter @repo/studio deploy-graphql` | Publish the project’s GraphQL API for external consumers |
 
 ## 📝 Scripts
 
@@ -205,19 +234,49 @@ This project uses Tailwind CSS v4 with a custom design system:
 ## 🔧 Tech Stack
 
 ### Frontend
-- [Next.js 15](https://nextjs.org/) - React framework
+- [Next.js 15](https://nextjs.org/) - React framework - it provides:
+  - Good integration with Sanity
+  - Handling complex task like page building
 - [React 19](https://react.dev/) - UI library
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [Tailwind CSS v4](https://tailwindcss.com/) - Styling
+  Used because of:
+
+  - Design token support
+  - Zero-configuration PostCSS pipeline
+  - Utility-first styling for scalable UIs
+  - Perfect compatibility with Radix
+  - Strong DX during component development
 
 ### Content Management
-- [Sanity](https://www.sanity.io/) - Headless CMS
+- [Sanity](https://www.sanity.io/) - Headless CMS -
+  it provides:
+  - A fully customizable schema system
+  - Real-time collaborative editing
+  - Rich Portable Text content
+  - Type generation for TypeScript
+  - Live Preview out of the box
+  - Fast GROQ querying
+  - Know-how
+  - its perfectly with dynamic blog + page builder architecture.
 - [next-sanity](https://www.npmjs.com/package/next-sanity) - Sanity integration
 - [@sanity/image-url](https://www.npmjs.com/package/@sanity/image-url) - Image optimization
 
 ### Tooling
 - [Turborepo](https://turbo.build/) - Monorepo build system
+
+  Chosen for its:
+  - Blazing-fast caching
+  - Monorepo-aware pipelines
+  - Zero-config task running
+  - Remote cache for CI/CD
+  - Perfect match for JS/TS ecosystem
 - [pnpm](https://pnpm.io/) - Package manager
+  Selected due to:
+  - Fast and disk-efficient package management
+  - Strict dependency isolation
+  - Native workspace support
+  - Symlinked node_modules for improved DX
 - [ESLint](https://eslint.org/) - Code linting
 - [Prettier](https://prettier.io/) - Code formatting
 
@@ -226,33 +285,16 @@ This project uses Tailwind CSS v4 with a custom design system:
 - [class-variance-authority](https://cva.style/) - Variant management
 - [tailwind-merge](https://github.com/dcastil/tailwind-merge) - Utility merging
 
+
 ## 📚 Documentation
 
 Check out the `docs/` directory for additional documentation:
 
 - [Tailwind v4 Monorepo Setup](docs/tailwind-v4-monorepo.md)
-- [Module Mapping Architecture](docs/module-mapping-architecture.md)
+- More guides (architecture, content modeling, etc.) live alongside the code and will continue to grow with the project. If you add a feature, please co-locate its documentation under `docs/`.
 
-## 🤝 Contributing
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is private and unlicensed.
-
-## 🙏 Acknowledgments
-
-- Built with [Turborepo](https://turbo.build/) starter
-- Inspired by modern web development best practices
-- Powered by the amazing open-source community
 
 ---
 
-**Built with ❤️ using Next.js, Sanity, and Turborepo**
+
