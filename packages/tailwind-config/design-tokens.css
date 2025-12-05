@@ -1,6 +1,4 @@
-/* Design tokens: colors, spacing, radii, semantic scales.
- * No Tailwind import here. Consuming apps must import this BEFORE `@import "tailwindcss"`.
- */
+@import "tailwindcss";
 
 @theme {
   /* Radii */

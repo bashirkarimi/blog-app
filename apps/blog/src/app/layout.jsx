@@ -4,6 +4,8 @@ import { Footer } from "@repo/modules/footer";
 import { sanityFetch } from "@/sanity/live";
 import { SITE_SETTINGS_QUERY } from "@/sanity/queries";
 import { urlFor } from "@/sanity/image";
+import "@repo/ui/styles.css";
+import "@repo/modules/styles.css";
 import "./globals.css";
 import { notFound } from "next/navigation";
 import { Inter } from "next/font/google";
