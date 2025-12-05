@@ -12,8 +12,8 @@ The primary purpose of this Monorepo is the provide a plateform for a developer(
 ## Why a Monorepo?
 
 This repository uses a monorepo to:
-- Share UI components and Modules to multiple apps
-- Create Apps for differenct usecase 
+- Share UI components and modules across apps
+- Spin up focused apps (blog, docs, studio) without duplicating setup
 - Share TypeScript types between Studio and Blog
 - Reuse design tokens and Tailwind config
 - Keep CMS schemas aligned with frontend components
@@ -86,7 +86,7 @@ apps/
   - Rich text rendering
   - Custom page builder
 
-- **`docs`** - Documentation and guides
+- **`docs`** - 
 
 - **`studio`** - Sanity Studio for content management:
   - Custom schema types (posts, authors, categories, tags)
@@ -154,6 +154,18 @@ cp apps/blog/.env.example apps/blog/.env.local
 cp apps/studio/.env.example apps/studio/.env.local
 ```
 
+Fill in the following environment variables in each `.env.local` file:
+
+```
+NEXT_PUBLIC_SANITY_PROJECT_ID=<your_sanity_project_id>
+NEXT_PUBLIC_SANITY_DATASET=<dataset_name>
+SANITY_STUDIO_PROJECT_ID=<same_as_above>
+SANITY_STUDIO_DATASET=<same_as_above>
+SANITY_STUDIO_API_TOKEN=<token_with_required_permissions>
+```
+
+You can retrieve these values from the Sanity project dashboard under **Project settings → API**.
+
 4. Configure Sanity:
    - Create a Sanity project at [sanity.io](https://www.sanity.io/)
    - Add your project ID and dataset to the environment files
@@ -179,6 +191,9 @@ pnpm --filter blog dev
 
 # Run only the studio
 pnpm --filter @repo/studio dev
+
+# Run only the docs site
+pnpm --filter docs dev
 ```
 
 ### Building
@@ -209,6 +224,7 @@ This project uses Tailwind CSS v4 with a custom design system:
 
 - **Data loading & preview**: Server Components call `sanityFetch` (see `apps/blog/src/sanity/live.ts`) so every route benefits from ISR-friendly caching and Sanity Live Preview via `<SanityLive />` in `layout.jsx`. If critical settings are missing, routes short-circuit to `notFound()` to avoid partially rendered pages.
 - **Composable page builder**: `PageBuilder` renders heros and sections based on Sanity documents. It extends the shared `@repo/modules` registry with a local `RichText` renderer that handles Portable Text images, external link security attributes, and internal links for accessible content blocks.
+- **Shared module registry**: `apps/blog/src/components/section-renderer.tsx` composes `@repo/modules/section-renderer`, so adding a new module in `packages/modules` immediately makes it available to editorial teams.
 - **Blog routing**: Static post pages (`app/post/[slug]/page.tsx`) opt into `generateStaticParams()` for SSG while still using `sanityFetch` at runtime for fresh data. Landing pages under `/[slug]` reuse the same builder for marketing-style content without duplicating layout logic.
 - **API surface**: `GET /api/posts` is a dynamic route that streams paginated posts from GROQ. It accepts `limit` (1-50, default 6), `offset`, `category`, and `mode` query params and responds with `{ posts, total, offset, limit, hasMore, category }`, making it easy to power infinite scroll or “load more” UIs without exposing Sanity directly.
 
@@ -231,34 +247,38 @@ This project uses Tailwind CSS v4 with a custom design system:
 | `pnpm check-types` | Type-check all packages |
 | `pnpm format` | Format code with Prettier |
 
+## ✅ Testing & Quality
+
+- `pnpm lint` enforces the shared ESLint rules across apps and packages.
+- `pnpm check-types` catches TypeScript drift after schema or component updates.
+- Add Jest/Playwright coverage as the project grows and document new commands here for future contributors.
+
+## 🚢 Deployment
+
+- **Blog / Docs**: Deploy to Vercel (or another Next.js-compatible host) and mirror the environment variables listed above.
+- **Sanity Studio**: Deploy with `pnpm --filter @repo/studio deploy` and publish the GraphQL API via `pnpm --filter @repo/studio deploy-graphql` when external systems need access.
+- Enable the Turborepo remote cache in CI/CD to speed up incremental builds.
+
 ## 🔧 Tech Stack
 
 ### Frontend
-- [Next.js 15](https://nextjs.org/) - React framework - it provides:
-  - Good integration with Sanity
-  - Handling complex task like page building
-- [React 19](https://react.dev/) - UI library
-- [TypeScript](https://www.typescriptlang.org/) - Type safety
-- [Tailwind CSS v4](https://tailwindcss.com/) - Styling
-  Used because of:
-
+- [Next.js 15](https://nextjs.org/) – React framework with first-class Sanity integration and App Router conveniences for page-building workflows
+- [React 19](https://react.dev/) – UI library
+- [TypeScript](https://www.typescriptlang.org/) – Type safety
+- [Tailwind CSS v4](https://tailwindcss.com/) – Utility-first styling with:
   - Design token support
   - Zero-configuration PostCSS pipeline
-  - Utility-first styling for scalable UIs
-  - Perfect compatibility with Radix
+  - Close interoperability with Radix primitives
   - Strong DX during component development
 
 ### Content Management
-- [Sanity](https://www.sanity.io/) - Headless CMS -
-  it provides:
+- [Sanity](https://www.sanity.io/) – Headless CMS that powers the page-builder architecture with:
   - A fully customizable schema system
   - Real-time collaborative editing
   - Rich Portable Text content
-  - Type generation for TypeScript
-  - Live Preview out of the box
-  - Fast GROQ querying
-  - Know-how
-  - its perfectly with dynamic blog + page builder architecture.
+  - Type-safe code generation
+  - Live preview out of the box
+  - Fast GROQ querying tailored to dynamic blogs and landing pages
 - [next-sanity](https://www.npmjs.com/package/next-sanity) - Sanity integration
 - [@sanity/image-url](https://www.npmjs.com/package/@sanity/image-url) - Image optimization
 
