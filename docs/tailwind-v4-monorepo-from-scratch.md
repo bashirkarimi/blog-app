@@ -27,7 +27,11 @@ Authoritative, up‑to‑date description of how Tailwind v4 is implemented in t
 5. Dark mode and future theming use CSS custom properties; overriding variables updates all dependent utilities.
 6. Each app controls its own `content` globs (no central root `tailwind.config.*` file at present). This keeps tree‑shaking local and explicit.
 
-> NOTE: Earlier docs described a pure token file (without importing Tailwind) plus a shared root `tailwind.config.ts`. The current codebase diverges: `design-tokens.css` imports Tailwind directly; there is no root config file. This document reflects reality. If we later revert to the earlier pattern, update this section.
+> ⚠️ **Warning:** The current codebase diverges from recommended architecture. Earlier docs described a pure token file (without importing Tailwind) plus a shared root `tailwind.config.ts`. **This is the preferred pattern.**
+> 
+> **Current state is a temporary workaround and a known issue:** `design-tokens.css` imports Tailwind directly, which causes duplicate imports, bloated CSS, and breaks the separation of concerns. This is **not** a valid architectural pattern and should be reverted as soon as feasible.
+> 
+> **Action item:** Track this as technical debt. When possible, restore the pure token file pattern and update this documentation to reflect the fix.
 
 ---
 
