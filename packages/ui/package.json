@@ -18,10 +18,13 @@
     "./*": "./dist/*.js"
   },
   "scripts": {
+    "clean": "rm -rf dist",
+    "build": "pnpm run clean && pnpm run build:styles && pnpm run build:components",
+    "build:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/index.css --minify",
     "build:components": "tsc",
     "check-types": "tsc --noEmit",
     "dev:components": "tsc --watch",
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+    "dev:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "lint": "eslint src --max-warnings 0"
   },
   "peerDependencies": {
